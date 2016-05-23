@@ -13,6 +13,7 @@ public:
 	void init2();
 	void hitMotion();
 	
+	Texture2D *energy0;
 	Texture2D *energy1;
 	Texture2D *energy2;
 	Texture2D *energy3;

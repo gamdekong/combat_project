@@ -5,6 +5,7 @@
 Energy::Energy()
 {
 	
+	energy0 = Director::getInstance()->getTextureCache()->addImage("ui/energy/energy0.png");
 	energy1 = Director::getInstance()->getTextureCache()->addImage("ui/energy/energy1.png");
 	energy2 = Director::getInstance()->getTextureCache()->addImage("ui/energy/energy2.png");
 	energy3 = Director::getInstance()->getTextureCache()->addImage("ui/energy/energy3.png");
@@ -34,6 +35,9 @@ void Energy::setTexture2(int energy)
 {
 	switch (energy)
 	{
+	case 0:
+		this->setTexture(energy0);
+		break;
 	case 1:
 		this->setTexture(energy1);
 		break;

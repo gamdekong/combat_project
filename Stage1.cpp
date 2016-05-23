@@ -820,7 +820,7 @@ void Stage1::createBackground()
 		{
 			auto door1 = Sprite::create("structure/bossdoor.png");
 			door1->setAnchorPoint(Vec2(0, 0));
-			door1->setPosition(Vec2(380, 390));
+			door1->setPosition(Vec2(985, 390));
 			this->addChild(door1, 0);
 		}
 		else if(false) //아이템 성소일시
@@ -831,7 +831,7 @@ void Stage1::createBackground()
 		{
 			auto door1 = Sprite::create("structure/door.png");
 			door1->setAnchorPoint(Vec2(0, 0));
-			door1->setPosition(Vec2(380, 390));
+			door1->setPosition(Vec2(985, 390));
 			this->addChild(door1, 0);
 		}
 
@@ -878,7 +878,7 @@ void Stage1::createBackground()
 	else
 	{
 		auto steelbar = Sprite::create("structure/steelbar.png", Rect(0, 0, 100, 163));
-		steelbar->setAnchorPoint(Vec2(0.65, 0.75));
+		steelbar->setAnchorPoint(Vec2(0.35, 0.75));
 		this->addChild(steelbar);
 		b2BodyDef rightLockDef;
 		rightLockDef.type = b2_kinematicBody;
@@ -1016,7 +1016,7 @@ void Stage1::tick(float dt)
 	// 문 제거
 	if (monsterBodyVector.size() == 0 && doorOpen == false)
 	{
-		auto texture = Director::getInstance()->getTextureCache()->addImage("structure/steelbar");
+		auto texture = Director::getInstance()->getTextureCache()->addImage("structure/steelbar.png");
 		auto animation = Animation::create();
 		animation->setDelayPerUnit(0.1);
 		animation->addSpriteFrameWithTexture(texture, Rect(0, 0, 100, 163));
@@ -1025,6 +1025,10 @@ void Stage1::tick(float dt)
 		animation->addSpriteFrameWithTexture(texture, Rect(300, 0, 100, 163));
 		auto animate = Animate::create(animation);
 		auto seq = Sequence::create(animate,RemoveSelf::create(), nullptr);
+		//if ()  ////////////////없는문 제거시 에러
+		{
+
+		}
 		((Sprite*)(leftLockBody->GetUserData()))->runAction(seq->clone());
 		((Sprite*)(rightLockBody->GetUserData()))->runAction(seq->clone());
 		_world->DestroyBody(leftLockBody);
