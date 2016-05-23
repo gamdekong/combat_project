@@ -42,7 +42,7 @@ bool Stage1::init()
 		monster3->setPosition(Vec2(1000, 300));
 		this->addChild(monster3, 1);
 		auto monster5 = new Monster(5);
-		monster5->setPosition(Vec2(1400, 300));
+		monster5->setPosition(Vec2(1300, 300));
 		this->addChild(monster5, 1);
 
 
@@ -529,7 +529,7 @@ bool Stage1::init()
 		log("init %d", stageNum);
 	}
 	
-	else if (stageNum == 9)
+	else if (stageNum == BOSS_MAP_NUM)
 	{
 
 		auto monster1 = new Monster(7);
@@ -663,7 +663,7 @@ bool Stage1::createWorld(bool debug)
 	groundEdge.Set(b2Vec2(500 / PTM_RATIO, 540 / PTM_RATIO), b2Vec2(1000 / PTM_RATIO, 540 / PTM_RATIO));
 	groundBody->CreateFixture(&boxShapeDef);
 
-	if (stageNum != BOSS_MAP_NUM && this->next == nullptr) //왼쪽문이 nullptr시
+	if (stageNum != BOSS_MAP_NUM && this->next == nullptr) //오른쪽문이 nullptr시
 	{
 		groundEdge.Set(b2Vec2(1000 / PTM_RATIO, 540 / PTM_RATIO), b2Vec2(1100 / PTM_RATIO, 540 / PTM_RATIO));
 		groundBody->CreateFixture(&boxShapeDef);
@@ -685,48 +685,20 @@ bool Stage1::createWorld(bool debug)
 
 	//월드 생성 끝-----------------------
 
-	b2BodyDef leftLockDef;
-	leftLockDef.type = b2_kinematicBody;
-	leftLockDef.position.Set(450 / PTM_RATIO, 540 / PTM_RATIO);
-	leftLockDef.userData = nullptr;
-
-	leftLockBody = _world->CreateBody(&leftLockDef);
-
-	b2PolygonShape leftLockBox;
-	leftLockBox.SetAsBox(100 / PTM_RATIO, 0);
 	
-	b2FixtureDef leftLockFixture;
-	leftLockFixture.shape = &leftLockBox;
-	leftLockFixture.density = 1.0f;
-	leftLockFixture.filter.categoryBits = CATEGORY_GROUND;
-	leftLockFixture.filter.maskBits = CATEGORY_MONSTER + CATEGORY_PLAYER;
-
-	leftLockBody->CreateFixture(&leftLockFixture);
-
-	b2BodyDef rightLockDef;
-	rightLockDef.type = b2_kinematicBody;
-	rightLockDef.position.Set(1050 / PTM_RATIO, 540 / PTM_RATIO);
-	rightLockDef.userData = nullptr;
-
-	rightLockBody = _world->CreateBody(&rightLockDef);
-
-	b2PolygonShape rightLockBox;
-	rightLockBox.SetAsBox(100 / PTM_RATIO, 0);
-
-	b2FixtureDef rightLockFixture;
-	rightLockFixture.shape = &rightLockBox;
-	rightLockFixture.density = 1.0f;
-	rightLockFixture.filter.categoryBits = CATEGORY_GROUND;
-	rightLockFixture.filter.maskBits = CATEGORY_MONSTER + CATEGORY_PLAYER;
-
-	rightLockBody->CreateFixture(&rightLockFixture);
+	
 
 
-	if (stageNum != BOSS_MAP_NUM && this->prev == nullptr)
-	{
-		
+	
 
-	}
+
+
+
+
+	
+
+
+	
 	return true;
 }
 
@@ -818,26 +790,114 @@ void Stage1::createBackground()
 	}
 	else
 	{
-		auto door1 = Sprite::create("structure/door.png");
-		door1->setAnchorPoint(Vec2(0, 0));
-		door1->setPosition(Vec2(380, 390));
-		this->addChild(door1, 0);
+		if (this->prev->stageNum == BOSS_MAP_NUM) //다음맵의 보스맵일 경우
+		{
+			auto door1 = Sprite::create("structure/bossdoor.png");
+			door1->setAnchorPoint(Vec2(0, 0));
+			door1->setPosition(Vec2(380, 390));
+			this->addChild(door1, 0);
+		}
+		else if (false) //아이템 성소일시
+		{
+
+		}
+		else
+		{
+			auto door1 = Sprite::create("structure/door.png");
+			door1->setAnchorPoint(Vec2(0, 0));
+			door1->setPosition(Vec2(380, 390));
+			this->addChild(door1, 0);
+		}
 	}
 
-	if (stageNum != BOSS_MAP_NUM && this->next == nullptr) //왼쪽문이 nullptr시
+	if (stageNum != BOSS_MAP_NUM && this->next == nullptr) //오른쪽문이 nullptr시
 	{
 
 	}
 	else
 	{
-		auto door2 = Sprite::create("structure/door.png");
-		door2->setAnchorPoint(Vec2(0, 0));
-		door2->setPosition(Vec2(985, 390));
-		this->addChild(door2, 0);
+		if (this->next->stageNum == BOSS_MAP_NUM)
+		{
+			auto door1 = Sprite::create("structure/bossdoor.png");
+			door1->setAnchorPoint(Vec2(0, 0));
+			door1->setPosition(Vec2(380, 390));
+			this->addChild(door1, 0);
+		}
+		else if(false) //아이템 성소일시
+		{
+
+		}
+		else
+		{
+			auto door1 = Sprite::create("structure/door.png");
+			door1->setAnchorPoint(Vec2(0, 0));
+			door1->setPosition(Vec2(380, 390));
+			this->addChild(door1, 0);
+		}
 
 	}
 
-	
+	if (stageNum != BOSS_MAP_NUM && this->prev == nullptr) //왼쪽문이 nullptr시
+	{
+
+
+	}
+	else
+	{
+		auto steelbar = Sprite::create("structure/steelbar.png", Rect(0, 0, 100, 163));
+		steelbar->setAnchorPoint(Vec2(0.65, 0.75));
+		this->addChild(steelbar);
+		b2BodyDef leftLockDef;
+		leftLockDef.type = b2_kinematicBody;
+		leftLockDef.position.Set(450 / PTM_RATIO, 540 / PTM_RATIO);
+		leftLockDef.userData = steelbar;
+
+		leftLockBody = _world->CreateBody(&leftLockDef);
+
+		b2PolygonShape leftLockBox;
+		leftLockBox.SetAsBox(100 / PTM_RATIO, 0);
+
+		b2FixtureDef leftLockFixture;
+		leftLockFixture.shape = &leftLockBox;
+		leftLockFixture.density = 1.0f;
+		leftLockFixture.filter.categoryBits = CATEGORY_GROUND;
+		leftLockFixture.filter.maskBits = CATEGORY_MONSTER + CATEGORY_PLAYER;
+
+		leftLockBody->CreateFixture(&leftLockFixture);
+
+	}
+
+
+
+
+	if (stageNum != BOSS_MAP_NUM && this->next == nullptr) //오른쪽문이 nullptr시
+	{
+
+
+	}
+	else
+	{
+		auto steelbar = Sprite::create("structure/steelbar.png", Rect(0, 0, 100, 163));
+		steelbar->setAnchorPoint(Vec2(0.65, 0.75));
+		this->addChild(steelbar);
+		b2BodyDef rightLockDef;
+		rightLockDef.type = b2_kinematicBody;
+		rightLockDef.position.Set(1050 / PTM_RATIO, 540 / PTM_RATIO);
+		rightLockDef.userData = steelbar;
+
+		rightLockBody = _world->CreateBody(&rightLockDef);
+
+		b2PolygonShape rightLockBox;
+		rightLockBox.SetAsBox(100 / PTM_RATIO, 0);
+
+		b2FixtureDef rightLockFixture;
+		rightLockFixture.shape = &rightLockBox;
+		rightLockFixture.density = 1.0f;
+		rightLockFixture.filter.categoryBits = CATEGORY_GROUND;
+		rightLockFixture.filter.maskBits = CATEGORY_MONSTER + CATEGORY_PLAYER;
+
+		rightLockBody->CreateFixture(&rightLockFixture);
+	}
 
 	
 }
@@ -890,7 +950,7 @@ void Stage1::tick(float dt)
 
 	//메뉴얼 상의 권장값
 	int velocityIterations = 8;
-	int positionIterations = 3;
+	int positionIterations = 4;
 
 	//Step : 물리 세계를 시뮬레이션한다.
 	_world->Step(dt, velocityIterations, positionIterations);
@@ -956,6 +1016,17 @@ void Stage1::tick(float dt)
 	// 문 제거
 	if (monsterBodyVector.size() == 0 && doorOpen == false)
 	{
+		auto texture = Director::getInstance()->getTextureCache()->addImage("structure/steelbar");
+		auto animation = Animation::create();
+		animation->setDelayPerUnit(0.1);
+		animation->addSpriteFrameWithTexture(texture, Rect(0, 0, 100, 163));
+		animation->addSpriteFrameWithTexture(texture, Rect(100, 0, 100, 163));
+		animation->addSpriteFrameWithTexture(texture, Rect(200, 0, 100, 163));
+		animation->addSpriteFrameWithTexture(texture, Rect(300, 0, 100, 163));
+		auto animate = Animate::create(animation);
+		auto seq = Sequence::create(animate,RemoveSelf::create(), nullptr);
+		((Sprite*)(leftLockBody->GetUserData()))->runAction(seq->clone());
+		((Sprite*)(rightLockBody->GetUserData()))->runAction(seq->clone());
 		_world->DestroyBody(leftLockBody);
 		_world->DestroyBody(rightLockBody);
 		doorOpen = true;

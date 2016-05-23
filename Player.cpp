@@ -82,11 +82,57 @@ void Player::MoveAction()
 
 void Player::HittedAction()
 {
-	//this->stopAllActions();
-	this->runAction(Sequence::create(FadeOut::create(0.1), FadeIn::create(0.1), FadeOut::create(0.1), FadeIn::create(0.1),
-		FadeOut::create(0.1), FadeIn::create(0.1), FadeOut::create(0.1), FadeIn::create(0.1), 
-		FadeOut::create(0.1), FadeIn::create(0.1), nullptr));
+	this->schedule(schedule_selector(Player::hittedAction2));
 	
+	
+
+}
+void Player::hittedAction2(float dt)
+{
+	if (hitCount == 0)
+	{
+		count = count - 30;
+		if (count < 0)
+			count = 0;
+		this->setOpacity(count);
+		if (count == 0)
+			hitCount = 1;
+	}
+	else if (hitCount == 1)
+	{
+		count = count + 30;
+		if (count > 255)
+			count = 255;
+		this->setOpacity(count);
+		if (count == 255)
+			hitCount = 2;
+
+	}
+	else if (hitCount == 2)
+	{
+		count = count - 30;
+		if (count < 0)
+			count = 0;
+		this->setOpacity(count);
+		if (count == 0)
+			hitCount = 3;
+
+	}
+	else if (hitCount == 3)
+	{
+		count = count + 30;
+		if (count > 255)
+			count = 255;
+		this->setOpacity(count);
+		if (count == 255)
+		{
+			this->unschedule(schedule_selector(Player::hittedAction2));
+			hitCount = 0;
+		}
+
+	}
+		
+
 
 }
 

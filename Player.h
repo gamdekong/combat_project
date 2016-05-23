@@ -15,6 +15,7 @@ public:
 	void HittedAction();
 	void ChangeHitted(float dt);
 	void ChangeHitting(float dt);
+	void hittedAction2(float dt);
 	void Delay();
 
 
@@ -25,6 +26,8 @@ public:
 	int maxEnergy;
 	int nowEnergy;
 	int power;
+	int count = 100;
+	int hitCount = 0;
 	float attackSpeed;
 	bool alive = true;
 	bool hitted = false;

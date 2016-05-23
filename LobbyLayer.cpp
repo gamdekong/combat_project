@@ -51,6 +51,7 @@ bool LobbyLayer::init()
 
 	Sprite* bg1 = Sprite::create("joystick_background.png");
 	bg1->setPosition(kCenter1);
+	bg1->setScale(0.7);
 	this->addChild(bg1, 2);
 
 	thumb1 = Sprite::create("joystick_thumb.png");
@@ -76,6 +77,7 @@ bool LobbyLayer::init()
 
 	Sprite* bg2 = Sprite::create("joystick_background.png");
 	bg2->setPosition(kCenter2);
+	bg2->setScale(0.7);
 	this->addChild(bg2, 1);
 
 	thumb2 = Sprite::create("joystick_thumb.png");

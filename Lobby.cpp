@@ -29,6 +29,7 @@ bool Lobby::init()
 
 	player = new Player();
 	this->addChild(player, 1);
+	//player->setOpacity(256);
 	
 	
 	auto firegirl = new Monster(9);
