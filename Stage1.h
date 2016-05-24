@@ -58,6 +58,9 @@ public:
 	void RightLongAttack(float dt);
 	void LeftLongAttack(float dt);
 	void clearTime(float dt);
+	void AITick(float dt);
+	void AITick2(float dt);
+	void BossTick(float dt);
 
 	b2World *_world;
 	
@@ -75,6 +78,7 @@ public:
 	bool isAttacking;
 	bool initComplete = false;
 	bool doorOpen = false;
+	bool isAiOn = false;
 
 
 	//for debugging

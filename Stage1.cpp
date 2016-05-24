@@ -98,7 +98,7 @@ bool Stage1::init()
 		monster1->setPosition(Vec2(500, 200));
 		this->addChild(monster1, 1);
 		auto monster2 = new Monster(4);
-		monster2->setPosition(Vec2(800, 400));
+		monster2->setPosition(Vec2(800, 300));
 		this->addChild(monster2, 1);
 		auto monster3 = new Monster(3);
 		monster3->setPosition(Vec2(1000, 300));
@@ -213,10 +213,10 @@ bool Stage1::init()
 		monster2->setPosition(Vec2(700, 250));
 		this->addChild(monster2, 1);
 		auto monster3 = new Monster(6);
-		monster3->setPosition(Vec2(1000, 400));
+		monster3->setPosition(Vec2(1000, 300));
 		this->addChild(monster3, 1);
 		auto monster5 = new Monster(8);
-		monster5->setPosition(Vec2(300, 400));
+		monster5->setPosition(Vec2(300, 300));
 		this->addChild(monster5, 1);
 
 
@@ -266,14 +266,14 @@ bool Stage1::init()
 		auto monster1 = new Monster(3);
 		monster1->setPosition(Vec2(600, 200));
 		this->addChild(monster1, 1);
-		auto monster2 = new Monster(7);
+		auto monster2 = new Monster(6);
 		monster2->setPosition(Vec2(800, 300));
 		this->addChild(monster2, 1);
 		auto monster3 = new Monster(1);
 		monster3->setPosition(Vec2(500, 250));
 		this->addChild(monster3, 1);
 		auto monster5 = new Monster(5);
-		monster5->setPosition(Vec2(470, 390));
+		monster5->setPosition(Vec2(470, 290));
 		this->addChild(monster5, 1);
 
 
@@ -326,8 +326,8 @@ bool Stage1::init()
 		auto monster2 = new Monster(5);
 		monster2->setPosition(Vec2(900, 265));
 		this->addChild(monster2, 1);
-		auto monster3 = new Monster(7);
-		monster3->setPosition(Vec2(700, 385));
+		auto monster3 = new Monster(2);
+		monster3->setPosition(Vec2(700, 285));
 		this->addChild(monster3, 1);
 		auto monster5 = new Monster(8);
 		monster5->setPosition(Vec2(100, 250));
@@ -383,7 +383,7 @@ bool Stage1::init()
 		monster2->setPosition(Vec2(700, 270));
 		this->addChild(monster2, 1);
 		auto monster3 = new Monster(2);
-		monster3->setPosition(Vec2(1000, 370));
+		monster3->setPosition(Vec2(1000, 270));
 		this->addChild(monster3, 1);
 		auto monster5 = new Monster(4);
 		monster5->setPosition(Vec2(1200, 200));
@@ -436,7 +436,7 @@ bool Stage1::init()
 		monster1->setPosition(Vec2(700, 345));
 		this->addChild(monster1, 1);
 		auto monster2 = new Monster(5);
-		monster2->setPosition(Vec2(500, 380));
+		monster2->setPosition(Vec2(500, 280));
 		this->addChild(monster2, 1);
 		auto monster3 = new Monster(3);
 		monster3->setPosition(Vec2(300, 180));
@@ -481,7 +481,7 @@ bool Stage1::init()
 		monster2->setPosition(Vec2(900, 225));
 		this->addChild(monster2, 1);
 		auto monster3 = new Monster(5);
-		monster3->setPosition(Vec2(740, 400));
+		monster3->setPosition(Vec2(740, 300));
 		this->addChild(monster3, 1);
 		auto monster5 = new Monster(6);
 		monster5->setPosition(Vec2(1200, 120));
@@ -630,6 +630,7 @@ bool Stage1::createWorld(bool debug)
 	b2EdgeShape groundEdge;
 	b2FixtureDef boxShapeDef;
 	boxShapeDef.shape = &groundEdge;
+	boxShapeDef.filter.groupIndex = GROUP_INDEX_MONSTER;
 	boxShapeDef.filter.categoryBits = CATEGORY_GROUND;
 	boxShapeDef.filter.maskBits = CATEGORY_MONSTER + CATEGORY_PLAYER;
 
@@ -757,7 +758,7 @@ void Stage1::createMonster(Sprite * monster)
 	
 	monsterFixtureDef.filter.groupIndex = GROUP_INDEX_MONSTER;
 	monsterFixtureDef.filter.categoryBits = CATEGORY_MONSTER;
-	monsterFixtureDef.filter.maskBits = CATEGORY_PLAYER;
+	monsterFixtureDef.filter.maskBits = CATEGORY_PLAYER + CATEGORY_GROUND;
 
 	monsterBody->SetFixedRotation(true);
 	monsterBody->CreateFixture(&monsterFixtureDef);
@@ -796,6 +797,13 @@ void Stage1::createBackground()
 			door1->setAnchorPoint(Vec2(0, 0));
 			door1->setPosition(Vec2(380, 390));
 			this->addChild(door1, 0);
+
+			auto bossEye = Sprite::create("structure/bosseyes.png");
+			bossEye->setPosition(Vec2(door1->getContentSize().width / 2, door1->getContentSize().height / 2 + 30));
+			door1->addChild(bossEye);
+
+			auto seq = Sequence::create(FadeOut::create(0.1), FadeIn::create(0.1), DelayTime::create(0.3), nullptr);
+			bossEye->runAction(seq);
 		}
 		else if (false) //아이템 성소일시
 		{
@@ -968,46 +976,46 @@ void Stage1::tick(float dt)
 
 			if (b->GetUserData() == player)
 			{
-				float vx = joystickVelocity1->x* 5;//스피드
+				float vx = joystickVelocity1->x * 5;//스피드
 				float vy = joystickVelocity1->y * 5;
 				//set ball velocity by Joystick
 				b->SetLinearVelocity(b2Vec2(vx, vy) + (b->GetLinearVelocity()));
-				
+
 			}
-			
-	
+
+
 		}
-		
+
 
 	}
 
 
-	//미사일 바디 삭제와 벡터에서의 바디 삭제
+	//------------------------------------------------------미사일 바디 삭제와 벡터에서의 바디 삭제
 	for (int i = 0; i < missileBodyVector.size(); i++)
 	{
-	
+
 		if (missileBodyVector[i]->GetUserData() == nullptr)
 		{
 			_world->DestroyBody(missileBodyVector[i]);
 			missileBodyVector.erase(missileBodyVector.begin() + i);
-			
+
 		}
-		
+
 
 	}
 
 
 
-	// 몬스터 바디 삭제
+	//------------------------------------------------------- 몬스터 바디 삭제
 	for (int i = 0; i < monsterBodyVector.size(); i++)
 	{
 
 		if (monsterBodyVector[i]->GetUserData() == nullptr)
 		{
-			
+
 
 			_world->DestroyBody(monsterBodyVector[i]);
-			
+
 
 			monsterBodyVector.erase(monsterBodyVector.begin() + i);
 		}
@@ -1015,7 +1023,7 @@ void Stage1::tick(float dt)
 	}
 
 
-	// 문 제거
+	//------------------------------------------------------------------ 문 제거
 	if (monsterBodyVector.size() == 0 && doorOpen == false)
 	{
 		auto texture = Director::getInstance()->getTextureCache()->addImage("structure/steelbar.png");
@@ -1026,7 +1034,7 @@ void Stage1::tick(float dt)
 		animation->addSpriteFrameWithTexture(texture, Rect(200, 0, 100, 163));
 		animation->addSpriteFrameWithTexture(texture, Rect(300, 0, 100, 163));
 		auto animate = Animate::create(animation);
-		auto seq = Sequence::create(animate,RemoveSelf::create(), nullptr);
+		auto seq = Sequence::create(animate, RemoveSelf::create(), nullptr);
 		for (int i = 0; i < doorBodyVector.size(); i++)
 		{
 			((Sprite*)(doorBodyVector.at(i)->GetUserData()))->runAction(seq->clone());
@@ -1038,35 +1046,45 @@ void Stage1::tick(float dt)
 
 
 
-
+	//-------------------------------------------------------------- ZOrder 처리
 	for (int i = 0; i < monsterBodyVector.size(); i++)
 	{
 
 		Monster *monster = (Monster*)(monsterBodyVector[i]->GetUserData());
 
 		//  충돌 처리
-		if (player->getPosition().y < monster->getPosition().y + 30 && player->getPosition().y > monster->getPosition().y -30)
+		if (player->getPosition().y < monster->getPosition().y + 30 && player->getPosition().y > monster->getPosition().y - 30)
 		{
 			//log("dddd");
-			auto newFilter = new b2Filter();
-			auto oldFilter = new b2Filter();
-			*oldFilter = monsterBodyVector[i]->GetFixtureList()->GetFilterData();
+			b2Filter newFilter;
+			b2Filter oldFilter;
+			oldFilter.categoryBits = 0x0001;
+			oldFilter.maskBits = 0xFFFF;
+			oldFilter.groupIndex = 0;
+			oldFilter = monsterBodyVector[i]->GetFixtureList()->GetFilterData();
 			newFilter = oldFilter;
-			newFilter->maskBits = CATEGORY_PLAYER;
-			monsterBodyVector[i]->GetFixtureList()->SetFilterData(*newFilter);
+			newFilter.maskBits = CATEGORY_PLAYER;
+			monsterBodyVector[i]->GetFixtureList()->SetFilterData(newFilter);
+			//CC_SAFE_DELETE(newFilter);
+			//CC_SAFE_DELETE(oldFilter);
 		}
 		else
 		{
-			auto newFilter = new b2Filter();
-			auto oldFilter = new b2Filter();
-			*oldFilter = monsterBodyVector[i]->GetFixtureList()->GetFilterData();
+			b2Filter newFilter;
+			b2Filter oldFilter;
+			oldFilter.categoryBits = 0x0001;
+			oldFilter.maskBits = 0xFFFF;
+			oldFilter.groupIndex = 0;
+			oldFilter = monsterBodyVector[i]->GetFixtureList()->GetFilterData();
 			newFilter = oldFilter;
-			newFilter->maskBits = 200;
-			monsterBodyVector[i]->GetFixtureList()->SetFilterData(*newFilter);
+			newFilter.maskBits = 0;////////////////////////////////
+			monsterBodyVector[i]->GetFixtureList()->SetFilterData(newFilter);
+			//CC_SAFE_DELETE(newFilter);
+			//CC_SAFE_DELETE(oldFilter);
 
 		}
 
-		// ZOrder 처리
+
 		if (player->getPosition().y > monster->getPosition().y + 30)
 			player->setZOrder(monster->getZOrder() - 1);
 		else if (player->getPosition().y < monster->getPosition().y + 30)
@@ -1076,6 +1094,8 @@ void Stage1::tick(float dt)
 
 	}
 
+
+	//------------------------------------------------------------------- 공격 처리
 	if (player->alive == true && player->hitting == true)
 	{
 		if (joystickVelocity2->x > 0.9)
@@ -1089,8 +1109,8 @@ void Stage1::tick(float dt)
 		}
 	}
 
-	
 
+	//------------------------------------------------------------------ 캐릭터 이동
 	if (player->alive == true)
 	{
 		// 캐릭터 이동 관련 부분
@@ -1127,8 +1147,81 @@ void Stage1::tick(float dt)
 
 		}
 	}
+	//------------------------------------------------------------------  A.I
+	if (isAiOn == false )
+	{
+		//this->scheduleOnce(schedule_selector(Stage1::AITick), 1);
+		isAiOn = true;
+	}
+	
 
 }
+void Stage1::BossTick(float dt)
+{
+	auto playerPosition = player->getPosition();
+	/////////////////////////////         보스 작업 필요
+	for (int i = 0; i < monsterBodyVector.size(); i++)
+	{
+		auto x = playerBody->GetPosition().x - monsterBodyVector.at(i)->GetPosition().x;
+		auto y = playerBody->GetPosition().y - monsterBodyVector.at(i)->GetPosition().y;
+		float xR, yR;
+		if (x < 0)
+			xR = -2;
+		else
+			xR = 2;
+
+		if (y < 0)
+			yR = -2;
+		else
+			yR = 2;
+
+		monsterBodyVector.at(i)->SetLinearVelocity(b2Vec2(xR, yR));
+
+
+	}
+}
+
+void Stage1::AITick(float dt)
+{
+	if (stageNum != 7)
+	{
+		this->schedule(schedule_selector(Stage1::AITick2));
+	}
+	else if (stageNum == 7)
+	{
+		this->schedule(schedule_selector(Stage1::BossTick));
+	}
+
+}
+void Stage1::AITick2(float dt)
+{
+	auto playerPosition = player->getPosition();
+
+	for (int i = 0; i < monsterBodyVector.size(); i++)
+	{
+		auto x = playerBody->GetPosition().x - monsterBodyVector.at(i)->GetPosition().x;
+		auto y = playerBody->GetPosition().y - monsterBodyVector.at(i)->GetPosition().y;
+		float xR, yR;
+		if (x < 0)
+			xR = -2;
+		else
+			xR = 2;
+
+		if (y < 0)
+			yR = -2;
+		else
+			yR = 2;
+
+		monsterBodyVector.at(i)->SetLinearVelocity(b2Vec2(xR,yR));
+
+
+	}
+
+
+
+}
+
+
 
 void Stage1::LongAttack(int num)
 {
@@ -1249,4 +1342,3 @@ void Stage1::LeftLongAttack(float dt)
 void Stage1::clearTime(float dt)
 {
 }
-

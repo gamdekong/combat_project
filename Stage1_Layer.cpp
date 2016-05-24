@@ -247,8 +247,19 @@ void Stage1_Layer::MakeMap()
 	}
 
 	int num = (stage.size() - 2) / 2;
-	this->MakeMapRamdom(stage.at(0)->prev, stage.at(0), num, true);  //prev
-	this->MakeMapRamdom(stage.at(0)->next, stage.at(0), num, false);  //next
+	int ran = rand() % 2 == 0;
+	log("%d", ran);
+	if (ran)
+	{
+		this->MakeMapRamdom(stage.at(0)->prev, stage.at(0), num, true);  //prev
+		this->MakeMapRamdom(stage.at(0)->next, stage.at(0), num, false);  //next
+	}
+	else
+	{
+		this->MakeMapRamdom(stage.at(0)->next, stage.at(0), num, false);  //next
+		this->MakeMapRamdom(stage.at(0)->prev, stage.at(0), num, true);  //prev
+	}
+	
 
 
 	log("Map Make Done");
@@ -266,7 +277,7 @@ void Stage1_Layer::MakeMapRamdom(Stage1 *nowStage, Stage1 *preStage, int num, bo
 		{
 			nowStage->prev = preStage;
 		}
-		if (rand() % 2 == 0 && check[stage.size() - 1] != 1)
+		if (check[stage.size() - 1] != 1)
 		{
 			if (state == true)
 			{
@@ -282,21 +293,7 @@ void Stage1_Layer::MakeMapRamdom(Stage1 *nowStage, Stage1 *preStage, int num, bo
 			check[stage.size() - 1]++;
 
 		}
-		else if (rand() % 2 == 1 && check[stage.size() - 1] != 1)
-		{
-			if (state == true)
-			{
-				nowStage->prev = stage.at(stage.size() - 1);
-				stage.at(stage.size() - 1)->next = nowStage;
-			}
-			else
-			{
-				nowStage->next = stage.at(stage.size() - 1);
-				stage.at(stage.size() - 1)->prev = nowStage;
-			}
-			check[stage.size() - 1]++;
-
-		}
+		
 		return;
 
 	}
