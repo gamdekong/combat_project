@@ -9,6 +9,7 @@
 #include "Monster.h"
 #include "SwordMissile.h"
 #include "ContactListener.h"
+#include "BossMissile.h"
 
 
 
@@ -60,6 +61,7 @@ public:
 	void clearTime(float dt);
 	void AITick(float dt);
 	void AITick2(float dt);
+	void MakeBossMissile1(int, float, float);
 	void BossTick(float dt);
 
 	b2World *_world;
@@ -70,6 +72,7 @@ public:
 	b2Body *playerBody;
 	b2Body *leftLockBody, *rightLockBody;
 	vector<b2Body*> missileBodyVector;
+	vector<b2Body*> monsterMissileBodyVector;
 	vector<b2Body*> monsterBodyVector;
 	vector<b2Body*> doorBodyVector;
 	ContactListener* myContactListener;

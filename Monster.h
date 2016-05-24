@@ -14,6 +14,7 @@ using namespace cocos2d;
 #define FIREGIRL 9
 #define BALCKSMITH 10
 #define FIRE 11
+#define BOSS1 12
 
 class Monster : public cocos2d::Sprite
 {

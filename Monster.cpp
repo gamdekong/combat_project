@@ -53,6 +53,11 @@ Monster::Monster(int num)
 		nowEnergy = 1000;
 		power = 0;
 	}
+	else if (monsterNum == BOSS1)
+	{
+		nowEnergy = 50;
+		power = 2;
+	}
 
 
 	this->init2();
@@ -103,6 +108,10 @@ void Monster::init2()
 	case FIRE:
 		monster = Director::getInstance()->getTextureCache()->addImage("monster/npc/Bonfire_v1.png");
 		this->initWithTexture(monster, Rect(0, 0, 71, 100));
+		break;
+	case BOSS1:
+		monster = Director::getInstance()->getTextureCache()->addImage("monster/stage1-monster/swornd.png");
+		this->initWithTexture(monster, Rect(0, 0, 120, 120));
 		break;
 
 	}
@@ -193,6 +202,12 @@ void Monster::IdleAction()
 		animation->addSpriteFrameWithTexture(monster, Rect(120, 0, 60, 101));
 		animation->addSpriteFrameWithTexture(monster, Rect(180, 0, 60, 101));
 		break;
+	case BOSS1:
+		animation->addSpriteFrameWithTexture(monster, Rect(0, 0, 120, 120));
+		animation->addSpriteFrameWithTexture(monster, Rect(120, 0, 120, 120));
+		animation->addSpriteFrameWithTexture(monster, Rect(240, 0, 120, 120));
+		animation->addSpriteFrameWithTexture(monster, Rect(360, 0, 120, 120));
+		break;
 		
 
 	}
@@ -270,6 +285,14 @@ void Monster::AttackAction()
 		animation->addSpriteFrameWithTexture(monster, Rect(360, 240, 120, 120));
 		
 		break;
+	case BOSS1:
+		animation->addSpriteFrameWithTexture(monster, Rect(0, 120, 120, 120));
+		animation->addSpriteFrameWithTexture(monster, Rect(120, 120, 120, 120));
+		animation->addSpriteFrameWithTexture(monster, Rect(240, 120, 120, 120));
+		animation->addSpriteFrameWithTexture(monster, Rect(360, 120, 120, 120));
+		animation->addSpriteFrameWithTexture(monster, Rect(480, 120, 120, 120));
+		animation->addSpriteFrameWithTexture(monster, Rect(600, 120, 120, 120));
+		animation->addSpriteFrameWithTexture(monster, Rect(720, 120, 120, 120));
 	}
 	auto animate = Animate::create(animation);
 	auto seq = Sequence::create(animate,CallFunc::create(CC_CALLBACK_0(Monster::IdleAction,this)), nullptr);
@@ -345,6 +368,11 @@ void Monster::MoveAction()
 		animation->addSpriteFrameWithTexture(monster, Rect(480, 120, 120, 120));
 		animation->addSpriteFrameWithTexture(monster, Rect(600, 120, 120, 120));
 		break;
+	case BOSS1:
+		animation->addSpriteFrameWithTexture(monster, Rect(0, 0, 120, 120));
+		animation->addSpriteFrameWithTexture(monster, Rect(120, 0, 120, 120));
+		animation->addSpriteFrameWithTexture(monster, Rect(240, 0, 120, 120));
+		animation->addSpriteFrameWithTexture(monster, Rect(360, 0, 120, 120));
 	}
 	auto animate = Animate::create(animation);
 	auto seq = Sequence::create(animate, nullptr);
@@ -439,6 +467,16 @@ void Monster::DeadAction()
 		animation->addSpriteFrameWithTexture(monster, Rect(480, 480, 120, 120));
 		animation->addSpriteFrameWithTexture(monster, Rect(600, 480, 120, 120));
 		break;
+	case BOSS1:
+		animation->addSpriteFrameWithTexture(monster, Rect(0, 360, 120, 120));
+		animation->addSpriteFrameWithTexture(monster, Rect(120, 360, 120, 120));
+		animation->addSpriteFrameWithTexture(monster, Rect(240, 360, 120, 120));
+		animation->addSpriteFrameWithTexture(monster, Rect(360, 360, 120, 120));
+		animation->addSpriteFrameWithTexture(monster, Rect(480, 360, 120, 120));
+		animation->addSpriteFrameWithTexture(monster, Rect(600, 360, 120, 120));
+		animation->addSpriteFrameWithTexture(monster, Rect(720, 360, 120, 120));
+		animation->addSpriteFrameWithTexture(monster, Rect(840, 360, 120, 120));
+		animation->addSpriteFrameWithTexture(monster, Rect(960, 360, 120, 120));
 	}
 	auto animate = Animate::create(animation);
 	auto seq = Sequence::create(animate,RemoveSelf::create(), nullptr);

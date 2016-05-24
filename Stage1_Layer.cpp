@@ -118,6 +118,9 @@ bool Stage1_Layer::init()
 
 	stage.at(0)->init();
 	this->addChild(stage.at(0), 0);
+
+	//stage.at(9)->init();
+	//this->addChild(stage.at(9), 0);
    
 	this->schedule(schedule_selector(Stage1_Layer::tick));
     return true;
@@ -197,6 +200,8 @@ void Stage1_Layer::MakeMap()
 	bgLayer10->joystickVelocity2 = &velocity2;
 	bgLayer10->joystickIspressed1 = &isPressed1;
 	bgLayer10->joystickIspressed2 = &isPressed2;
+	//bgLayer10->player = player;
+	//bgLayer10->addChild(player,3);
 	//-------------------------------백터에 스테이지 넣기------------------
 
 	player->nowStage = bgLayer1;

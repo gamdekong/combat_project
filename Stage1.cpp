@@ -532,7 +532,7 @@ bool Stage1::init()
 	else if (stageNum == BOSS_MAP_NUM)
 	{
 
-		auto monster1 = new Monster(7);
+		auto monster1 = new Monster(12);
 		monster1->setPosition(Vec2(winsize.width / 2 , winsize.height /2));
 		this->addChild(monster1, 1);
 		
@@ -789,6 +789,15 @@ void Stage1::createBackground()
 	{
 		
 	}
+	else if (this->stageNum == BOSS_MAP_NUM)
+	{
+		
+			auto door1 = Sprite::create("structure/door.png");
+			door1->setAnchorPoint(Vec2(0, 0));
+			door1->setPosition(Vec2(380, 390));
+			this->addChild(door1, 0);
+		
+	}
 	else
 	{
 		if (this->prev->stageNum == BOSS_MAP_NUM) //다음맵의 보스맵일 경우
@@ -803,7 +812,8 @@ void Stage1::createBackground()
 			door1->addChild(bossEye);
 
 			auto seq = Sequence::create(FadeOut::create(0.1), FadeIn::create(0.1), DelayTime::create(0.3), nullptr);
-			bossEye->runAction(seq);
+			auto seqR = RepeatForever::create(seq);
+			bossEye->runAction(seqR);
 		}
 		else if (false) //아이템 성소일시
 		{
@@ -822,6 +832,15 @@ void Stage1::createBackground()
 	{
 
 	}
+	else if (this->stageNum == BOSS_MAP_NUM)
+	{
+		
+			auto door1 = Sprite::create("structure/door.png");
+			door1->setAnchorPoint(Vec2(0, 0));
+			door1->setPosition(Vec2(985, 390));
+			this->addChild(door1, 0);
+		
+	}
 	else
 	{
 		if (this->next->stageNum == BOSS_MAP_NUM)
@@ -830,6 +849,14 @@ void Stage1::createBackground()
 			door1->setAnchorPoint(Vec2(0, 0));
 			door1->setPosition(Vec2(985, 390));
 			this->addChild(door1, 0);
+
+			auto bossEye = Sprite::create("structure/bosseyes.png");
+			bossEye->setPosition(Vec2(door1->getContentSize().width / 2, door1->getContentSize().height / 2 + 30));
+			door1->addChild(bossEye);
+
+			auto seq = Sequence::create(FadeOut::create(0.1), FadeIn::create(0.1), DelayTime::create(0.3), nullptr);
+			auto seqR = RepeatForever::create(seq);
+			bossEye->runAction(seqR);
 		}
 		else if(false) //아이템 성소일시
 		{
@@ -1150,7 +1177,7 @@ void Stage1::tick(float dt)
 	//------------------------------------------------------------------  A.I
 	if (isAiOn == false )
 	{
-		//this->scheduleOnce(schedule_selector(Stage1::AITick), 1);
+		this->scheduleOnce(schedule_selector(Stage1::AITick), 1);
 		isAiOn = true;
 	}
 	
@@ -1160,36 +1187,25 @@ void Stage1::BossTick(float dt)
 {
 	auto playerPosition = player->getPosition();
 	/////////////////////////////         보스 작업 필요
-	for (int i = 0; i < monsterBodyVector.size(); i++)
-	{
-		auto x = playerBody->GetPosition().x - monsterBodyVector.at(i)->GetPosition().x;
-		auto y = playerBody->GetPosition().y - monsterBodyVector.at(i)->GetPosition().y;
-		float xR, yR;
-		if (x < 0)
-			xR = -2;
-		else
-			xR = 2;
-
-		if (y < 0)
-			yR = -2;
-		else
-			yR = 2;
-
-		monsterBodyVector.at(i)->SetLinearVelocity(b2Vec2(xR, yR));
-
-
-	}
+	this->MakeBossMissile1(1, 0, 1);
+	this->MakeBossMissile1(2, 1, 1);
+	this->MakeBossMissile1(3, 1, 0);
+	this->MakeBossMissile1(4, 1, -1);
+	this->MakeBossMissile1(5, 0, -1);
+	this->MakeBossMissile1(6, -1, -1);
+	this->MakeBossMissile1(7, -1, 0);
+	this->MakeBossMissile1(8, -1, 1);
 }
 
 void Stage1::AITick(float dt)
 {
-	if (stageNum != 7)
+	if (stageNum == 9)
+	{
+		this->schedule(schedule_selector(Stage1::BossTick),1);
+	}
+	else 
 	{
 		this->schedule(schedule_selector(Stage1::AITick2));
-	}
-	else if (stageNum == 7)
-	{
-		this->schedule(schedule_selector(Stage1::BossTick));
 	}
 
 }
@@ -1219,6 +1235,86 @@ void Stage1::AITick2(float dt)
 
 
 
+}
+void Stage1::MakeBossMissile1(int location, float x, float y)
+{
+	Vec2 position;
+	if (location == 1)
+	{
+		position = Vec2(((Sprite*)(monsterBodyVector.at(0)->GetUserData()))->getPosition().x 
+			, ((Sprite*)(monsterBodyVector.at(0)->GetUserData()))->getPosition().y + 50);
+	}
+	else if (location == 2)
+	{
+		position = Vec2(((Sprite*)(monsterBodyVector.at(0)->GetUserData()))->getPosition().x+50
+			, ((Sprite*)(monsterBodyVector.at(0)->GetUserData()))->getPosition().y + 50);
+	}
+	else if (location == 3)
+	{
+		position = Vec2(((Sprite*)(monsterBodyVector.at(0)->GetUserData()))->getPosition().x+50
+			, ((Sprite*)(monsterBodyVector.at(0)->GetUserData()))->getPosition().y );
+	}
+	else if (location == 4)
+	{
+		position = Vec2(((Sprite*)(monsterBodyVector.at(0)->GetUserData()))->getPosition().x+50
+			, ((Sprite*)(monsterBodyVector.at(0)->GetUserData()))->getPosition().y - 50);
+	}
+	else if (location == 5)
+	{
+		position = Vec2(((Sprite*)(monsterBodyVector.at(0)->GetUserData()))->getPosition().x
+			, ((Sprite*)(monsterBodyVector.at(0)->GetUserData()))->getPosition().y - 50);
+	}
+	else if (location == 6)
+	{
+		position = Vec2(((Sprite*)(monsterBodyVector.at(0)->GetUserData()))->getPosition().x -50
+			, ((Sprite*)(monsterBodyVector.at(0)->GetUserData()))->getPosition().y - 50);
+	}
+	else if (location == 7)
+	{
+		position = Vec2(((Sprite*)(monsterBodyVector.at(0)->GetUserData()))->getPosition().x -50
+			, ((Sprite*)(monsterBodyVector.at(0)->GetUserData()))->getPosition().y );
+	}
+	else if (location == 8)
+	{
+		position = Vec2(((Sprite*)(monsterBodyVector.at(0)->GetUserData()))->getPosition().x -50
+			, ((Sprite*)(monsterBodyVector.at(0)->GetUserData()))->getPosition().y + 50);
+	}
+
+
+	BossMissile *missile = new BossMissile(1);
+	missile->setPosition(position);
+	//missile->setAnchorPoint(Vec2(0.8, 0.5));
+	this->addChild(missile);
+	missile->startAction();
+	//auto move = MoveBy::create(1.75f, Vec2(1500, 0));
+	//missile->runAction(move);
+
+	b2BodyDef missileBodyDef;
+	missileBodyDef.type = b2_dynamicBody;
+	missileBodyDef.position.Set((missile->getPosition().x) / PTM_RATIO, missile->getPosition().y / PTM_RATIO);
+	missileBodyDef.linearDamping = 0;
+	missileBodyDef.userData = missile;
+
+	auto missileBody = _world->CreateBody(&missileBodyDef);
+	//playerBody->SetMassData(mass);
+	//playerBody->SetGravityScale(0);
+	b2CircleShape circle;
+	circle.m_radius = 0.45f;
+	
+
+
+	b2FixtureDef missileFixtureDef;
+	missileFixtureDef.shape = &circle;
+	missileFixtureDef.density = 1.0f;
+	missileFixtureDef.restitution = 0.5;
+	//missileFixtureDef.filter.groupIndex = GROUP_INDEX_MONSTER;
+	missileFixtureDef.filter.categoryBits = CATEGORY_MONSTER;
+	missileFixtureDef.filter.maskBits = CATEGORY_PLAYER;
+	//missileBody->SetFixedRotation(true);
+	missileBody->CreateFixture(&missileFixtureDef);
+	missileBody->SetLinearVelocity(b2Vec2(x, y));
+	monsterMissileBodyVector.push_back(missileBody);
+	//joystick2->attack = 0;
 }
 
 
@@ -1284,8 +1380,8 @@ void Stage1::RightLongAttack(float dt)
 	missileFixtureDef.density = 1.0f;
 	missileFixtureDef.restitution = 0.5;
 	missileFixtureDef.filter.groupIndex = GROUP_INDEX_MONSTER;
-	//monsterFixtureDef.filter.categoryBits = CATEGORY_MONSTER;
-	//monsterFixtureDef.filter.maskBits = CATEGORY_PLAYER;
+	missileFixtureDef.filter.categoryBits = CATEGORY_MONSTER;
+	missileFixtureDef.filter.maskBits = CATEGORY_MONSTER;
 	//missileBody->SetFixedRotation(true);
 	missileBody->CreateFixture(&missileFixtureDef);
 	missileBody->SetLinearVelocity(b2Vec2(10, 0));
@@ -1328,8 +1424,8 @@ void Stage1::LeftLongAttack(float dt)
 	missileFixtureDef.density = 1.0f;
 	missileFixtureDef.restitution = 0.5;
 	missileFixtureDef.filter.groupIndex = GROUP_INDEX_MONSTER;
-	//monsterFixtureDef.filter.categoryBits = CATEGORY_MONSTER;
-	//monsterFixtureDef.filter.maskBits = CATEGORY_PLAYER;
+	missileFixtureDef.filter.categoryBits = CATEGORY_MONSTER;
+	missileFixtureDef.filter.maskBits = CATEGORY_MONSTER;
 	//missileBody->SetFixedRotation(true);
 	missileBody->CreateFixture(&missileFixtureDef);
 	missileBody->SetLinearVelocity(b2Vec2(-10, 0));
