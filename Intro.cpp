@@ -26,27 +26,40 @@ bool Intro::init()
 
 	auto winsize = Director::getInstance()->getWinSize();
 
-	auto bg = Sprite::create("intro/background-star1.png");
-	auto gameName = Sprite::create("intro/title.png");
+	auto bg = Sprite::create("intro/intro_bg.png");
 	bg->setPosition(Vec2(0 , 0));
 	bg->setAnchorPoint(Vec2(0, 0));
-	gameName->setPosition(Vec2(winsize.width / 2, winsize.height/2 + 150));
 
-	auto bg2 = Sprite::create("intro/bg2.png");
-	bg2->setAnchorPoint(Vec2(0, 0));
-	bg2->setPosition(Vec2(0, 0));
+	auto title = Sprite::create("intro/title.png");
+	title->setPosition(Vec2(winsize.width / 2, winsize.height/2 + 200));
+
+	auto sub_title = Sprite::create("intro/sub_title.png");
+	sub_title->setPosition(Vec2(title->getContentSize().width-100, -30));
 	
 	
 	
 
+	
+	
+
+	auto clickbg = Sprite::create("intro/clickbg.png");
+	clickbg->setOpacity(200);
+	clickbg->setPosition(Vec2(winsize.width / 2, 100));
+	
 	auto click = Sprite::create("intro/click.png");
-	click->setPosition(Vec2(winsize.width / 2, 100));
+	click->setPosition(Vec2(clickbg->getContentSize().width / 2, clickbg->getContentSize().height / 2));
 	
 	
-	this->addChild(click, 10);
 	this->addChild(bg,0);
+	this->addChild(title, 10);
+	title->addChild(sub_title);
+	this->addChild(clickbg,10);
+	clickbg->addChild(click);
+
 	//this->addChild(bg2, 4);
-	this->addChild(gameName, 10);
+	auto seq = Sequence::create(FadeOut::create(0.2),FadeIn::create(0.2), DelayTime::create(0.5), nullptr);
+	auto seqR = RepeatForever::create(seq);
+	click->runAction(seqR);
 
 
 	
@@ -82,62 +95,32 @@ void Intro::doParticles()
 	int x = rand() % 1200 - 200 ;
 	int y = rand() % 700 + 300;
 	int type = rand() % 2 + 1;
-	int speed = rand() % 8 +4;
-	float size = (float)(rand() % 3+1 ) / 10;
-	//ParticleSystem* particleTest = ParticleFire::create();
-	ParticleSystem* particleTest1 = ParticleSun::create();
-	//ParticleSystem* particleTest = ParticleGalaxy::create();
-	//ParticleSystem* particleTest = ParticleSmoke::create();
-	ParticleSystem* particleTest2 = ParticleMeteor::create();
-	//ParticleSystem* particleTest = ParticleSpiral::create();   //fire.png
-	//ParticleSystem* particleTest = ParticleFlower::create();
-	//ParticleSystem* particleTest = ParticleFireworks::create();
-	//ParticleSystem* particleTest = ParticleExplosion::create();  //stars.png
+	int speed = rand() % 3+6 ;
+	speed = speed / 3;
+	float size = (float)(rand() % 3+7 ) / 10;
+	
+	auto shooting = Sprite::create("intro/shooting_star.png");
 
-	auto texture = Director::getInstance()->getTextureCache()->addImage("images/fire.png");
-	if (type == 1)
-	{
-		particleTest1->setTexture(texture);
-		if (particleTest1 != nullptr)
-		{
 
-			//파티클의 크기 조정
-			particleTest1->setScale(size);
-
-			//파티클의 지속 시간 조정 : -1 means 'foerver'
-			//particleTest->setDuration(1,0);
-
-			//파티클의 위치 조정
-			particleTest1->setPosition(Vec2(x, y));
-			auto move = MoveBy::create(speed, Vec2(1300, -2000));
-			auto seq = Sequence::create(move, RemoveSelf::create(), nullptr);
-			particleTest1->runAction(seq);
-			this->addChild(particleTest1,5);
-
-		}
 		
-	}
-	else if (type == 2)
-	{
-		particleTest2->setTexture(texture);
-		if (particleTest2 != nullptr)
+		if (shooting != nullptr)
 		{
 
 			//파티클의 크기 조정
-			particleTest2->setScale(size);
+			shooting->setScale(size);
 
 			//파티클의 지속 시간 조정 : -1 means 'foerver'
 			//particleTest->setDuration(1,0);
 
 			//파티클의 위치 조정
-			particleTest2->setPosition(Vec2(x, y));
-			auto move = MoveBy::create(speed, Vec2(1300, -2000));
+			shooting->setPosition(Vec2(x, y));
+			auto move = MoveBy::create(speed, Vec2(2000, -1500));
 			auto seq = Sequence::create(move, RemoveSelf::create(), nullptr);
-			particleTest2->runAction(seq);
-			this->addChild(particleTest2,5);
+			shooting->runAction(seq);
+			this->addChild(shooting,5);
 
 		}
-	}
+	
 	
 
 }
@@ -146,9 +129,9 @@ void Intro::doStar()
 {
 	int x = rand() % 1280 + 1;
 	int y = rand() % 720 + 1;
-	float size = (float)(rand() % 3 + 2) / 10;
+	float size = (float)(rand() % 3 + 5) / 10;
 
-	auto star = Sprite::create("images/stars.png");
+	auto star = Sprite::create("intro/star.png");
 	star->setPosition(Vec2(x, y));
 	star->setOpacity(0);
 	star->setScale(size);

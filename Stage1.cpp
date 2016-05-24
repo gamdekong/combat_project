@@ -864,6 +864,7 @@ void Stage1::createBackground()
 		leftLockFixture.filter.maskBits = CATEGORY_MONSTER + CATEGORY_PLAYER;
 
 		leftLockBody->CreateFixture(&leftLockFixture);
+		doorBodyVector.push_back(leftLockBody);
 
 	}
 
@@ -897,6 +898,7 @@ void Stage1::createBackground()
 		rightLockFixture.filter.maskBits = CATEGORY_MONSTER + CATEGORY_PLAYER;
 
 		rightLockBody->CreateFixture(&rightLockFixture);
+		doorBodyVector.push_back(rightLockBody);
 	}
 
 	
@@ -1025,14 +1027,12 @@ void Stage1::tick(float dt)
 		animation->addSpriteFrameWithTexture(texture, Rect(300, 0, 100, 163));
 		auto animate = Animate::create(animation);
 		auto seq = Sequence::create(animate,RemoveSelf::create(), nullptr);
-		//if ()  ////////////////없는문 제거시 에러
+		for (int i = 0; i < doorBodyVector.size(); i++)
 		{
-
+			((Sprite*)(doorBodyVector.at(i)->GetUserData()))->runAction(seq->clone());
+			_world->DestroyBody(doorBodyVector.at(i));
 		}
-		((Sprite*)(leftLockBody->GetUserData()))->runAction(seq->clone());
-		((Sprite*)(rightLockBody->GetUserData()))->runAction(seq->clone());
-		_world->DestroyBody(leftLockBody);
-		_world->DestroyBody(rightLockBody);
+		doorBodyVector.clear();
 		doorOpen = true;
 	}
 

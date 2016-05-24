@@ -68,6 +68,7 @@ public:
 	b2Body *leftLockBody, *rightLockBody;
 	vector<b2Body*> missileBodyVector;
 	vector<b2Body*> monsterBodyVector;
+	vector<b2Body*> doorBodyVector;
 	ContactListener* myContactListener;
 	int clickCount = 0;
 	int count = 0;
