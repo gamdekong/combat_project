@@ -155,7 +155,7 @@ void Player::Delay()
 Player::Player()
 {
 	attackSpeed = 0.2;
-	nowEnergy = 10;
+	nowEnergy = 50;
 	power = 1;
 	energy = new Energy();
 

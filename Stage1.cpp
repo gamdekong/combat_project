@@ -811,7 +811,7 @@ void Stage1::createBackground()
 			bossEye->setPosition(Vec2(door1->getContentSize().width / 2, door1->getContentSize().height / 2 + 30));
 			door1->addChild(bossEye);
 
-			auto seq = Sequence::create(FadeOut::create(0.1), FadeIn::create(0.1), DelayTime::create(0.3), nullptr);
+			auto seq = Sequence::create(FadeOut::create(0.5), FadeIn::create(0.5), DelayTime::create(1), nullptr);
 			auto seqR = RepeatForever::create(seq);
 			bossEye->runAction(seqR);
 		}
@@ -854,7 +854,7 @@ void Stage1::createBackground()
 			bossEye->setPosition(Vec2(door1->getContentSize().width / 2, door1->getContentSize().height / 2 + 30));
 			door1->addChild(bossEye);
 
-			auto seq = Sequence::create(FadeOut::create(0.1), FadeIn::create(0.1), DelayTime::create(0.3), nullptr);
+			auto seq = Sequence::create(FadeOut::create(0.5), FadeIn::create(0.5), DelayTime::create(1), nullptr);
 			auto seqR = RepeatForever::create(seq);
 			bossEye->runAction(seqR);
 		}
@@ -895,6 +895,7 @@ void Stage1::createBackground()
 		b2FixtureDef leftLockFixture;
 		leftLockFixture.shape = &leftLockBox;
 		leftLockFixture.density = 1.0f;
+		
 		leftLockFixture.filter.categoryBits = CATEGORY_GROUND;
 		leftLockFixture.filter.maskBits = CATEGORY_MONSTER + CATEGORY_PLAYER;
 
@@ -1001,7 +1002,7 @@ void Stage1::tick(float dt)
 			spriteData->setPosition(Vec2(b->GetPosition().x * PTM_RATIO, b->GetPosition().y * PTM_RATIO));
 			spriteData->setRotation(-1 * CC_RADIANS_TO_DEGREES(b->GetAngle()));
 
-			if (b->GetUserData() == player)
+			if (b->GetUserData() == player &&  player->alive )
 			{
 				float vx = joystickVelocity1->x * 5;//스피드
 				float vy = joystickVelocity1->y * 5;
@@ -1025,6 +1026,20 @@ void Stage1::tick(float dt)
 		{
 			_world->DestroyBody(missileBodyVector[i]);
 			missileBodyVector.erase(missileBodyVector.begin() + i);
+
+		}
+
+
+	}
+
+
+	for (int i = 0; i < monsterMissileBodyVector.size(); i++)
+	{
+
+		if (monsterMissileBodyVector[i]->GetUserData() == nullptr)
+		{
+			_world->DestroyBody(monsterMissileBodyVector[i]);
+			monsterMissileBodyVector.erase(monsterMissileBodyVector.begin() + i);
 
 		}
 
@@ -1138,7 +1153,7 @@ void Stage1::tick(float dt)
 
 
 	//------------------------------------------------------------------ 캐릭터 이동
-	if (player->alive == true)
+	if (player->alive)
 	{
 		// 캐릭터 이동 관련 부분
 		if (joystickVelocity1->x == 0 && joystickVelocity1->y == 0 && count == 0)
@@ -1187,29 +1202,102 @@ void Stage1::BossTick(float dt)
 {
 	auto playerPosition = player->getPosition();
 	/////////////////////////////         보스 작업 필요
-	this->MakeBossMissile1(1, 0, 1);
-	this->MakeBossMissile1(2, 1, 1);
-	this->MakeBossMissile1(3, 1, 0);
-	this->MakeBossMissile1(4, 1, -1);
-	this->MakeBossMissile1(5, 0, -1);
-	this->MakeBossMissile1(6, -1, -1);
-	this->MakeBossMissile1(7, -1, 0);
-	this->MakeBossMissile1(8, -1, 1);
+
+	for (int i = 0; i < monsterBodyVector.size(); i++)
+	{
+		if (((Monster*)(monsterBodyVector.at(i)->GetUserData()))->nowEnergy >25)
+		{
+			if (bossFirstAttack)
+			{
+				this->BossCrossAttack();
+				bossFirstAttack = false;
+			}
+			else
+			{
+				this->BossXAttack();
+				bossFirstAttack = true;
+
+			}
+		}
+		else if (((Monster*)(monsterBodyVector.at(i)->GetUserData()))->nowEnergy <=25)
+		{
+			BossPointAttack(monsterBodyVector.at(i));
+
+		}
+	}
+}
+void Stage1::BossPointAttack(b2Body *bossBody)
+{
+	BossMissile *missile = new BossMissile(1);
+	missile->setPosition(((Monster*)(bossBody->GetUserData()))->getPosition());
+	//missile->setAnchorPoint(Vec2(0.8, 0.5));
+	this->addChild(missile);
+	missile->startAction();
+	//auto move = MoveBy::create(1.75f, Vec2(1500, 0));
+	//missile->runAction(move);
+
+	b2BodyDef missileBodyDef;
+	missileBodyDef.type = b2_dynamicBody;
+	missileBodyDef.position.Set((missile->getPosition().x) / PTM_RATIO, missile->getPosition().y / PTM_RATIO);
+	missileBodyDef.linearDamping = 0;
+	missileBodyDef.userData = missile;
+
+	auto missileBody = _world->CreateBody(&missileBodyDef);
+	//playerBody->SetMassData(mass);
+	//playerBody->SetGravityScale(0);
+	b2CircleShape circle;
+	circle.m_radius = 0.45f;
+
+
+
+	b2FixtureDef missileFixtureDef;
+	missileFixtureDef.shape = &circle;
+	missileFixtureDef.density = 1.0f;
+	missileFixtureDef.restitution = 0.5;
+	//missileFixtureDef.filter.groupIndex = GROUP_INDEX_MONSTER;
+	missileFixtureDef.filter.categoryBits = CATEGORY_MONSTER;
+	missileFixtureDef.filter.maskBits = CATEGORY_PLAYER;
+	//missileBody->SetFixedRotation(true);
+	missileBody->CreateFixture(&missileFixtureDef);
+	missileBody->SetLinearVelocity(playerBody->GetPosition()- bossBody->GetPosition());
+	//missileBody->SetTransform(b2Vec2(player->getPosition().x / PTM_RATIO, player->getPosition().y / PTM_RATIO), 0);
+	monsterMissileBodyVector.push_back(missileBody);
+}
+void Stage1::BossCrossAttack()
+{
+	for (int i = 0; i < monsterBodyVector.size(); i++)
+	{
+		this->MakeBossMissile1(1, 0, 7);
+		this->MakeBossMissile1(3, 7, 0);
+		this->MakeBossMissile1(5, 0, -7);
+		this->MakeBossMissile1(7, -7, 0);
+	}
+
+}
+void Stage1::BossXAttack()
+{
+	for (int i = 0; i < monsterBodyVector.size(); i++)
+	{
+		
+		this->MakeBossMissile1(2, 4, 4);
+		this->MakeBossMissile1(4, 4, -4);
+		this->MakeBossMissile1(6, -4, -4);
+		this->MakeBossMissile1(8, -4, 4);
+	}
 }
 
-void Stage1::AITick(float dt)
+void Stage1::AITick(float dt)  //  AI 시작
 {
-	if (stageNum == 9)
+	if (stageNum == BOSS_MAP_NUM)
 	{
 		this->schedule(schedule_selector(Stage1::BossTick),1);
 	}
-	else 
-	{
+	
 		this->schedule(schedule_selector(Stage1::AITick2));
-	}
+	
 
 }
-void Stage1::AITick2(float dt)
+void Stage1::AITick2(float dt)  // 몬스터 이동 부분
 {
 	auto playerPosition = player->getPosition();
 
@@ -1218,15 +1306,30 @@ void Stage1::AITick2(float dt)
 		auto x = playerBody->GetPosition().x - monsterBodyVector.at(i)->GetPosition().x;
 		auto y = playerBody->GetPosition().y - monsterBodyVector.at(i)->GetPosition().y;
 		float xR, yR;
-		if (x < 0)
-			xR = -2;
-		else
-			xR = 2;
+		if (stageNum == BOSS_MAP_NUM)
+		{
+			if (x < 0)
+				xR = -1;
+			else
+				xR = 1;
 
-		if (y < 0)
-			yR = -2;
+			if (y < 0)
+				yR = -1;
+			else
+				yR = 1;
+		}
 		else
-			yR = 2;
+		{
+			if (x < 0)
+				xR = -2;
+			else
+				xR = 2;
+
+			if (y < 0)
+				yR = -2;
+			else
+				yR = 2;
+		}
 
 		monsterBodyVector.at(i)->SetLinearVelocity(b2Vec2(xR,yR));
 

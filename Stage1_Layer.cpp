@@ -1,5 +1,5 @@
 ﻿#include "Stage1_Layer.h"
-
+#include "Gameover.h"
 USING_NS_CC;
 
 
@@ -24,8 +24,10 @@ bool Stage1_Layer::init()
         return false;
     }
 	srand((unsigned)time(nullptr));
+	winsize = Director::getInstance()->getWinSize();
 
-	auto winsize = Director::getInstance()->getWinSize();
+	
+	
 	player = new Player();
 		//player = new Player();
 	//this->addChild(player,1);
@@ -116,11 +118,11 @@ bool Stage1_Layer::init()
 
 	//---------------------------------------------------------------------
 
-	stage.at(0)->init();
-	this->addChild(stage.at(0), 0);
+	//stage.at(0)->init();
+	//this->addChild(stage.at(0), 0);
 
-	//stage.at(9)->init();
-	//this->addChild(stage.at(9), 0);
+	stage.at(9)->init();
+	this->addChild(stage.at(9), 0);
    
 	this->schedule(schedule_selector(Stage1_Layer::tick));
     return true;
@@ -143,8 +145,8 @@ void Stage1_Layer::MakeMap()
 	bgLayer1->joystickVelocity2 = &velocity2;
 	bgLayer1->joystickIspressed1 = &isPressed1;
 	bgLayer1->joystickIspressed2 = &isPressed2;
-	bgLayer1->player = player;
-	bgLayer1->addChild(player,3);
+	//bgLayer1->player = player;
+	//bgLayer1->addChild(player,3);
 	
 
 	auto bgLayer2 = new Stage1();
@@ -200,11 +202,11 @@ void Stage1_Layer::MakeMap()
 	bgLayer10->joystickVelocity2 = &velocity2;
 	bgLayer10->joystickIspressed1 = &isPressed1;
 	bgLayer10->joystickIspressed2 = &isPressed2;
-	//bgLayer10->player = player;
-	//bgLayer10->addChild(player,3);
+	bgLayer10->player = player;
+	bgLayer10->addChild(player,3);
 	//-------------------------------백터에 스테이지 넣기------------------
 
-	player->nowStage = bgLayer1;
+	player->nowStage = bgLayer10;
 
 	stage.push_back(bgLayer1);
 	stage.push_back(bgLayer2);
@@ -434,13 +436,19 @@ bool Stage1_Layer::handleLastTouch2()
 void Stage1_Layer::tick(float dt)
 {
 
-	if (player->getPosition().x > 1000 && player->getPosition().x < 1100 && player->getPosition().y > 480 ) // 오른쪽문
+	if (player->getPosition().x > 1000 && player->getPosition().x < 1100 && player->getPosition().y > 480) // 오른쪽문
 	{
 		auto nowPlayerStage = (Stage1*)(player->nowStage);
 		auto nextPlayerStage = ((Stage1*)(player->nowStage))->next;
-		if (nowPlayerStage->next->initComplete == false)
+		if (nowPlayerStage->next == nullptr)
 		{
-			
+			auto pScene = Gameover::createScene();
+			Director::getInstance()->replaceScene(TransitionFade::create(0.5, pScene));
+
+		}
+		else if (nowPlayerStage->next->initComplete == false)
+		{
+
 			//-----------플레이어의 현재 스테이지를 바꾸고 현재스테이지는 제거한다.
 			player->nowStage = nextPlayerStage;
 			nowPlayerStage->removeChild(player, false);
@@ -458,7 +466,7 @@ void Stage1_Layer::tick(float dt)
 		{
 			//------------현재 스테이지 제거
 			player->nowStage = nextPlayerStage;
-			nowPlayerStage->removeChild(player,false);
+			nowPlayerStage->removeChild(player, false);
 			nowPlayerStage->_world->DestroyBody(nowPlayerStage->playerBody);
 			this->removeChild(nowPlayerStage, false);
 
@@ -467,17 +475,23 @@ void Stage1_Layer::tick(float dt)
 			nextPlayerStage->addChild(player);
 			nextPlayerStage->createPlayer(player);
 			this->addChild(nextPlayerStage);
-			
+
 
 		}
-		
+
 
 	}
-	else if (player->getPosition().x > 400 && player->getPosition().x < 500 && player->getPosition().y > 480 ) // 왼쪽문
+	else if (player->getPosition().x > 400 && player->getPosition().x < 500 && player->getPosition().y > 480) // 왼쪽문
 	{
+
 		auto nowPlayerStage = (Stage1*)(player->nowStage);
 		auto prevPlayerStage = ((Stage1*)(player->nowStage))->prev;
-		if (nowPlayerStage->prev->initComplete == false)
+		if (nowPlayerStage->prev == nullptr)
+		{
+			auto pScene = Gameover::createScene();
+			Director::getInstance()->replaceScene(TransitionFade::create(0.5, pScene));
+		}
+		else if (nowPlayerStage->prev->initComplete == false)
 		{
 
 			//-----------플레이어의 현재 스테이지를 바꾸고 현재스테이지는 제거한다.
@@ -509,11 +523,40 @@ void Stage1_Layer::tick(float dt)
 
 
 		}
-		
-		
-
 	}
 
+	if (((Stage1*)(player->nowStage))->stageNum == 9) //보스 스테이지
+	{
+		
+		if (isProgressOn == false)
+		{
+			auto bossenergy = Sprite::create("ui/bossenergy.png");
+			pt = ProgressTimer::create(bossenergy);
+			pt->setType(ProgressTimer::Type::BAR);
+			pt->setPosition(Vec2(winsize.width / 2, winsize.height - 100));
+			pt->setMidpoint(Vec2(0, 0));
+			pt->setBarChangeRate(Vec2(1, 0));
+			log("progress");
+			this->addChild(pt);
+			isProgressOn = true;
+			
+			log("progress2");
+		}
+		vector<b2Body*> temp = ((Stage1*)(player->nowStage))->monsterBodyVector;
+
+		for (int i = 0; i < temp.size(); i++)
+		{
+			float bossEnergy = ((Monster*)(temp.at(i)->GetUserData()))->nowEnergy;
+			float bossMaxEnergy = ((Monster*)(temp.at(i)->GetUserData()))->maxEnergy;
+			float f = (bossEnergy / bossMaxEnergy) * 100;
+			if (((Monster*)(temp.at(i)->GetUserData()))->nowEnergy <= 0)
+				f = 0;
+			log("%f", f);
+			pt->setPercentage(f);
+
+		}
+
+	}
 }
 
 void Stage1_Layer::ItemUse(Ref * p)

@@ -9,8 +9,10 @@ public:
 	BossMissile(int);
 	void init2(int);
 	void startAction();
+	void selfRemove();
 
 	int missileNum;
+	int power;
 
 	Texture2D *missile;
 	Sprite *missile1;

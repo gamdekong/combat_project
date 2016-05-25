@@ -20,7 +20,7 @@
 #define LEFTLONGATTACK 200
 
 
-#define CATEGORY_PLAYER 0x0001
+#define CATEGORY_PLAYER 0x0005
 #define CATEGORY_MONSTER 0x0002
 #define CATEGORY_GROUND 0x0003
 #define CATEGORY_MISSILE 0x0004
@@ -63,6 +63,9 @@ public:
 	void AITick2(float dt);
 	void MakeBossMissile1(int, float, float);
 	void BossTick(float dt);
+	void BossCrossAttack();
+	void BossXAttack();
+	void BossPointAttack(b2Body*);
 
 	b2World *_world;
 	
@@ -82,6 +85,7 @@ public:
 	bool initComplete = false;
 	bool doorOpen = false;
 	bool isAiOn = false;
+	bool bossFirstAttack = true;
 
 
 	//for debugging

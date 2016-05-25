@@ -1,6 +1,7 @@
 #include "ContactListener.h"
 #include "SwordMissile.h"
 #include "Monster.h"
+#include "BossMissile.h"
 
 ContactListener::ContactListener(Player *player) {
 	this->player = player;
@@ -73,7 +74,7 @@ void ContactListener::BeginContact(b2Contact *contact)
 						player->energy->setTexture2(player->nowEnergy);
 						player->energy->hitMotion();
 						player->DeadAction();   //Game Over
-						bodyB->SetUserData(nullptr);
+						//bodyA->SetUserData(nullptr);
 
 						// 죽었을때 함수
 					}
@@ -100,7 +101,7 @@ void ContactListener::BeginContact(b2Contact *contact)
 				{
 					player->nowEnergy -= monsterSprite->power;
 					player->hitted = true;
-					log("%d", player->nowEnergy);
+					
 					if (player->nowEnergy <= 0)
 					{
 						player->nowEnergy = 0;
@@ -108,7 +109,77 @@ void ContactListener::BeginContact(b2Contact *contact)
 						player->energy->setTexture2(player->nowEnergy);
 						player->energy->hitMotion();
 						player->DeadAction();   //Game Over
-						bodyB->SetUserData(nullptr);
+						//bodyB->SetUserData(nullptr);
+						// 죽었을때 함수
+					}
+					else
+					{
+						player->hitting = false;
+						player->energy->setTexture2(player->nowEnergy);
+						player->energy->hitMotion();
+						player->Delay();
+						if (player->isFlippedX())
+							bodyB->SetLinearVelocity(b2Vec2(50, 0));
+						else
+							bodyB->SetLinearVelocity(b2Vec2(-50, 0));
+						player->HittedAction();
+					}
+				}
+
+			}
+			else if (spriteA->getTag() == 1 && spriteB->getTag() == 4) // 주인공과 보스미사일 충돌 A가 주인공 B가 미사일
+			{
+				BossMissile *MissleSprite = (BossMissile*)spriteB;
+
+				if (player->hitted == false)
+				{
+					player->nowEnergy -= MissleSprite->power;
+					player->hitted = true;
+
+					if (player->nowEnergy <= 0)
+					{
+						player->nowEnergy = 0;
+						player->alive = false;
+						player->energy->setTexture2(player->nowEnergy);
+						player->energy->hitMotion();
+						player->DeadAction();   //Game Over
+						//bodyA->SetUserData(nullptr);
+
+						// 죽었을때 함수
+					}
+					else
+					{
+						player->hitting = false;
+						player->energy->setTexture2(player->nowEnergy);
+						player->energy->hitMotion();
+						player->Delay();
+						if (player->isFlippedX())
+							bodyB->SetLinearVelocity(b2Vec2(50, 0));
+						else
+							bodyB->SetLinearVelocity(b2Vec2(-50, 0));
+						player->HittedAction();
+					}
+				}
+
+			}
+			else if (spriteA->getTag() == 4 && spriteB->getTag() == 1) // 주인공과 보스미사일 충돌 B가 주인공 A가 미사일
+			{
+				BossMissile *MissleSprite = (BossMissile*)spriteA;
+
+				if (player->hitted == false)
+				{
+					player->nowEnergy -= MissleSprite->power;
+					player->hitted = true;
+
+					if (player->nowEnergy <= 0)
+					{
+						player->nowEnergy = 0;
+						player->alive = false;
+						player->energy->setTexture2(player->nowEnergy);
+						player->energy->hitMotion();
+						player->DeadAction();   //Game Over
+						//bodyB->SetUserData(nullptr);
+
 						// 죽었을때 함수
 					}
 					else
@@ -145,6 +216,25 @@ void ContactListener::BeginContact(b2Contact *contact)
 		{
 			SwordMissile *missileSprite = (SwordMissile*)spriteB;
 			missileSprite->endAction(missileSprite->missileNum);
+			bodyB->SetUserData(nullptr);
+		}
+	}
+	//---------------보스미사일 처리
+	if (spriteA != nullptr)
+	{
+		if (spriteA->getTag() == 4)
+		{
+			BossMissile *missileSprite = (BossMissile*)spriteB;
+			missileSprite->selfRemove();
+			bodyA->SetUserData(nullptr);
+		}
+	}
+	if (spriteB != nullptr)
+	{
+		if (spriteB->getTag() == 4)
+		{
+			BossMissile *missileSprite = (BossMissile*)spriteB;
+			missileSprite->selfRemove();
 			bodyB->SetUserData(nullptr);
 		}
 	}

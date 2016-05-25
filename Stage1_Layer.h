@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "Stage1.h"
 
+
 #define STAGE_LENGTH 10
 #define JOYSTICK_OFFSET_X 5.0f
 #define JOYSTICK_OFFSET_Y 5.0f
@@ -41,12 +42,15 @@ public:
 	int count = 0;
 	int check[STAGE_LENGTH] = { 0 };
 
+	Size winsize;
 	Vec2 kCenter1, kCenter2;
 	Sprite* thumb1, *thumb2;
 	bool isPressed1,isPressed2;
+	bool isProgressOn = false;
 
 	Vec2 velocity1, velocity2;
 	int tCount = 0;
+	ProgressTimer *pt;
 	
 	void MakeMap();
 	void MakeMapRamdom(Stage1 *nowStage, Stage1 *preStage, int num, bool state);

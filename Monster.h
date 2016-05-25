@@ -1,5 +1,6 @@
 #pragma once
 #include "cocos2d.h"
+#include "BossMissile.h"
 
 using namespace cocos2d;
 
@@ -28,7 +29,9 @@ public:
 	//int maxEnergy;
 	int power;
 	int nowEnergy;
+	int maxEnergy = 0;
 	int monsterNum;
+	
 	Texture2D *monster;
 	
 

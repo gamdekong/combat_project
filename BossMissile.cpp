@@ -12,6 +12,7 @@ void BossMissile::init2(int num)
 	{
 	case 1:
 		this->initWithTexture(missile, Rect(0, 0, 71, 55));
+		power = 2;
 		break;
 		
 
@@ -44,4 +45,9 @@ void BossMissile::startAction()
 
 
 
+}
+
+void BossMissile::selfRemove()
+{
+	this->runAction(RemoveSelf::create());
 }

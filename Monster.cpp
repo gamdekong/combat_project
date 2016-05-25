@@ -56,7 +56,9 @@ Monster::Monster(int num)
 	else if (monsterNum == BOSS1)
 	{
 		nowEnergy = 50;
+		maxEnergy = 50;
 		power = 2;
+	
 	}
 
 

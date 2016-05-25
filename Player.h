@@ -2,6 +2,7 @@
 #include "cocos2d.h"
 #include "SwordMissile.h"
 #include "Energy.h"
+//#include "Stage1.h"
 using namespace cocos2d;
 
 
