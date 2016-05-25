@@ -32,6 +32,7 @@ public:
 	int maxEnergy = 0;
 	int monsterNum;
 	bool isMove = false;
+	//bool isAlive = true;
 	
 	Texture2D *monster;
 	
