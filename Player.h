@@ -30,6 +30,7 @@ public:
 	int count = 100;
 	int hitCount = 0;
 	float attackSpeed;
+	float nukBack ;
 	bool alive = true;
 	bool hitted = false;
 	bool hitting = true;

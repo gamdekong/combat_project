@@ -222,7 +222,7 @@ void Monster::IdleAction()
 void Monster::AttackAction()
 {
 	Animation *animation = Animation::create();
-	animation->setDelayPerUnit(0.1);
+	animation->setDelayPerUnit(0.05);
 	switch (monsterNum)
 	{
 	case BEAST:
@@ -303,6 +303,7 @@ void Monster::AttackAction()
 }
 void Monster::MoveAction()
 {
+	this->stopAllActions();
 	Animation *animation = Animation::create();
 	animation->setDelayPerUnit(0.1);
 	switch (monsterNum)
@@ -378,8 +379,9 @@ void Monster::MoveAction()
 	}
 	auto animate = Animate::create(animation);
 	auto seq = Sequence::create(animate, nullptr);
-	this->stopAllActions();
-	this->runAction(seq);
+	auto seqR = RepeatForever::create(seq);
+	
+	this->runAction(seqR);
 }
 
 void Monster::DeadAction()
@@ -547,11 +549,11 @@ void Monster::HittedAction()
 	this->stopAllActions();
 	this->runAction(seq);
 }
-#define BEAST 1
-#define BIRD 2
-#define DOG 3
-#define BAT 4
-#define SNAKE 5
-#define SOUL 6
-#define SWORND 7
-#define WORM 8
+void Monster::AfterAttack()
+{
+	this->scheduleOnce(schedule_selector(Monster::ChangeMove), 0.35);
+}
+void Monster::ChangeMove(float dt)
+{
+	isMove = false;
+}

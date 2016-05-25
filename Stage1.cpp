@@ -715,7 +715,7 @@ void Stage1::createPlayer(Sprite * player)
 
 
 	playerBody = _world->CreateBody(&playerBodyDef);
-
+	playerBody->SetFixedRotation(true);
 	//playerBody->SetMassData(mass);
 	//playerBody->SetGravityScale(0);
 
@@ -724,7 +724,8 @@ void Stage1::createPlayer(Sprite * player)
 
 	b2FixtureDef playerFixtureDef;
 	playerFixtureDef.shape = &playerPolygon;
-	playerFixtureDef.density = 0.0f;
+	playerFixtureDef.density = 0.1f;
+	playerFixtureDef.restitution = 1;
 	playerFixtureDef.filter.groupIndex = GROUP_INDEX_PLAYER;
 	playerFixtureDef.filter.categoryBits = CATEGORY_PLAYER;
 	playerFixtureDef.filter.maskBits = CATEGORY_MONSTER;
@@ -753,8 +754,8 @@ void Stage1::createMonster(Sprite * monster)
 
 	b2FixtureDef monsterFixtureDef;
 	monsterFixtureDef.shape = &monsterPolygon;
-	monsterFixtureDef.density = 0.1f;
-	monsterFixtureDef.restitution = 0.3;
+	monsterFixtureDef.density = 0.5f;
+	monsterFixtureDef.restitution = 1;
 	
 	monsterFixtureDef.filter.groupIndex = GROUP_INDEX_MONSTER;
 	monsterFixtureDef.filter.categoryBits = CATEGORY_MONSTER;
@@ -1151,6 +1152,9 @@ void Stage1::tick(float dt)
 		}
 	}
 
+	//------------------------------------------------------------------ 몬스터 이동
+	
+
 
 	//------------------------------------------------------------------ 캐릭터 이동
 	if (player->alive)
@@ -1303,6 +1307,11 @@ void Stage1::AITick2(float dt)  // 몬스터 이동 부분
 
 	for (int i = 0; i < monsterBodyVector.size(); i++)
 	{
+		if (((Monster*)(monsterBodyVector.at(i)->GetUserData()))->isMove == false)
+		{
+			((Monster*)(monsterBodyVector.at(i)->GetUserData()))->MoveAction();
+			((Monster*)(monsterBodyVector.at(i)->GetUserData()))->isMove = true;
+		}
 		auto x = playerBody->GetPosition().x - monsterBodyVector.at(i)->GetPosition().x;
 		auto y = playerBody->GetPosition().y - monsterBodyVector.at(i)->GetPosition().y;
 		float xR, yR;
@@ -1321,16 +1330,19 @@ void Stage1::AITick2(float dt)  // 몬스터 이동 부분
 		else
 		{
 			if (x < 0)
-				xR = -2;
+				xR = -1;
 			else
-				xR = 2;
+				xR = 1;
 
 			if (y < 0)
-				yR = -2;
+				yR = -1;
 			else
-				yR = 2;
+				yR = 1;
 		}
-
+		if(xR > 0)
+			((Monster*)(monsterBodyVector.at(i)->GetUserData()))->setFlippedX(true);
+		else if(xR < 0)
+			((Monster*)(monsterBodyVector.at(i)->GetUserData()))->setFlippedX(false);
 		monsterBodyVector.at(i)->SetLinearVelocity(b2Vec2(xR,yR));
 
 
@@ -1480,7 +1492,7 @@ void Stage1::RightLongAttack(float dt)
 
 	b2FixtureDef missileFixtureDef;
 	missileFixtureDef.shape = &missilePolygon;
-	missileFixtureDef.density = 1.0f;
+	missileFixtureDef.density = player->nukBack;
 	missileFixtureDef.restitution = 0.5;
 	missileFixtureDef.filter.groupIndex = GROUP_INDEX_MONSTER;
 	missileFixtureDef.filter.categoryBits = CATEGORY_MONSTER;
@@ -1524,7 +1536,7 @@ void Stage1::LeftLongAttack(float dt)
 
 	b2FixtureDef missileFixtureDef;
 	missileFixtureDef.shape = &missilePolygon;
-	missileFixtureDef.density = 1.0f;
+	missileFixtureDef.density = player->nukBack;
 	missileFixtureDef.restitution = 0.5;
 	missileFixtureDef.filter.groupIndex = GROUP_INDEX_MONSTER;
 	missileFixtureDef.filter.categoryBits = CATEGORY_MONSTER;

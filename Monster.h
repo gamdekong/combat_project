@@ -31,6 +31,7 @@ public:
 	int nowEnergy;
 	int maxEnergy = 0;
 	int monsterNum;
+	bool isMove = false;
 	
 	Texture2D *monster;
 	
@@ -40,6 +41,8 @@ public:
 	void MoveAction();
 	void DeadAction();
 	void HittedAction();
+	void AfterAttack();
+	void ChangeMove(float);
 
 
 

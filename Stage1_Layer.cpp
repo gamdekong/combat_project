@@ -118,11 +118,11 @@ bool Stage1_Layer::init()
 
 	//---------------------------------------------------------------------
 
-	//stage.at(0)->init();
-	//this->addChild(stage.at(0), 0);
+	stage.at(0)->init();
+	this->addChild(stage.at(0), 0);
 
-	stage.at(9)->init();
-	this->addChild(stage.at(9), 0);
+	//stage.at(9)->init();
+	//this->addChild(stage.at(9), 0);
    
 	this->schedule(schedule_selector(Stage1_Layer::tick));
     return true;
@@ -145,8 +145,8 @@ void Stage1_Layer::MakeMap()
 	bgLayer1->joystickVelocity2 = &velocity2;
 	bgLayer1->joystickIspressed1 = &isPressed1;
 	bgLayer1->joystickIspressed2 = &isPressed2;
-	//bgLayer1->player = player;
-	//bgLayer1->addChild(player,3);
+	bgLayer1->player = player;
+	bgLayer1->addChild(player,3);
 	
 
 	auto bgLayer2 = new Stage1();
@@ -202,11 +202,11 @@ void Stage1_Layer::MakeMap()
 	bgLayer10->joystickVelocity2 = &velocity2;
 	bgLayer10->joystickIspressed1 = &isPressed1;
 	bgLayer10->joystickIspressed2 = &isPressed2;
-	bgLayer10->player = player;
-	bgLayer10->addChild(player,3);
+	//bgLayer10->player = player;
+	//bgLayer10->addChild(player,3);
 	//-------------------------------백터에 스테이지 넣기------------------
 
-	player->nowStage = bgLayer10;
+	player->nowStage = bgLayer1;
 
 	stage.push_back(bgLayer1);
 	stage.push_back(bgLayer2);
@@ -549,11 +549,12 @@ void Stage1_Layer::tick(float dt)
 			float bossEnergy = ((Monster*)(temp.at(i)->GetUserData()))->nowEnergy;
 			float bossMaxEnergy = ((Monster*)(temp.at(i)->GetUserData()))->maxEnergy;
 			float f = (bossEnergy / bossMaxEnergy) * 100;
-			if (((Monster*)(temp.at(i)->GetUserData()))->nowEnergy <= 0)
-				f = 0;
-			log("%f", f);
+			
 			pt->setPercentage(f);
-
+		}
+		if (temp.size() == 0)
+		{
+			pt->setPercentage(0);
 		}
 
 	}

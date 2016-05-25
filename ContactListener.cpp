@@ -61,7 +61,8 @@ void ContactListener::BeginContact(b2Contact *contact)
 			else if (spriteA->getTag() == 1 && spriteB->getTag() == 2) // 주인공과 몬스터 충돌  A가 주인공  B가 몬스터일 일때
 			{
 				Monster *monsterSprite = (Monster*)spriteB;
-				
+				monsterSprite->AttackAction();
+				monsterSprite->AfterAttack();
 				if (player->hitted == false)
 				{
 					player->nowEnergy -= monsterSprite->power;
@@ -96,7 +97,8 @@ void ContactListener::BeginContact(b2Contact *contact)
 			else if (spriteB->getTag() == 1 && spriteA->getTag() == 2) // 주인공과 몬스터 충돌 B가 주인공 A가 몬스터 일때
 			{
 				Monster *monsterSprite = (Monster*)spriteA;
-				
+				monsterSprite->AttackAction();
+				monsterSprite->AfterAttack();
 				if(player->hitted == false)
 				{
 					player->nowEnergy -= monsterSprite->power;

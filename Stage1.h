@@ -86,6 +86,8 @@ public:
 	bool doorOpen = false;
 	bool isAiOn = false;
 	bool bossFirstAttack = true;
+	
+
 
 
 	//for debugging
