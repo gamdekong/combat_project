@@ -154,10 +154,12 @@ void Player::Delay()
 
 Player::Player()
 {
-	attackSpeed = 0.2;
+	attackSpeed = 0.1;
 	nowEnergy = 50;
 	power = 1;
-	nukBack = 0.5;
+	nukBack = 10;
+	speed = 2.5;
+	missileSpeed = 10;
 	energy = new Energy();
 
 	playerMoveTexture = Director::getInstance()->getTextureCache()->addImage("player/move/move.png");

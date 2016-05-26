@@ -24,13 +24,17 @@ public:
 	void init2();
 	Energy *energy;
 	Layer *nowStage;
-	int maxEnergy;
-	int nowEnergy;
-	int power;
+	float nowEnergy;
+	
 	int count = 100;
 	int hitCount = 0;
-	float attackSpeed;
-	float nukBack ;
+
+	float speed;           //2.5 ~ 4
+	float attackSpeed;    //0.1 ~ 0.5
+	float nukBack ;      // 0.5 ~ 10
+	float power;        // 1 ~ 5
+	float missileSpeed;  // 10 ~ 20
+
 	bool alive = true;
 	bool hitted = false;
 	bool hitting = true;

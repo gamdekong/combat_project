@@ -133,9 +133,12 @@ bool Lobby::createWorld(bool debug)
 	groundBody->CreateFixture(&boxShapeDef);
 
 	//위쪽1
-	groundEdge.Set(b2Vec2(200 / PTM_RATIO, 540 / PTM_RATIO), b2Vec2(1000 / PTM_RATIO, 540 / PTM_RATIO));
+	groundEdge.Set(b2Vec2(200 / PTM_RATIO, 540 / PTM_RATIO), b2Vec2(600 / PTM_RATIO, 540 / PTM_RATIO));
 	groundBody->CreateFixture(&boxShapeDef);
 	//위쪽2
+	groundEdge.Set(b2Vec2(700 / PTM_RATIO, 540 / PTM_RATIO), b2Vec2(1000 / PTM_RATIO, 540 / PTM_RATIO));
+	groundBody->CreateFixture(&boxShapeDef);
+	//위쪽3
 	groundEdge.Set(b2Vec2(1100 / PTM_RATIO, 540 / PTM_RATIO), b2Vec2(1300 / PTM_RATIO, 540 / PTM_RATIO));
 	groundBody->CreateFixture(&boxShapeDef);
 
@@ -334,9 +337,11 @@ void Lobby::createBackground()
 	bg->setPosition(Vec2(0, 100));
 	this->addChild(bg, 0);
 
+
+
 	auto door = Sprite::create("structure/door2.png");
 	door->setAnchorPoint(Vec2(0, 0));
-	door->setPosition(Vec2(965, 400));
+	door->setPosition(Vec2(965, 398));
 	this->addChild(door,0);
 
 	

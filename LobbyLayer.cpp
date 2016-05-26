@@ -112,11 +112,8 @@ void LobbyLayer::updateVelocity1(Vec2 point)
 	// calculate Angle and length
 	float dx = point.x - kCenter1.x;
 	float dy = point.y - kCenter1.y;
-	float dx1 = point.x - kCenter1.x;
-	float dy1 = point.y - kCenter1.y;
 	
 	
-
 	//float distance = sqrt(dx*dx + dy*dy);
 	float distance = sqrt(dx*dx + dy*dy);
 	float angle = atan2(dy, dx); // in radians
@@ -128,7 +125,7 @@ void LobbyLayer::updateVelocity1(Vec2 point)
 	}
 	
 
-	velocity1 = Vec2((dx+ dx*0.01) / JOYSTICK_RADIUS, (dy + dy*0.01) / JOYSTICK_RADIUS);
+	velocity1 = Vec2((dx) / JOYSTICK_RADIUS, (dy) / JOYSTICK_RADIUS);
 
 	if (distance>THUMB_RADIUS)
 	{

@@ -12,7 +12,7 @@ public:
 	void selfRemove();
 
 	int missileNum;
-	int power;
+	float power;
 
 	Texture2D *missile;
 	Sprite *missile1;

@@ -57,7 +57,7 @@ Monster::Monster(int num)
 	{
 		nowEnergy = 50;
 		maxEnergy = 50;
-		power = 2;
+		power = 5;
 	
 	}
 

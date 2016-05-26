@@ -41,7 +41,7 @@ public:
 	Lobby *bgLayer;
 	Layer *joyLayer;
 	int count = 0;
-
+	
 
 	Vec2 kCenter1, kCenter2;
 	Sprite* thumb1, *thumb2;
@@ -56,6 +56,7 @@ public:
 	void resetJoystick2();
 	bool handleLastTouch1();
 	bool handleLastTouch2();
+	void tick(float);
 
 
 

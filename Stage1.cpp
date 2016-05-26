@@ -24,7 +24,7 @@ bool Stage1::init()
 	}
 	missileBodyVector.clear();
 	monsterBodyVector.clear();
-	auto winsize = Director::getInstance()->getWinSize();
+	winsize = Director::getInstance()->getWinSize();
 
 	//player = new Player();
 	//this->addChild(player, 1);
@@ -32,18 +32,7 @@ bool Stage1::init()
 	if (stageNum == 0)
 	{
 
-		auto monster1 = new Monster(1);
-		monster1->setPosition(Vec2(500, 200));
-		this->addChild(monster1, 1);
-		auto monster2 = new Monster(2);
-		monster2->setPosition(Vec2(800, 300));
-		this->addChild(monster2, 1);
-		auto monster3 = new Monster(3);
-		monster3->setPosition(Vec2(1000, 300));
-		this->addChild(monster3, 1);
-		auto monster5 = new Monster(5);
-		monster5->setPosition(Vec2(1300, 300));
-		this->addChild(monster5, 1);
+		
 
 
 		if (this->createWorld(true))
@@ -55,10 +44,7 @@ bool Stage1::init()
 		}
 
 		  //바디 생성
-		this->createMonster(monster1);
-		this->createMonster(monster2);
-		this->createMonster(monster3);
-		this->createMonster(monster5);
+		
 		this->createPlayer(player);
 
 		this->createBackground();   //배경 이미지 생성
@@ -471,21 +457,10 @@ bool Stage1::init()
 		initComplete = true;
 		log("init %d", stageNum);
 	}
-	else if (stageNum == 8)
+	else if (stageNum == ITEM_MAP_NUM)
 	{
 
-		auto monster1 = new Monster(2);
-		monster1->setPosition(Vec2(400, 355));
-		this->addChild(monster1, 1);
-		auto monster2 = new Monster(1);
-		monster2->setPosition(Vec2(900, 225));
-		this->addChild(monster2, 1);
-		auto monster3 = new Monster(5);
-		monster3->setPosition(Vec2(740, 300));
-		this->addChild(monster3, 1);
-		auto monster5 = new Monster(6);
-		monster5->setPosition(Vec2(1200, 120));
-		this->addChild(monster5, 1);
+		
 
 
 		if (this->createWorld(true))
@@ -497,10 +472,7 @@ bool Stage1::init()
 		}
 
 		//바디 생성
-		this->createMonster(monster1);
-		this->createMonster(monster2);
-		this->createMonster(monster3);
-		this->createMonster(monster5);
+		
 		this->createPlayer(player);
 
 		this->createBackground();   //배경 이미지 생성
@@ -710,7 +682,7 @@ void Stage1::createPlayer(Sprite * player)
 	b2BodyDef playerBodyDef;
 	playerBodyDef.type = b2_dynamicBody;
 	playerBodyDef.position.Set(player->getPosition().x / PTM_RATIO, player->getPosition().y / PTM_RATIO);
-	playerBodyDef.linearDamping = 30;
+	playerBodyDef.linearDamping = 20;
 	playerBodyDef.userData = player;
 
 
@@ -938,9 +910,50 @@ void Stage1::createBackground()
 		doorBodyVector.push_back(rightLockBody);
 	}
 
+	if(stageNum == 0  || stageNum == ITEM_MAP_NUM)
+	{ 
+		log("make");
+		this->MakeItem();
+	}
 	
 }
 
+void Stage1::MakeItem()
+{
+	auto item = new Item(1);
+	this->addChild(item,1);
+	item->setPosition(Vec2(1500/ 2, winsize.height / 2));
+
+	//--------------플레이어 바디생성
+	b2BodyDef itemBodyDef;
+	itemBodyDef.type = b2_kinematicBody;
+	itemBodyDef.position.Set(item->getPosition().x / PTM_RATIO, item->getPosition().y / PTM_RATIO);
+	itemBodyDef.userData = item;
+
+
+	auto itemBody = _world->CreateBody(&itemBodyDef);
+	
+	//playerBody->SetMassData(mass);
+	//playerBody->SetGravityScale(0);
+
+	b2PolygonShape itemPolygon;
+	itemPolygon.SetAsBox((item->getContentSize().width / 2) / PTM_RATIO, (item->getContentSize().height / 2) / PTM_RATIO);
+	//log(" %f ", (monster->getContentSize().height / 2.5));
+
+	b2FixtureDef ItemFixtureDef;
+	ItemFixtureDef.shape = &itemPolygon;
+	ItemFixtureDef.density = 0.5f;
+	ItemFixtureDef.restitution = 1;
+
+	ItemFixtureDef.filter.groupIndex = GROUP_INDEX_MONSTER;
+	ItemFixtureDef.filter.categoryBits = CATEGORY_MONSTER;
+	ItemFixtureDef.filter.maskBits = CATEGORY_PLAYER + CATEGORY_GROUND;
+
+	itemBody->SetFixedRotation(true);
+	itemBody->CreateFixture(&ItemFixtureDef);
+	itemBodyVector.push_back(itemBody);
+	
+}
 
 Stage1::~Stage1()
 {
@@ -1005,8 +1018,8 @@ void Stage1::tick(float dt)
 
 			if (b->GetUserData() == player &&  player->alive )
 			{
-				float vx = joystickVelocity1->x * 5;//스피드
-				float vy = joystickVelocity1->y * 5;
+				float vx = joystickVelocity1->x * player->speed;//스피드
+				float vy = joystickVelocity1->y * player->speed;
 				//set ball velocity by Joystick
 				b->SetLinearVelocity(b2Vec2(vx, vy) + (b->GetLinearVelocity()));
 
@@ -1132,6 +1145,55 @@ void Stage1::tick(float dt)
 			player->setZOrder(monster->getZOrder() - 1);
 		else if (player->getPosition().y < monster->getPosition().y + 30)
 			player->setZOrder(monster->getZOrder() + 1);
+
+
+
+	}
+
+
+	//----------------Item ZOder
+	for (int i = 0; i < itemBodyVector.size(); i++)
+	{
+
+		Item *item = (Item*)(itemBodyVector[i]->GetUserData());
+
+		//  충돌 처리
+		if (player->getPosition().y < item->getPosition().y + 50 && player->getPosition().y > item->getPosition().y - 10)
+		{
+			//log("dddd");
+			b2Filter newFilter;
+			b2Filter oldFilter;
+			oldFilter.categoryBits = 0x0001;
+			oldFilter.maskBits = 0xFFFF;
+			oldFilter.groupIndex = 0;
+			oldFilter = itemBodyVector.at(i)->GetFixtureList()->GetFilterData();
+			newFilter = oldFilter;
+			newFilter.maskBits = CATEGORY_PLAYER;
+			itemBodyVector.at(i)->GetFixtureList()->SetFilterData(newFilter);
+			//CC_SAFE_DELETE(newFilter);
+			//CC_SAFE_DELETE(oldFilter);
+		}
+		else
+		{
+			b2Filter newFilter;
+			b2Filter oldFilter;
+			oldFilter.categoryBits = 0x0001;
+			oldFilter.maskBits = 0xFFFF;
+			oldFilter.groupIndex = 0;
+			oldFilter = itemBodyVector.at(i)->GetFixtureList()->GetFilterData();
+			newFilter = oldFilter;
+			newFilter.maskBits = 0;////////////////////////////////
+			itemBodyVector.at(i)->GetFixtureList()->SetFilterData(newFilter);
+			//CC_SAFE_DELETE(newFilter);
+			//CC_SAFE_DELETE(oldFilter);
+
+		}
+
+
+		if (player->getPosition().y > item->getPosition().y + 50)
+			player->setZOrder(item->getZOrder() - 1);
+		else if (player->getPosition().y < item->getPosition().y + 10)
+			player->setZOrder(item->getZOrder() + 1);
 
 
 
@@ -1499,7 +1561,7 @@ void Stage1::RightLongAttack(float dt)
 	missileFixtureDef.filter.maskBits = CATEGORY_MONSTER;
 	//missileBody->SetFixedRotation(true);
 	missileBody->CreateFixture(&missileFixtureDef);
-	missileBody->SetLinearVelocity(b2Vec2(10, 0));
+	missileBody->SetLinearVelocity(b2Vec2(player->missileSpeed, 0));
 	missileBodyVector.push_back(missileBody);
 	//joystick2->attack = 0;
 	this->scheduleOnce(schedule_selector(Stage1::clearTime), player->attackSpeed);
@@ -1543,7 +1605,7 @@ void Stage1::LeftLongAttack(float dt)
 	missileFixtureDef.filter.maskBits = CATEGORY_MONSTER;
 	//missileBody->SetFixedRotation(true);
 	missileBody->CreateFixture(&missileFixtureDef);
-	missileBody->SetLinearVelocity(b2Vec2(-10, 0));
+	missileBody->SetLinearVelocity(b2Vec2(-player->missileSpeed, 0));
 	missileBodyVector.push_back(missileBody);
 	//joystick2->attack = 0;
 	this->scheduleOnce(schedule_selector(Stage1::clearTime), player->attackSpeed);

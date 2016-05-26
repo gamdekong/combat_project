@@ -10,6 +10,7 @@
 #include "SwordMissile.h"
 #include "ContactListener.h"
 #include "BossMissile.h"
+#include "Item.h"
 
 
 
@@ -25,7 +26,7 @@
 #define CATEGORY_GROUND 0x0003
 #define CATEGORY_MISSILE 0x0004
 
-
+#define ITEM_MAP_NUM 8
 #define BOSS_MAP_NUM 9
 
 using namespace cocos2d;
@@ -66,9 +67,10 @@ public:
 	void BossCrossAttack();
 	void BossXAttack();
 	void BossPointAttack(b2Body*);
+	void MakeItem();
 
 	b2World *_world;
-	
+	Size winsize;
 	Vec2 *joystickVelocity1, *joystickVelocity2;
 	bool *joystickIspressed1, *joystickIspressed2;
 	Player *player;
@@ -78,6 +80,7 @@ public:
 	vector<b2Body*> monsterMissileBodyVector;
 	vector<b2Body*> monsterBodyVector;
 	vector<b2Body*> doorBodyVector;
+	vector<b2Body*> itemBodyVector;
 	ContactListener* myContactListener;
 	int clickCount = 0;
 	int count = 0;

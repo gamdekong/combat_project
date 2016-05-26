@@ -2,6 +2,7 @@
 #include "SwordMissile.h"
 #include "Monster.h"
 #include "BossMissile.h"
+#include "Item.h"
 
 ContactListener::ContactListener(Player *player) {
 	this->player = player;
@@ -25,7 +26,30 @@ void ContactListener::BeginContact(b2Contact *contact)
 	auto spriteB = (Sprite*)bodyB->GetUserData();
 
 
+	if (bodyA->GetType() == b2_dynamicBody && bodyB->GetType() == b2_kinematicBody)
+	{
+		if (spriteA != nullptr && spriteB != nullptr)
+		{
+			if (spriteA->getTag() == 1 && spriteB->getTag() == 5) // A가 플레이어 B가 아이템일 경우
+			{
+				Item *item = (Item*)spriteB;
+				if (item->itemNum == 1)
+				{
 
+				}
+
+			}
+			else if (spriteB->getTag() == 1 && spriteA->getTag() == 5) // A가 아이템 B가 플레이어
+			{
+				Item *item = (Item*)spriteA;
+				if (item->itemNum == 1)
+				{
+
+				}
+
+			}
+		}
+	}
 	
 
 	if (bodyA->GetType() == b2_dynamicBody && bodyB->GetType() == b2_dynamicBody)
@@ -38,7 +62,7 @@ void ContactListener::BeginContact(b2Contact *contact)
 				monsterSprite->nowEnergy -= player->power;
 				if (monsterSprite->nowEnergy <= 0 )
 				{
-					monsterSprite->isAlive = false;
+					//monsterSprite->isAlive = false;
 					monsterSprite->DeadAction();
 					bodyA->SetUserData(nullptr);
 				}
