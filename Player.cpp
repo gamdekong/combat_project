@@ -154,7 +154,7 @@ void Player::Delay()
 
 Player::Player()
 {
-	attackSpeed = 0.1;
+	attackSpeed = 0.5;
 	nowEnergy = 50;
 	power = 1;
 	nukBack = 10;
