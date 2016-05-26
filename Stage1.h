@@ -83,7 +83,7 @@ public:
 	vector<b2Body*> itemBodyVector;
 	ContactListener* myContactListener;
 	int clickCount = 0;
-	int count = 0;
+	bool isMoving = false;
 	bool isAttacking;
 	bool initComplete = false;
 	bool doorOpen = false;

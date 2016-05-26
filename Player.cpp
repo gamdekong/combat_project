@@ -22,7 +22,7 @@ void Player::IdleAction()
 	this->runAction(playerIdleSeq);
 }
 
-void Player::AttackAction()
+void Player::AttackAction(bool isMoving)
 {
 	this->stopAllActions();
 	auto animation3 = Animation::create();
@@ -35,8 +35,12 @@ void Player::AttackAction()
 	}
 
 	auto animate3 = Animate::create(animation3);
-
-	auto seq3 = Sequence::create(animate3, CallFunc::create(CC_CALLBACK_0(Player::IdleAction,this)),nullptr);
+	Sequence *seq3;
+	if(isMoving)
+		seq3 = Sequence::create(animate3, CallFunc::create(CC_CALLBACK_0(Player::IdleAction, this)), nullptr);
+	else
+		seq3 = Sequence::create(animate3, CallFunc::create(CC_CALLBACK_0(Player::MoveAction, this)), nullptr);
+		
 	//auto playerAttackSeq = RepeatForever::create(seq3);
 	this->runAction(seq3);
 }
@@ -152,20 +156,29 @@ void Player::Delay()
 
 }
 
+
+
 Player::Player()
 {
-	attackSpeed = 0.5;
+	attackSpeed = 0.7;
 	nowEnergy = 50;
 	power = 1;
 	nukBack = 10;
 	speed = 2.5;
-	missileSpeed = 10;
+	missileSpeed = 5;
+	activeItem = 0;
+	missileNum = 1;
 	energy = new Energy();
 
 	playerMoveTexture = Director::getInstance()->getTextureCache()->addImage("player/move/move.png");
 	playerAttackTexture = Director::getInstance()->getTextureCache()->addImage("player/attack/attack.png");
 	playerIdleTexture = Director::getInstance()->getTextureCache()->addImage("player/idle/idle.png");
 	playerDeadTexture = Director::getInstance()->getTextureCache()->addImage("player/dead/dead.png");
+
+	
+	
+
+	
 
 	this->init2();
 
@@ -176,4 +189,145 @@ void Player::init2()
 	this->initWithTexture(playerIdleTexture, Rect(0, 0, 160, 120));
 	this->setPosition(Vec2(300, 200));
 	this->setTag(1);
+
+	getcigar = Sprite::create("item/face/getcigar.png");
+	getcross = Sprite::create("item/face/getcross.png");
+	getdumbel = Sprite::create("item/face/getdumbel.png");
+	getgamdekong = Sprite::create("item/face/getgamdekong.png");
+	getgarlic = Sprite::create("item/face/getgarlic.png");
+	getpensil = Sprite::create("item/face/getpensil.png");
+	getpipe = Sprite::create("item/face/getpipe.png");
+	getblue = Sprite::create("item/face/getblue.png");
+	getred = Sprite::create("item/face/getred.png");
+	getyellow = Sprite::create("item/face/getyellow.png");
+	
+	getcigar->setPosition(Vec2(this->getContentSize().width/2, this->getContentSize().height / 2));
+	getcross->setPosition(Vec2(this->getContentSize().width / 2, this->getContentSize().height / 2));
+	getdumbel->setPosition(Vec2(this->getContentSize().width / 2, this->getContentSize().height / 2));
+	getgamdekong->setPosition(Vec2(this->getContentSize().width / 2, this->getContentSize().height / 2));
+	getgarlic->setPosition(Vec2(this->getContentSize().width / 2, this->getContentSize().height / 2));
+	getpensil->setPosition(Vec2(this->getContentSize().width / 2, this->getContentSize().height / 2));
+	getpipe->setPosition(Vec2(this->getContentSize().width / 2, this->getContentSize().height / 2));
+	getblue->setPosition(Vec2(this->getContentSize().width / 2, this->getContentSize().height / 2));
+	getred->setPosition(Vec2(this->getContentSize().width / 2, this->getContentSize().height / 2));
+	getyellow->setPosition(Vec2(this->getContentSize().width / 2, this->getContentSize().height / 2));
+
+	getcigar->setVisible(false);
+	getcross->setVisible(false);
+	getdumbel->setVisible(false);
+	getgamdekong->setVisible(false);
+	getgarlic->setVisible(false);
+	getpensil->setVisible(false);
+	getpipe->setVisible(false);
+	getblue->setVisible(false);
+	getred->setVisible(false);
+	getyellow->setVisible(false);
+
+	this->addChild(getcigar, 3);
+	this->addChild(getcross, 2);
+	this->addChild(getdumbel, 2);
+	this->addChild(getgamdekong, 2);
+	this->addChild(getgarlic, 1);
+	this->addChild(getpensil, 3);
+	this->addChild(getpipe, 3);
+	this->addChild(getblue, 4);
+	this->addChild(getred, 4);
+	this->addChild(getyellow, 4);
+
+	this->schedule(schedule_selector(Player::ItemImaging));
+}
+void Player::ChildFlip(bool flip)
+{
+	if (flip)
+	{
+		getcigar->setFlippedX(true);
+		getcross->setFlippedX(true);
+		getdumbel->setFlippedX(true);
+		getgamdekong->setFlippedX(true);
+		getgarlic->setFlippedX(true);
+		getpensil->setFlippedX(true);
+		getpipe->setFlippedX(true);
+		getblue->setFlippedX(true);
+		getred->setFlippedX(true);
+		getyellow->setFlippedX(true);
+	}
+	else
+	{
+		getcigar->setFlippedX(false);
+		getcross->setFlippedX(false);
+		getdumbel->setFlippedX(false);
+		getgamdekong->setFlippedX(false);
+		getgarlic->setFlippedX(false);
+		getpensil->setFlippedX(false);
+		getpipe->setFlippedX(false);
+		getblue->setFlippedX(false);
+		getred->setFlippedX(false);
+		getyellow->setFlippedX(false);
+	}
+
+}
+
+void Player::ItemImaging(float dt)
+{
+	if (itemImage[6] == 1)
+	{
+		if (!getcigar->isVisible())
+			getcigar->setVisible(true);
+
+	}
+	else if (itemImage[7] == 1)
+	{
+		if (!getcross->isVisible())
+			getcross->setVisible(true);
+
+	}
+	else if (itemImage[8] == 1)
+	{
+		if (!getdumbel->isVisible())
+			getdumbel->setVisible(true);
+
+	}
+	else if (itemImage[9] == 1)
+	{
+		if (!getgamdekong->isVisible())
+			getgamdekong->setVisible(true);
+
+	}
+	else if (itemImage[10] == 1)
+	{
+		if (!getgarlic->isVisible())
+			getgarlic->setVisible(true);
+
+	}
+	else if (itemImage[11] == 1)
+	{
+		if (!getpensil->isVisible())
+			getpensil->setVisible(true);
+
+	}
+	else if (itemImage[12] == 1)
+	{
+		if (!getpipe->isVisible())
+			getpipe->setVisible(true);
+
+	}
+	else if (itemImage[13] == 1)
+	{
+		if (!getblue->isVisible())
+			getblue->setVisible(true);
+
+	}
+	else if (itemImage[14] == 1)
+	{
+		if (!getred->isVisible())
+			getred->setVisible(true);
+
+	}
+	else if (itemImage[15] == 1)
+	{
+		if (!getyellow->isVisible())
+			getyellow->setVisible(true);
+
+	}
+
 }

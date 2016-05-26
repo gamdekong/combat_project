@@ -26,7 +26,8 @@ void ContactListener::BeginContact(b2Contact *contact)
 	auto spriteB = (Sprite*)bodyB->GetUserData();
 
 
-	if (bodyA->GetType() == b2_dynamicBody && bodyB->GetType() == b2_kinematicBody)
+	if ( (bodyA->GetType() == b2_dynamicBody && bodyB->GetType() == b2_kinematicBody) ||
+		(bodyB->GetType() == b2_dynamicBody && bodyA->GetType() == b2_kinematicBody) )
 	{
 		if (spriteA != nullptr && spriteB != nullptr)
 		{
@@ -35,7 +36,351 @@ void ContactListener::BeginContact(b2Contact *contact)
 				Item *item = (Item*)spriteB;
 				if (item->itemNum == 1)
 				{
+					player->activeItem = 1;
+					item->itemNum = 0;
+					item->removeAllChildren();
+				}
+				else if (item->itemNum == 2)
+				{
+					player->activeItem = 2;
+					item->itemNum = 0;
+					item->removeAllChildren();
+				}
+				else if (item->itemNum == 3)
+				{
+					player->activeItem = 3;
+					item->itemNum = 0;
+					item->removeAllChildren();
+				}
+				else if (item->itemNum == 4)
+				{
+					player->activeItem = 4;
+					item->itemNum = 0;
+					item->removeAllChildren();
+				}
+				else if (item->itemNum == 5)
+				{
+					player->power += 2;
+					if(player->power < 1)
+						player->power = 1;
+					else if(player->power > 5)
+						player->power = 5;
+					
+					player->attackSpeed += -0.1;
+					if (player->attackSpeed < 0.2)
+						player->attackSpeed = 0.2;
+					else if (player->attackSpeed > 0.7)
+						player->attackSpeed = 0.7;
 
+					player->speed += 0.5;
+					if (player->speed < 2.5)
+						player->speed = 2.5;
+					else if (player->speed > 4)
+						player->speed = 4;
+
+					player->missileSpeed += 5;
+					if (player->missileSpeed < 5)
+						player->missileSpeed = 5;
+					else if (player->missileSpeed > 20)
+						player->missileSpeed = 20;
+
+					player->nukBack += 2;
+					if (player->nukBack < 0.5)
+						player->nukBack = 0.5;
+					else if (player->nukBack > 10)
+						player->nukBack = 10;
+					
+					player->missileNum = 5;
+
+
+					item->itemNum = 0;
+					item->removeAllChildren();
+				}
+				else if (item->itemNum == 6)
+				{
+					player->power += 2;
+					if (player->power < 1)
+						player->power = 1;
+					else if (player->power > 5)
+						player->power = 5;
+
+					player->attackSpeed += 0.1;
+					if (player->attackSpeed < 0.2)
+						player->attackSpeed = 0.2;
+					else if (player->attackSpeed > 0.7)
+						player->attackSpeed = 0.7;
+
+					player->speed += -1.5;
+					if (player->speed < 2.5)
+						player->speed = 2.5;
+					else if (player->speed > 4)
+						player->speed = 4;
+
+					player->missileSpeed += 2;
+					if (player->missileSpeed < 5)
+						player->missileSpeed = 5;
+					else if (player->missileSpeed > 20)
+						player->missileSpeed = 20;
+
+					player->nukBack += 1;
+					if (player->nukBack < 0.5)
+						player->nukBack = 0.5;
+					else if (player->nukBack > 10)
+						player->nukBack = 10;
+
+					player->nowEnergy += -2;
+					player->energy->setTexture2(player->nowEnergy);
+
+					player->itemImage[6] = 1;
+
+
+					item->itemNum = 0;
+					item->removeAllChildren();
+				}
+				else if (item->itemNum == 7)
+				{
+					player->power += 1;
+					if (player->power < 1)
+						player->power = 1;
+					else if (player->power > 5)
+						player->power = 5;
+
+
+					player->speed += -0.5;
+					if (player->speed < 2.5)
+						player->speed = 2.5;
+					else if (player->speed > 4)
+						player->speed = 4;
+
+					player->missileSpeed += 5;
+					if (player->missileSpeed < 5)
+						player->missileSpeed = 5;
+					else if (player->missileSpeed > 20)
+						player->missileSpeed = 20;
+
+					
+
+					player->nowEnergy += 3;
+					player->energy->setTexture2(player->nowEnergy);
+
+					player->itemImage[7] = 1;
+
+					item->itemNum = 0;
+					item->removeAllChildren();
+				}
+				else if (item->itemNum == 8)
+				{
+					player->power += 4;
+					if (player->power < 1)
+						player->power = 1;
+					else if (player->power > 5)
+						player->power = 5;
+
+					player->attackSpeed += 0.1;
+					if (player->attackSpeed < 0.2)
+						player->attackSpeed = 0.2;
+					else if (player->attackSpeed > 0.7)
+						player->attackSpeed = 0.7;
+
+					player->speed += -1;
+					if (player->speed < 2.5)
+						player->speed = 2.5;
+					else if (player->speed > 4)
+						player->speed = 4;
+
+					player->missileSpeed += -5;
+					if (player->missileSpeed < 5)
+						player->missileSpeed = 5;
+					else if (player->missileSpeed > 20)
+						player->missileSpeed = 20;
+
+					player->nukBack += 5;
+					if (player->nukBack < 0.5)
+						player->nukBack = 0.5;
+					else if (player->nukBack > 10)
+						player->nukBack = 10;
+
+					player->nowEnergy += 1;
+					player->energy->setTexture2(player->nowEnergy);
+
+					player->itemImage[8] = 1;
+
+					item->itemNum = 0;
+					item->removeAllChildren();
+				}
+				else if (item->itemNum == 9)
+				{
+					player->power += 5;
+					if (player->power < 1)
+						player->power = 1;
+					else if (player->power > 5)
+						player->power = 5;
+
+					player->attackSpeed += -0.2;
+					if (player->attackSpeed < 0.2)
+						player->attackSpeed = 0.2;
+					else if (player->attackSpeed > 0.7)
+						player->attackSpeed = 0.7;
+
+					player->speed += 1;
+					if (player->speed < 2.5)
+						player->speed = 2.5;
+					else if (player->speed > 4)
+						player->speed = 4;
+
+					player->missileSpeed += 10;
+					if (player->missileSpeed < 5)
+						player->missileSpeed = 5;
+					else if (player->missileSpeed > 20)
+						player->missileSpeed = 20;
+
+					player->nukBack += 1;
+					if (player->nukBack < 0.5)
+						player->nukBack = 0.5;
+					else if (player->nukBack > 10)
+						player->nukBack = 10;
+
+					player->missileNum = 4;
+					player->itemImage[9] = 1;
+
+					item->itemNum = 0;
+					item->removeAllChildren();
+				}
+				else if (item->itemNum == 10)
+				{
+					
+
+					player->attackSpeed += -0.2;
+					if (player->attackSpeed < 0.2)
+						player->attackSpeed = 0.2;
+					else if (player->attackSpeed > 0.7)
+						player->attackSpeed = 0.7;
+
+					player->speed += 1;
+					if (player->speed < 2.5)
+						player->speed = 2.5;
+					else if (player->speed > 4)
+						player->speed = 4;
+
+					player->missileSpeed += -5;
+					if (player->missileSpeed < 5)
+						player->missileSpeed = 5;
+					else if (player->missileSpeed > 20)
+						player->missileSpeed = 20;
+
+					player->itemImage[10] = 1;
+
+					item->itemNum = 0;
+					item->removeAllChildren();
+				}
+				else if (item->itemNum == 11)
+				{
+					player->power += -1;
+					if (player->power < 1)
+						player->power = 1;
+					else if (player->power > 5)
+						player->power = 5;
+
+					player->attackSpeed += -0.1;
+					if (player->attackSpeed < 0.2)
+						player->attackSpeed = 0.2;
+					else if (player->attackSpeed > 0.7)
+						player->attackSpeed = 0.7;
+
+					player->speed += 1;
+					if (player->speed < 2.5)
+						player->speed = 2.5;
+					else if (player->speed > 4)
+						player->speed = 4;
+
+					player->missileSpeed += -3;
+					if (player->missileSpeed < 5)
+						player->missileSpeed = 5;
+					else if (player->missileSpeed > 20)
+						player->missileSpeed = 20;
+
+					player->itemImage[11] = 1;
+					
+
+
+					item->itemNum = 0;
+					item->removeAllChildren();
+				}
+				else if (item->itemNum == 12)
+				{
+					player->power += 3;
+					if (player->power < 1)
+						player->power = 1;
+					else if (player->power > 5)
+						player->power = 5;
+
+					player->attackSpeed += 0.1;
+					if (player->attackSpeed < 0.2)
+						player->attackSpeed = 0.2;
+					else if (player->attackSpeed > 0.7)
+						player->attackSpeed = 0.7;
+
+
+					player->missileSpeed += 3;
+					if (player->missileSpeed < 5)
+						player->missileSpeed = 5;
+					else if (player->missileSpeed > 20)
+						player->missileSpeed = 20;
+
+					player->nukBack += 5;
+					if (player->nukBack < 0.5)
+						player->nukBack = 0.5;
+					else if (player->nukBack > 10)
+						player->nukBack = 10;
+
+					player->missileNum = 2;
+					player->itemImage[12] = 1;
+
+					item->itemNum = 0;
+					item->removeAllChildren();
+				}
+				else if (item->itemNum == 13)
+				{
+				
+					player->speed += 2;
+					if (player->speed < 2.5)
+						player->speed = 2.5;
+					else if (player->speed > 4)
+						player->speed = 4;
+
+
+					player->itemImage[13] = 1;
+					item->itemNum = 0;
+					item->removeAllChildren();
+				}
+				else if (item->itemNum == 14)
+				{
+					player->power += 2;
+					if (player->power < 1)
+						player->power = 1;
+					else if (player->power > 5)
+						player->power = 5;
+
+
+					player->itemImage[14] = 1;
+					item->itemNum = 0;
+					item->removeAllChildren();
+				}
+				else if (item->itemNum == 15)
+				{
+				
+
+					player->attackSpeed += -0.2;
+					if (player->attackSpeed < 0.2)
+						player->attackSpeed = 0.2;
+					else if (player->attackSpeed > 0.7)
+						player->attackSpeed = 0.7;
+
+					player->missileNum = 3;
+					player->itemImage[15] = 1;
+
+					item->itemNum = 0;
+					item->removeAllChildren();
 				}
 
 			}
@@ -44,9 +389,352 @@ void ContactListener::BeginContact(b2Contact *contact)
 				Item *item = (Item*)spriteA;
 				if (item->itemNum == 1)
 				{
-
+					player->activeItem = 1;
+					item->itemNum = 0;
+					item->removeAllChildren();
 				}
+				else if (item->itemNum == 2)
+				{
+					player->activeItem = 2;
+					item->itemNum = 0;
+					item->removeAllChildren();
+				}
+				else if (item->itemNum == 3)
+				{
+					player->activeItem = 3;
+					item->itemNum = 0;
+					item->removeAllChildren();
+				}
+				else if (item->itemNum == 4)
+				{
+					player->activeItem = 4;
+					item->itemNum = 0;
+					item->removeAllChildren();
+				}
+				else if (item->itemNum == 5)
+				{
+					player->power += 2;
+					if (player->power < 1)
+						player->power = 1;
+					else if (player->power > 5)
+						player->power = 5;
 
+					player->attackSpeed += -0.1;
+					if (player->attackSpeed < 0.2)
+						player->attackSpeed = 0.2;
+					else if (player->attackSpeed > 0.7)
+						player->attackSpeed = 0.7;
+
+					player->speed += 0.5;
+					if (player->speed < 2.5)
+						player->speed = 2.5;
+					else if (player->speed > 4)
+						player->speed = 4;
+
+					player->missileSpeed += 5;
+					if (player->missileSpeed < 5)
+						player->missileSpeed = 5;
+					else if (player->missileSpeed > 20)
+						player->missileSpeed = 20;
+
+					player->nukBack += 2;
+					if (player->nukBack < 0.5)
+						player->nukBack = 0.5;
+					else if (player->nukBack > 10)
+						player->nukBack = 10;
+
+					player->missileNum = 5;
+
+					item->itemNum = 0;
+					item->removeAllChildren();
+				}
+				else if (item->itemNum == 6)
+				{
+					player->power += 2;
+					if (player->power < 1)
+						player->power = 1;
+					else if (player->power > 5)
+						player->power = 5;
+
+					player->attackSpeed += 0.1;
+					if (player->attackSpeed < 0.2)
+						player->attackSpeed = 0.2;
+					else if (player->attackSpeed > 0.7)
+						player->attackSpeed = 0.7;
+
+					player->speed += -1.5;
+					if (player->speed < 2.5)
+						player->speed = 2.5;
+					else if (player->speed > 4)
+						player->speed = 4;
+
+					player->missileSpeed += 2;
+					if (player->missileSpeed < 5)
+						player->missileSpeed = 5;
+					else if (player->missileSpeed > 20)
+						player->missileSpeed = 20;
+
+					player->nukBack += 1;
+					if (player->nukBack < 0.5)
+						player->nukBack = 0.5;
+					else if (player->nukBack > 10)
+						player->nukBack = 10;
+
+					player->nowEnergy += -2;
+					player->energy->setTexture2(player->nowEnergy);
+
+					player->itemImage[6] = 1;
+
+
+					item->itemNum = 0;
+					item->removeAllChildren();
+				}
+				else if (item->itemNum == 7)
+				{
+					player->power += 1;
+					if (player->power < 1)
+						player->power = 1;
+					else if (player->power > 5)
+						player->power = 5;
+
+
+					player->speed += -0.5;
+					if (player->speed < 2.5)
+						player->speed = 2.5;
+					else if (player->speed > 4)
+						player->speed = 4;
+
+					player->missileSpeed += 5;
+					if (player->missileSpeed < 5)
+						player->missileSpeed = 5;
+					else if (player->missileSpeed > 20)
+						player->missileSpeed = 20;
+
+
+
+					player->nowEnergy += 3;
+					player->energy->setTexture2(player->nowEnergy);
+
+					player->itemImage[7] = 1;
+
+					item->itemNum = 0;
+					item->removeAllChildren();
+				}
+				else if (item->itemNum == 8)
+				{
+					player->power += 4;
+					if (player->power < 1)
+						player->power = 1;
+					else if (player->power > 5)
+						player->power = 5;
+
+					player->attackSpeed += 0.1;
+					if (player->attackSpeed < 0.2)
+						player->attackSpeed = 0.2;
+					else if (player->attackSpeed > 0.7)
+						player->attackSpeed = 0.7;
+
+					player->speed += -1;
+					if (player->speed < 2.5)
+						player->speed = 2.5;
+					else if (player->speed > 4)
+						player->speed = 4;
+
+					player->missileSpeed += -5;
+					if (player->missileSpeed < 5)
+						player->missileSpeed = 5;
+					else if (player->missileSpeed > 20)
+						player->missileSpeed = 20;
+
+					player->nukBack += 5;
+					if (player->nukBack < 0.5)
+						player->nukBack = 0.5;
+					else if (player->nukBack > 10)
+						player->nukBack = 10;
+
+					player->nowEnergy += 1;
+					player->energy->setTexture2(player->nowEnergy);
+
+					player->itemImage[8] = 1;
+
+					item->itemNum = 0;
+					item->removeAllChildren();
+				}
+				else if (item->itemNum == 9)
+				{
+					player->power += 5;
+					if (player->power < 1)
+						player->power = 1;
+					else if (player->power > 5)
+						player->power = 5;
+
+					player->attackSpeed += -0.2;
+					if (player->attackSpeed < 0.2)
+						player->attackSpeed = 0.2;
+					else if (player->attackSpeed > 0.7)
+						player->attackSpeed = 0.7;
+
+					player->speed += 1;
+					if (player->speed < 2.5)
+						player->speed = 2.5;
+					else if (player->speed > 4)
+						player->speed = 4;
+
+					player->missileSpeed += 10;
+					if (player->missileSpeed < 5)
+						player->missileSpeed = 5;
+					else if (player->missileSpeed > 20)
+						player->missileSpeed = 20;
+
+					player->nukBack += 1;
+					if (player->nukBack < 0.5)
+						player->nukBack = 0.5;
+					else if (player->nukBack > 10)
+						player->nukBack = 10;
+
+					player->missileNum = 4;
+					player->itemImage[9] = 1;
+
+					item->itemNum = 0;
+					item->removeAllChildren();
+				}
+				else if (item->itemNum == 10)
+				{
+
+
+					player->attackSpeed += -0.2;
+					if (player->attackSpeed < 0.2)
+						player->attackSpeed = 0.2;
+					else if (player->attackSpeed > 0.7)
+						player->attackSpeed = 0.7;
+
+					player->speed += 1;
+					if (player->speed < 2.5)
+						player->speed = 2.5;
+					else if (player->speed > 4)
+						player->speed = 4;
+
+					player->missileSpeed += -5;
+					if (player->missileSpeed < 5)
+						player->missileSpeed = 5;
+					else if (player->missileSpeed > 20)
+						player->missileSpeed = 20;
+
+					player->itemImage[10] = 1;
+
+					item->itemNum = 0;
+					item->removeAllChildren();
+				}
+				else if (item->itemNum == 11)
+				{
+					player->power += -1;
+					if (player->power < 1)
+						player->power = 1;
+					else if (player->power > 5)
+						player->power = 5;
+
+					player->attackSpeed += -0.1;
+					if (player->attackSpeed < 0.2)
+						player->attackSpeed = 0.2;
+					else if (player->attackSpeed > 0.7)
+						player->attackSpeed = 0.7;
+
+					player->speed += 1;
+					if (player->speed < 2.5)
+						player->speed = 2.5;
+					else if (player->speed > 4)
+						player->speed = 4;
+
+					player->missileSpeed += -3;
+					if (player->missileSpeed < 5)
+						player->missileSpeed = 5;
+					else if (player->missileSpeed > 20)
+						player->missileSpeed = 20;
+
+					player->itemImage[11] = 1;
+
+
+
+					item->itemNum = 0;
+					item->removeAllChildren();
+				}
+				else if (item->itemNum == 12)
+				{
+					player->power += 3;
+					if (player->power < 1)
+						player->power = 1;
+					else if (player->power > 5)
+						player->power = 5;
+
+					player->attackSpeed += 0.1;
+					if (player->attackSpeed < 0.2)
+						player->attackSpeed = 0.2;
+					else if (player->attackSpeed > 0.7)
+						player->attackSpeed = 0.7;
+
+
+					player->missileSpeed += 3;
+					if (player->missileSpeed < 5)
+						player->missileSpeed = 5;
+					else if (player->missileSpeed > 20)
+						player->missileSpeed = 20;
+
+					player->nukBack += 5;
+					if (player->nukBack < 0.5)
+						player->nukBack = 0.5;
+					else if (player->nukBack > 10)
+						player->nukBack = 10;
+
+					player->missileNum = 2;
+					player->itemImage[12] = 1;
+
+					item->itemNum = 0;
+					item->removeAllChildren();
+				}
+				else if (item->itemNum == 13)
+				{
+
+					player->speed += 2;
+					if (player->speed < 2.5)
+						player->speed = 2.5;
+					else if (player->speed > 4)
+						player->speed = 4;
+
+
+					player->itemImage[13] = 1;
+					item->itemNum = 0;
+					item->removeAllChildren();
+				}
+				else if (item->itemNum == 14)
+				{
+					player->power += 2;
+					if (player->power < 1)
+						player->power = 1;
+					else if (player->power > 5)
+						player->power = 5;
+
+
+					player->itemImage[14] = 1;
+					item->itemNum = 0;
+					item->removeAllChildren();
+				}
+				else if (item->itemNum == 15)
+				{
+
+
+					player->attackSpeed += -0.2;
+					if (player->attackSpeed < 0.2)
+						player->attackSpeed = 0.2;
+					else if (player->attackSpeed > 0.7)
+						player->attackSpeed = 0.7;
+
+					player->missileNum = 3;
+					player->itemImage[15] = 1;
+
+					item->itemNum = 0;
+					item->removeAllChildren();
+				}
+				
 			}
 		}
 	}

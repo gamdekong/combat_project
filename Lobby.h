@@ -66,7 +66,7 @@ public:
 	vector<b2Body*> monsterBodyVector;
 	ContactListener* myContactListener;
 	int clickCount = 0;
-	int count = 0;
+	bool isMoving = false;
 	bool isAttacking;
 
 

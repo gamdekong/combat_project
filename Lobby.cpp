@@ -186,8 +186,8 @@ void Lobby::tick(float dt)
 
 			if (b->GetUserData() == player)
 			{
-				float vx = joystickVelocity1->x * 5;//스피드
-				float vy = joystickVelocity1->y * 5;
+				float vx = joystickVelocity1->x * player->speed;//스피드
+				float vy = joystickVelocity1->y * player->speed;
 				//set ball velocity by Joystick
 				b->SetLinearVelocity(b2Vec2(vx, vy) + (b->GetLinearVelocity()));
 
@@ -233,22 +233,22 @@ void Lobby::tick(float dt)
 
 
 	// 캐릭터 이동 관련 부분
-	if (joystickVelocity1->x == 0 && joystickVelocity1->y == 0 && count == 0)
+	if (joystickVelocity1->x == 0 && joystickVelocity1->y == 0 && isMoving == false)
 	{
 
 		player->stopAllActions();
 		player->IdleAction();
-		count = 1;
+		isMoving = true;
 
 	}
 	else if (joystickVelocity1->x < 0)
 	{
 		//log("%f", joystick1->getVelocity().x);
-		if (count == 1)
+		if (isMoving == true)
 		{
 			player->stopAllActions();
 			player->MoveAction();
-			count = 0;
+			isMoving = false;
 		}
 		player->setFlippedX(true);
 
@@ -256,11 +256,11 @@ void Lobby::tick(float dt)
 	else if (joystickVelocity1->x > 0)
 	{
 		//log("%f", joystick1->getVelocity().x);
-		if (count == 1)
+		if (isMoving == true)
 		{
 			player->stopAllActions();
 			player->MoveAction();
-			count = 0;
+			isMoving = false;
 		}
 		player->setFlippedX(false);
 
@@ -463,7 +463,7 @@ void Lobby::RightLongAttack(float dt)
 	this->addChild(missile);
 	player->stopAllActions();
 	player->setFlippedX(false);
-	player->AttackAction();
+	player->AttackAction(isMoving);
 	missile->startAction(missile->missileNum);
 	//auto move = MoveBy::create(1.75f, Vec2(1500, 0));
 	//missile->runAction(move);
@@ -504,7 +504,7 @@ void Lobby::LeftLongAttack(float dt)
 	player->stopAllActions();
 	player->setFlippedX(true);
 	missile->setAnchorPoint(Vec2(0.2, 0.5));
-	player->AttackAction();
+	player->AttackAction(isMoving);
 	missile->startAction(missile->missileNum);
 
 

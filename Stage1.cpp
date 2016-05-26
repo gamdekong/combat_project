@@ -22,6 +22,7 @@ bool Stage1::init()
 	{
 		return false;
 	}
+	srand((unsigned)time(nullptr));
 	missileBodyVector.clear();
 	monsterBodyVector.clear();
 	winsize = Director::getInstance()->getWinSize();
@@ -788,9 +789,12 @@ void Stage1::createBackground()
 			auto seqR = RepeatForever::create(seq);
 			bossEye->runAction(seqR);
 		}
-		else if (false) //아이템 성소일시
+		else if (this->prev->stageNum == ITEM_MAP_NUM) //아이템 성소일시
 		{
-
+			auto door1 = Sprite::create("structure/itemdoor.png");
+			door1->setAnchorPoint(Vec2(0, 0));
+			door1->setPosition(Vec2(380, 390));
+			this->addChild(door1, 0);
 		}
 		else
 		{
@@ -831,9 +835,12 @@ void Stage1::createBackground()
 			auto seqR = RepeatForever::create(seq);
 			bossEye->runAction(seqR);
 		}
-		else if(false) //아이템 성소일시
+		else if(this->next->stageNum == ITEM_MAP_NUM) //아이템 성소일시
 		{
-
+			auto door1 = Sprite::create("structure/itemdoor.png");
+			door1->setAnchorPoint(Vec2(0, 0));
+			door1->setPosition(Vec2(985, 390));
+			this->addChild(door1, 0);
 		}
 		else
 		{
@@ -920,7 +927,8 @@ void Stage1::createBackground()
 
 void Stage1::MakeItem()
 {
-	auto item = new Item(1);
+	int num = rand() % 15 + 1;
+	auto item = new Item(num);
 	this->addChild(item,1);
 	item->setPosition(Vec2(1500/ 2, winsize.height / 2));
 
@@ -1222,36 +1230,38 @@ void Stage1::tick(float dt)
 	if (player->alive)
 	{
 		// 캐릭터 이동 관련 부분
-		if (joystickVelocity1->x == 0 && joystickVelocity1->y == 0 && count == 0)
+		if (joystickVelocity1->x == 0 && joystickVelocity1->y == 0 && isMoving == false)
 		{
 
 			//player->stopAllActions();
 			player->IdleAction();
-			count = 1;
+			isMoving = true;
 
 		}
 		else if (joystickVelocity1->x < 0)
 		{
 			//log("%f", joystick1->getVelocity().x);
-			if (count == 1)
+			if (isMoving == true)
 			{
 				//player->stopAllActions();
 				player->MoveAction();
-				count = 0;
+				isMoving = false;
 			}
 			player->setFlippedX(true);
+			player->ChildFlip(true);
 
 		}
 		else if (joystickVelocity1->x > 0)
 		{
 			//log("%f", joystick1->getVelocity().x);
-			if (count == 1)
+			if (isMoving == true)
 			{
 				//player->stopAllActions();
 				player->MoveAction();
-				count = 0;
+				isMoving = false;
 			}
 			player->setFlippedX(false);
+			player->ChildFlip(false);
 
 		}
 	}
@@ -1528,14 +1538,15 @@ void Stage1::RightLongAttack(float dt)
 {
 	log("오른쪽 검기");
 
-	SwordMissile *missile = new SwordMissile(1);
+	SwordMissile *missile = new SwordMissile(player->missileNum);
 	missile->setPosition(Vec2(player->getPosition().x + 50.f, player->getPosition().y));
 	missile->setFlipX(true);
 	missile->setAnchorPoint(Vec2(0.8, 0.5));
 	this->addChild(missile);
 	player->stopAllActions();
 	player->setFlippedX(false);
-	player->AttackAction();
+	player->ChildFlip(false);
+	player->AttackAction(isMoving);
 	missile->startAction(missile->missileNum);
 	//auto move = MoveBy::create(1.75f, Vec2(1500, 0));
 	//missile->runAction(move);
@@ -1571,13 +1582,14 @@ void Stage1::LeftLongAttack(float dt)
 {
 	
 
-	SwordMissile *missile = new SwordMissile(1);
+	SwordMissile *missile = new SwordMissile(player->missileNum);
 	missile->setPosition(Vec2(player->getPosition().x - 50.f, player->getPosition().y));
 	this->addChild(missile);
 	player->stopAllActions();
 	player->setFlippedX(true);
+	player->ChildFlip(true);
 	missile->setAnchorPoint(Vec2(0.2, 0.5));
-	player->AttackAction();
+	player->AttackAction(isMoving);
 	missile->startAction(missile->missileNum);
 	
 
