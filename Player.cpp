@@ -161,7 +161,7 @@ void Player::Delay()
 Player::Player()
 {
 	attackSpeed = 0.7;
-	nowEnergy = 50;
+	nowEnergy = 20;
 	power = 1;
 	nukBack = 10;
 	speed = 2.5;
@@ -269,61 +269,62 @@ void Player::ChildFlip(bool flip)
 
 void Player::ItemImaging(float dt)
 {
-	if (itemImage[6] == 1)
+	
+	if (itemImage[6] == 1)   
 	{
 		if (!getcigar->isVisible())
 			getcigar->setVisible(true);
 
 	}
-	else if (itemImage[7] == 1)
+	if (itemImage[7] == 1)
 	{
 		if (!getcross->isVisible())
 			getcross->setVisible(true);
 
 	}
-	else if (itemImage[8] == 1)
+	if (itemImage[8] == 1)
 	{
 		if (!getdumbel->isVisible())
 			getdumbel->setVisible(true);
 
 	}
-	else if (itemImage[9] == 1)
+	if (itemImage[9] == 1)
 	{
 		if (!getgamdekong->isVisible())
 			getgamdekong->setVisible(true);
 
 	}
-	else if (itemImage[10] == 1)
+	if (itemImage[10] == 1)
 	{
 		if (!getgarlic->isVisible())
 			getgarlic->setVisible(true);
 
 	}
-	else if (itemImage[11] == 1)
+	if (itemImage[11] == 1)
 	{
 		if (!getpensil->isVisible())
 			getpensil->setVisible(true);
 
 	}
-	else if (itemImage[12] == 1)
+	if (itemImage[12] == 1)
 	{
 		if (!getpipe->isVisible())
 			getpipe->setVisible(true);
 
 	}
-	else if (itemImage[13] == 1)
+	if (itemImage[13] == 1)
 	{
 		if (!getblue->isVisible())
 			getblue->setVisible(true);
 
 	}
-	else if (itemImage[14] == 1)
+	if (itemImage[14] == 1)
 	{
 		if (!getred->isVisible())
 			getred->setVisible(true);
 
 	}
-	else if (itemImage[15] == 1)
+	if (itemImage[15] == 1)
 	{
 		if (!getyellow->isVisible())
 			getyellow->setVisible(true);
