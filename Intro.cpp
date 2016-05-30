@@ -1,5 +1,19 @@
 #include "Intro.h"
+#include "SimpleAudioEngine.h"
 
+
+#define PLAYER_SWORD "sounds/player/player_sword.ogg"
+#define PLAYER_HITTED "sounds/player/player_hitted.ogg"
+#define CLICK "sounds/click/click.ogg"
+#define INTRO_BGM "sounds/intro/intro_bgm.ogg"
+#define LOBBY_BGM "sounds/lobby/lobby_bgm.ogg"
+#define STAGE1_BGM "sounds/stage1/stage1_bgm.ogg"
+#define STAGE2_BGM "sounds/stage2/stage2_bgm.ogg"
+#define STAGE3_BGM "sounds/stage3/stage3_bgm.ogg"
+#define ITEM_GET "sounds/item/item_get.ogg"
+#define ITEM_USE "sounds/item/item_use.ogg"
+
+using namespace CocosDenshion;
 
 Scene* Intro::createScene()
 {
@@ -22,6 +36,20 @@ bool Intro::init()
 		return false;
 	}
 	srand((unsigned)time(NULL));
+
+	SimpleAudioEngine::getInstance()->preloadBackgroundMusic(INTRO_BGM);
+	SimpleAudioEngine::getInstance()->preloadBackgroundMusic(LOBBY_BGM);
+	SimpleAudioEngine::getInstance()->preloadBackgroundMusic(STAGE2_BGM);
+	SimpleAudioEngine::getInstance()->preloadBackgroundMusic(STAGE1_BGM);
+	SimpleAudioEngine::getInstance()->preloadBackgroundMusic(STAGE3_BGM);
+
+	SimpleAudioEngine::getInstance()->preloadEffect(PLAYER_SWORD);
+	SimpleAudioEngine::getInstance()->preloadEffect(PLAYER_HITTED);
+	SimpleAudioEngine::getInstance()->preloadEffect(CLICK);
+	SimpleAudioEngine::getInstance()->preloadEffect(ITEM_GET);
+	SimpleAudioEngine::getInstance()->preloadEffect(ITEM_USE);
+
+	SimpleAudioEngine::getInstance()->playBackgroundMusic(INTRO_BGM, true);
 
 
 	auto winsize = Director::getInstance()->getWinSize();
@@ -177,6 +205,14 @@ void Intro::onEnter()
 	listener->onTouchesEnded = CC_CALLBACK_2(Intro::onTouchesEnded, this);
 	
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+}
+
+void Intro::onExit()
+{
+	SimpleAudioEngine::getInstance()->stopBackgroundMusic(true);
+	SimpleAudioEngine::getInstance()->end();
+	Layer::onExit();
+
 }
 
 void Intro::onTouchesBegan(const std::vector<Touch*>& touches, Event  *event)

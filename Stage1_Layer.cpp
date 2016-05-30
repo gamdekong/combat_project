@@ -1,5 +1,21 @@
 ﻿#include "Stage1_Layer.h"
 #include "Gameover.h"
+#include "SimpleAudioEngine.h"
+
+
+#define PLAYER_SWORD "sounds/player/player_sword.ogg"
+#define PLAYER_HITTED "sounds/player/player_hitted.ogg"
+#define CLICK "sounds/click/click.ogg"
+#define INTRO_BGM "sounds/intro/intro_bgm.ogg"
+#define LOBBY_BGM "sounds/lobby/lobby_bgm.ogg"
+#define STAGE1_BGM "sounds/stage1/stage1_bgm.ogg"
+#define STAGE2_BGM "sounds/stage2/stage2_bgm.ogg"
+#define STAGE3_BGM "sounds/stage3/stage3_bgm.ogg"
+#define ITEM_GET "sounds/item/item_get.ogg"
+#define ITEM_USE "sounds/item/item_use.ogg"
+
+using namespace CocosDenshion;
+
 USING_NS_CC;
 
 
@@ -23,6 +39,7 @@ bool Stage1_Layer::init()
     {
         return false;
     }
+	SimpleAudioEngine::getInstance()->playBackgroundMusic(STAGE1_BGM,true);
 	srand((unsigned)time(nullptr));
 	winsize = Director::getInstance()->getWinSize();
 
@@ -596,6 +613,7 @@ void Stage1_Layer::ItemUse(Ref * p)
 	log("item click");
 	if (player->activeItem == 1 && player->nowMagic > 7 )
 	{
+		SimpleAudioEngine::getInstance()->playEffect(ITEM_USE);
 		auto nowPlayerStage = (Stage1*)(player->nowStage);
 		auto monster = nowPlayerStage->monsterBodyVector;
 
@@ -619,6 +637,7 @@ void Stage1_Layer::ItemUse(Ref * p)
 	}
 	if (player->activeItem == 2 && player->nowMagic > 5)
 	{
+		SimpleAudioEngine::getInstance()->playEffect(ITEM_USE);
 		player->power += 5;
 		
 
@@ -638,6 +657,7 @@ void Stage1_Layer::ItemUse(Ref * p)
 	}
 	if (player->activeItem == 3 && player->nowMagic > 4)
 	{
+		SimpleAudioEngine::getInstance()->playEffect(ITEM_USE);
 		player->power += 10;
 
 
@@ -657,6 +677,7 @@ void Stage1_Layer::ItemUse(Ref * p)
 	}
 	if (player->activeItem == 4 && player->nowMagic > 1)
 	{
+		SimpleAudioEngine::getInstance()->playEffect(ITEM_USE);
 		auto nowPlayerStage = (Stage1*)(player->nowStage);
 		nowPlayerStage->unschedule(schedule_selector(Stage1::AITick2));
 		this->scheduleOnce(schedule_selector(Stage1_Layer::resetStat), 5);
@@ -702,6 +723,13 @@ void Stage1_Layer::onEnter()
 	listener->onTouchesEnded = CC_CALLBACK_2(Stage1_Layer::onTouchesEnded, this);
 	listener->onTouchesCancelled = CC_CALLBACK_2(Stage1_Layer::onTouchesCancelled, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+}
+
+void Stage1_Layer::onExit()
+{
+	SimpleAudioEngine::getInstance()->stopBackgroundMusic(true);
+	SimpleAudioEngine::getInstance()->end();
+	Layer::onExit();
 }
 
 void Stage1_Layer::onTouchesBegan(const std::vector<Touch*>& touches, Event  *event)

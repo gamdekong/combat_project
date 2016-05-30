@@ -1,4 +1,20 @@
 #include "Stage1.h"
+#include "Gameover.h"
+#include "SimpleAudioEngine.h"
+
+
+#define PLAYER_SWORD "sounds/player/player_sword.ogg"
+#define PLAYER_HITTED "sounds/player/player_hitted.ogg"
+#define CLICK "sounds/click/click.ogg"
+#define INTRO_BGM "sounds/intro/intro_bgm.ogg"
+#define LOBBY_BGM "sounds/lobby/lobby_bgm.ogg"
+#define STAGE1_BGM "sounds/stage1/stage1_bgm.ogg"
+#define STAGE2_BGM "sounds/stage2/stage2_bgm.ogg"
+#define STAGE3_BGM "sounds/stage3/stage3_bgm.ogg"
+#define ITEM_GET "sounds/item/item_get.ogg"
+#define ITEM_USE "sounds/item/item_use.ogg"
+
+using namespace CocosDenshion;
 
 USING_NS_CC;
 
@@ -927,8 +943,8 @@ void Stage1::createBackground()
 
 void Stage1::MakeItem()
 {
-	int num = rand() % 15+ 1;
-	//int num = 4;
+	//int num = rand() % 15+ 1;
+	int num = 1;
 	auto item = new Item(num);
 	this->addChild(item,1);
 	item->setPosition(Vec2(1500/ 2, winsize.height / 2));
@@ -977,6 +993,11 @@ void Stage1::onEnter()
 {
 	Layer::onEnter();
 
+}
+void Stage1::onExit()
+{
+	SimpleAudioEngine::getInstance()->end();
+	Layer::onExit();
 }
 //
 //void Stage1::onExit()
@@ -1272,6 +1293,18 @@ void Stage1::tick(float dt)
 
 		}
 	}
+
+	//------------------------------------------------------------------ 주인공 죽음
+
+	if (player->alive == false)
+	{
+		this->scheduleOnce(schedule_selector(Stage1::LoadGameOver), 2);
+	}
+
+
+
+
+
 	//------------------------------------------------------------------  A.I
 	if (isAiOn == false )
 	{
@@ -1281,6 +1314,15 @@ void Stage1::tick(float dt)
 	
 
 }
+
+void Stage1::LoadGameOver(float dt)
+{
+	auto pScene = Gameover::createScene();
+	Director::getInstance()->replaceScene(TransitionFade::create(0.5, pScene));
+
+}
+
+
 void Stage1::BossTick(float dt)
 {
 	auto playerPosition = player->getPosition();
@@ -1545,8 +1587,7 @@ void Stage1::LongAttack(int num)
 
 void Stage1::RightLongAttack(float dt)
 {
-	log("오른쪽 검기");
-
+	SimpleAudioEngine::getInstance()->playEffect(PLAYER_SWORD);
 	SwordMissile *missile = new SwordMissile(player->missileNum);
 	missile->setPosition(Vec2(player->getPosition().x + 50.f, player->getPosition().y));
 	missile->setFlipX(true);
@@ -1590,7 +1631,7 @@ void Stage1::RightLongAttack(float dt)
 void Stage1::LeftLongAttack(float dt)
 {
 	
-
+	SimpleAudioEngine::getInstance()->playEffect(PLAYER_SWORD);
 	SwordMissile *missile = new SwordMissile(player->missileNum);
 	missile->setPosition(Vec2(player->getPosition().x - 50.f, player->getPosition().y));
 	this->addChild(missile);

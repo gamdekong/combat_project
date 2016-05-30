@@ -62,6 +62,7 @@ void magic::setTexture2(int magic)
 	
 
 	}
+	this->magicMotion();
 }
 
 void magic::init2()

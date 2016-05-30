@@ -3,6 +3,21 @@
 #include "Monster.h"
 #include "BossMissile.h"
 #include "Item.h"
+#include "SimpleAudioEngine.h"
+
+
+#define PLAYER_SWORD "sounds/player/player_sword.ogg"
+#define PLAYER_HITTED "sounds/player/player_hitted.ogg"
+#define CLICK "sounds/click/click.ogg"
+#define INTRO_BGM "sounds/intro/intro_bgm.ogg"
+#define LOBBY_BGM "sounds/lobby/lobby_bgm.ogg"
+#define STAGE1_BGM "sounds/stage1/stage1_bgm.ogg"
+#define STAGE2_BGM "sounds/stage2/stage2_bgm.ogg"
+#define STAGE3_BGM "sounds/stage3/stage3_bgm.ogg"
+#define ITEM_GET "sounds/item/item_get.ogg"
+#define ITEM_USE "sounds/item/item_use.ogg"
+
+using namespace CocosDenshion;
 
 ContactListener::ContactListener(Player *player) {
 	this->player = player;
@@ -36,30 +51,47 @@ void ContactListener::BeginContact(b2Contact *contact)
 				Item *item = (Item*)spriteB;
 				if (item->itemNum == 1)
 				{
+					SimpleAudioEngine::getInstance()->playEffect(ITEM_GET);
+					int temp = player->activeItem;
+
 					player->activeItem = 1;
-					item->itemNum = 0;
+					item->itemNum = temp;
 					item->removeAllChildren();
+					item->addItem();
 				}
 				else if (item->itemNum == 2)
 				{
+					SimpleAudioEngine::getInstance()->playEffect(ITEM_GET);
+					int temp = player->activeItem;
+
 					player->activeItem = 2;
-					item->itemNum = 0;
+					item->itemNum = temp;
 					item->removeAllChildren();
+					item->addItem();
 				}
 				else if (item->itemNum == 3)
 				{
+					SimpleAudioEngine::getInstance()->playEffect(ITEM_GET);
+					int temp = player->activeItem;
+
 					player->activeItem = 3;
-					item->itemNum = 0;
+					item->itemNum = temp;
 					item->removeAllChildren();
+					item->addItem();
 				}
 				else if (item->itemNum == 4)
 				{
+					SimpleAudioEngine::getInstance()->playEffect(ITEM_GET);
+					int temp = player->activeItem;
+
 					player->activeItem = 4;
-					item->itemNum = 0;
+					item->itemNum = temp;
 					item->removeAllChildren();
+					item->addItem();
 				}
 				else if (item->itemNum == 5)
 				{
+					SimpleAudioEngine::getInstance()->playEffect(ITEM_GET);
 					player->power += 2;
 					if(player->power < 1)
 						player->power = 1;
@@ -98,6 +130,7 @@ void ContactListener::BeginContact(b2Contact *contact)
 				}
 				else if (item->itemNum == 6)
 				{
+					SimpleAudioEngine::getInstance()->playEffect(ITEM_GET);
 					player->power += 2;
 					if (player->power < 1)
 						player->power = 1;
@@ -139,6 +172,7 @@ void ContactListener::BeginContact(b2Contact *contact)
 				}
 				else if (item->itemNum == 7)
 				{
+					SimpleAudioEngine::getInstance()->playEffect(ITEM_GET);
 					player->power += 1;
 					if (player->power < 1)
 						player->power = 1;
@@ -170,6 +204,7 @@ void ContactListener::BeginContact(b2Contact *contact)
 				}
 				else if (item->itemNum == 8)
 				{
+					SimpleAudioEngine::getInstance()->playEffect(ITEM_GET);
 					player->power += 4;
 					if (player->power < 1)
 						player->power = 1;
@@ -210,6 +245,7 @@ void ContactListener::BeginContact(b2Contact *contact)
 				}
 				else if (item->itemNum == 9)
 				{
+					SimpleAudioEngine::getInstance()->playEffect(ITEM_GET);
 					player->power += 5;
 					if (player->power < 1)
 						player->power = 1;
@@ -248,7 +284,7 @@ void ContactListener::BeginContact(b2Contact *contact)
 				}
 				else if (item->itemNum == 10)
 				{
-					
+					SimpleAudioEngine::getInstance()->playEffect(ITEM_GET);
 
 					player->attackSpeed += -0.2;
 					if (player->attackSpeed < 0.2)
@@ -275,6 +311,7 @@ void ContactListener::BeginContact(b2Contact *contact)
 				}
 				else if (item->itemNum == 11)
 				{
+					SimpleAudioEngine::getInstance()->playEffect(ITEM_GET);
 					player->power += -1;
 					if (player->power < 1)
 						player->power = 1;
@@ -308,6 +345,7 @@ void ContactListener::BeginContact(b2Contact *contact)
 				}
 				else if (item->itemNum == 12)
 				{
+					SimpleAudioEngine::getInstance()->playEffect(ITEM_GET);
 					player->power += 3;
 					if (player->power < 1)
 						player->power = 1;
@@ -341,7 +379,7 @@ void ContactListener::BeginContact(b2Contact *contact)
 				}
 				else if (item->itemNum == 13)
 				{
-				
+					SimpleAudioEngine::getInstance()->playEffect(ITEM_GET);
 					player->speed += 2;
 					if (player->speed < 2.5)
 						player->speed = 2.5;
@@ -355,6 +393,7 @@ void ContactListener::BeginContact(b2Contact *contact)
 				}
 				else if (item->itemNum == 14)
 				{
+					SimpleAudioEngine::getInstance()->playEffect(ITEM_GET);
 					player->power += 2;
 					if (player->power < 1)
 						player->power = 1;
@@ -368,7 +407,7 @@ void ContactListener::BeginContact(b2Contact *contact)
 				}
 				else if (item->itemNum == 15)
 				{
-				
+					SimpleAudioEngine::getInstance()->playEffect(ITEM_GET);
 
 					player->attackSpeed += -0.2;
 					if (player->attackSpeed < 0.2)
@@ -389,30 +428,47 @@ void ContactListener::BeginContact(b2Contact *contact)
 				Item *item = (Item*)spriteA;
 				if (item->itemNum == 1)
 				{
+					SimpleAudioEngine::getInstance()->playEffect(ITEM_GET);
+					int temp = player->activeItem;
+
 					player->activeItem = 1;
-					item->itemNum = 0;
+					item->itemNum = temp;
 					item->removeAllChildren();
+					item->addItem();
 				}
 				else if (item->itemNum == 2)
 				{
+					SimpleAudioEngine::getInstance()->playEffect(ITEM_GET);
+					int temp = player->activeItem;
+
 					player->activeItem = 2;
-					item->itemNum = 0;
+					item->itemNum = temp;
 					item->removeAllChildren();
+					item->addItem();
 				}
 				else if (item->itemNum == 3)
 				{
+					SimpleAudioEngine::getInstance()->playEffect(ITEM_GET);
+					int temp = player->activeItem;
+
 					player->activeItem = 3;
-					item->itemNum = 0;
+					item->itemNum = temp;
 					item->removeAllChildren();
+					item->addItem();
 				}
 				else if (item->itemNum == 4)
 				{
+					SimpleAudioEngine::getInstance()->playEffect(ITEM_GET);
+					int temp = player->activeItem;
+
 					player->activeItem = 4;
-					item->itemNum = 0;
+					item->itemNum = temp;
 					item->removeAllChildren();
+					item->addItem();
 				}
 				else if (item->itemNum == 5)
 				{
+					SimpleAudioEngine::getInstance()->playEffect(ITEM_GET);
 					player->power += 2;
 					if (player->power < 1)
 						player->power = 1;
@@ -450,6 +506,7 @@ void ContactListener::BeginContact(b2Contact *contact)
 				}
 				else if (item->itemNum == 6)
 				{
+					SimpleAudioEngine::getInstance()->playEffect(ITEM_GET);
 					player->power += 2;
 					if (player->power < 1)
 						player->power = 1;
@@ -491,6 +548,7 @@ void ContactListener::BeginContact(b2Contact *contact)
 				}
 				else if (item->itemNum == 7)
 				{
+					SimpleAudioEngine::getInstance()->playEffect(ITEM_GET);
 					player->power += 1;
 					if (player->power < 1)
 						player->power = 1;
@@ -522,6 +580,7 @@ void ContactListener::BeginContact(b2Contact *contact)
 				}
 				else if (item->itemNum == 8)
 				{
+					SimpleAudioEngine::getInstance()->playEffect(ITEM_GET);
 					player->power += 4;
 					if (player->power < 1)
 						player->power = 1;
@@ -562,6 +621,7 @@ void ContactListener::BeginContact(b2Contact *contact)
 				}
 				else if (item->itemNum == 9)
 				{
+					SimpleAudioEngine::getInstance()->playEffect(ITEM_GET);
 					player->power += 5;
 					if (player->power < 1)
 						player->power = 1;
@@ -600,7 +660,7 @@ void ContactListener::BeginContact(b2Contact *contact)
 				}
 				else if (item->itemNum == 10)
 				{
-
+					SimpleAudioEngine::getInstance()->playEffect(ITEM_GET);
 
 					player->attackSpeed += -0.2;
 					if (player->attackSpeed < 0.2)
@@ -627,6 +687,7 @@ void ContactListener::BeginContact(b2Contact *contact)
 				}
 				else if (item->itemNum == 11)
 				{
+					SimpleAudioEngine::getInstance()->playEffect(ITEM_GET);
 					player->power += -1;
 					if (player->power < 1)
 						player->power = 1;
@@ -660,6 +721,7 @@ void ContactListener::BeginContact(b2Contact *contact)
 				}
 				else if (item->itemNum == 12)
 				{
+					SimpleAudioEngine::getInstance()->playEffect(ITEM_GET);
 					player->power += 3;
 					if (player->power < 1)
 						player->power = 1;
@@ -693,7 +755,7 @@ void ContactListener::BeginContact(b2Contact *contact)
 				}
 				else if (item->itemNum == 13)
 				{
-
+					SimpleAudioEngine::getInstance()->playEffect(ITEM_GET);
 					player->speed += 2;
 					if (player->speed < 2.5)
 						player->speed = 2.5;
@@ -707,6 +769,7 @@ void ContactListener::BeginContact(b2Contact *contact)
 				}
 				else if (item->itemNum == 14)
 				{
+					SimpleAudioEngine::getInstance()->playEffect(ITEM_GET);
 					player->power += 2;
 					if (player->power < 1)
 						player->power = 1;
@@ -720,7 +783,7 @@ void ContactListener::BeginContact(b2Contact *contact)
 				}
 				else if (item->itemNum == 15)
 				{
-
+					SimpleAudioEngine::getInstance()->playEffect(ITEM_GET);
 
 					player->attackSpeed += -0.2;
 					if (player->attackSpeed < 0.2)
@@ -778,6 +841,7 @@ void ContactListener::BeginContact(b2Contact *contact)
 				monsterSprite->AfterAttack();
 				if (player->hitted == false)
 				{
+					SimpleAudioEngine::getInstance()->playEffect(PLAYER_HITTED);
 					player->nowEnergy -= monsterSprite->power;
 					player->hitted = true;
 					
@@ -814,6 +878,7 @@ void ContactListener::BeginContact(b2Contact *contact)
 				monsterSprite->AfterAttack();
 				if(player->hitted == false)
 				{
+					SimpleAudioEngine::getInstance()->playEffect(PLAYER_HITTED);
 					player->nowEnergy -= monsterSprite->power;
 					player->hitted = true;
 					
@@ -848,6 +913,7 @@ void ContactListener::BeginContact(b2Contact *contact)
 
 				if (player->hitted == false)
 				{
+					SimpleAudioEngine::getInstance()->playEffect(PLAYER_HITTED);
 					player->nowEnergy -= MissleSprite->power;
 					player->hitted = true;
 
@@ -883,6 +949,7 @@ void ContactListener::BeginContact(b2Contact *contact)
 
 				if (player->hitted == false)
 				{
+					SimpleAudioEngine::getInstance()->playEffect(PLAYER_HITTED);
 					player->nowEnergy -= MissleSprite->power;
 					player->hitted = true;
 

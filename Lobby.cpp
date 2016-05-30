@@ -1,5 +1,19 @@
 #include "Lobby.h"
+#include "SimpleAudioEngine.h"
 
+
+#define PLAYER_SWORD "sounds/player/player_sword.ogg"
+#define PLAYER_HITTED "sounds/player/player_hitted.ogg"
+#define CLICK "sounds/click/click.ogg"
+#define INTRO_BGM "sounds/intro/intro_bgm.ogg"
+#define LOBBY_BGM "sounds/lobby/lobby_bgm.ogg"
+#define STAGE1_BGM "sounds/stage1/stage1_bgm.ogg"
+#define STAGE2_BGM "sounds/stage2/stage2_bgm.ogg"
+#define STAGE3_BGM "sounds/stage3/stage3_bgm.ogg"
+#define ITEM_GET "sounds/item/item_get.ogg"
+#define ITEM_USE "sounds/item/item_use.ogg"
+
+using namespace CocosDenshion;
 USING_NS_CC;
 
 Scene* Lobby::createScene()
@@ -133,11 +147,9 @@ bool Lobby::createWorld(bool debug)
 	groundBody->CreateFixture(&boxShapeDef);
 
 	//위쪽1
-	groundEdge.Set(b2Vec2(200 / PTM_RATIO, 540 / PTM_RATIO), b2Vec2(600 / PTM_RATIO, 540 / PTM_RATIO));
+	groundEdge.Set(b2Vec2(200 / PTM_RATIO, 540 / PTM_RATIO), b2Vec2(1000 / PTM_RATIO, 540 / PTM_RATIO));
 	groundBody->CreateFixture(&boxShapeDef);
-	//위쪽2
-	groundEdge.Set(b2Vec2(700 / PTM_RATIO, 540 / PTM_RATIO), b2Vec2(1000 / PTM_RATIO, 540 / PTM_RATIO));
-	groundBody->CreateFixture(&boxShapeDef);
+
 	//위쪽3
 	groundEdge.Set(b2Vec2(1100 / PTM_RATIO, 540 / PTM_RATIO), b2Vec2(1300 / PTM_RATIO, 540 / PTM_RATIO));
 	groundBody->CreateFixture(&boxShapeDef);
@@ -454,8 +466,7 @@ void Lobby::LongAttack(int num)
 
 void Lobby::RightLongAttack(float dt)
 {
-	log("오른쪽 검기");
-
+	SimpleAudioEngine::getInstance()->playEffect(PLAYER_SWORD);
 	SwordMissile *missile = new SwordMissile(1);
 	missile->setPosition(Vec2(player->getPosition().x + 50.f, player->getPosition().y));
 	missile->setFlipX(true);
@@ -496,8 +507,7 @@ void Lobby::RightLongAttack(float dt)
 }
 void Lobby::LeftLongAttack(float dt)
 {
-	log("왼쪽 검기");
-
+	SimpleAudioEngine::getInstance()->playEffect(PLAYER_SWORD);
 	SwordMissile *missile = new SwordMissile(1);
 	missile->setPosition(Vec2(player->getPosition().x - 50.f, player->getPosition().y));
 	this->addChild(missile);

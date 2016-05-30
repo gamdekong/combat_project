@@ -1,4 +1,19 @@
 #include "LobbyLayer.h"
+#include "SimpleAudioEngine.h"
+
+
+#define PLAYER_SWORD "sounds/player/player_sword.ogg"
+#define PLAYER_HITTED "sounds/player/player_hitted.ogg"
+#define CLICK "sounds/click/click.ogg"
+#define INTRO_BGM "sounds/intro/intro_bgm.ogg"
+#define LOBBY_BGM "sounds/lobby/lobby_bgm.ogg"
+#define STAGE1_BGM "sounds/stage1/stage1_bgm.ogg"
+#define STAGE2_BGM "sounds/stage2/stage2_bgm.ogg"
+#define STAGE3_BGM "sounds/stage3/stage3_bgm.ogg"
+#define ITEM_GET "sounds/item/item_get.ogg"
+#define ITEM_USE "sounds/item/item_use.ogg"
+
+using namespace CocosDenshion;
 
 USING_NS_CC;
 
@@ -23,7 +38,7 @@ bool LobbyLayer::init()
 	{
 		return false;
 	}
-
+	SimpleAudioEngine::getInstance()->playBackgroundMusic(LOBBY_BGM, true);
 	auto winsize = Director::getInstance()->getWinSize();
 	//player = new Player();
 	//this->addChild(player,1);
@@ -211,6 +226,13 @@ void LobbyLayer::onEnter()
 	listener->onTouchesEnded = CC_CALLBACK_2(LobbyLayer::onTouchesEnded, this);
 	listener->onTouchesCancelled = CC_CALLBACK_2(LobbyLayer::onTouchesCancelled, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+}
+
+void LobbyLayer::onExit()
+{
+	SimpleAudioEngine::getInstance()->stopBackgroundMusic(true);
+	SimpleAudioEngine::getInstance()->end();
+	Layer::onExit();
 }
 
 void LobbyLayer::onTouchesBegan(const std::vector<Touch*>& touches, Event  *event)

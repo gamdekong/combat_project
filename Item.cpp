@@ -25,6 +25,10 @@ void Item::addItem()
 	RepeatForever *seqR;
 	switch (itemNum)
 	{
+	case 0:
+		this->removeAllChildren();
+		break;
+
 	case 1:
 		sprite = Sprite::create("item/active/lighter.png");
 		sprite->setPosition(Vec2(this->getContentSize().width / 2, this->getContentSize().height+10 ));
@@ -152,3 +156,6 @@ void Item::addItem()
 	}
 }
 
+void Item::setTexture2(int num)
+{
+}
