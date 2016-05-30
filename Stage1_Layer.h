@@ -45,6 +45,7 @@ public:
 	Size winsize;
 	Vec2 kCenter1, kCenter2;
 	Sprite* thumb1, *thumb2;
+	Sprite *itemSprite;
 	bool isPressed1,isPressed2;
 	bool isProgressOn = false;
 
@@ -62,6 +63,8 @@ public:
 	bool handleLastTouch2();
 	void tick(float dt);
 	void ItemUse(Ref *p);
+
+	void resetStat(float dt);
 	
 
 

@@ -2,6 +2,7 @@
 #include "cocos2d.h"
 #include "SwordMissile.h"
 #include "Energy.h"
+#include "magic.h"
 //#include "Stage1.h"
 using namespace cocos2d;
 
@@ -25,13 +26,14 @@ public:
 	Player();
 	void init2();
 	Energy *energy;
+	magic *magicEnergy;
 	Layer *nowStage;
 	
 	int activeItem;
 	int count = 100;
 	int hitCount = 0;
 
-
+	float nowMagic;
 	float nowEnergy;
 	float speed;           //2.5 ~ 4
 	float attackSpeed;    //0.1 ~ 0.7

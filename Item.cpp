@@ -138,7 +138,7 @@ void Item::addItem()
 		sprite->runAction(seqR);
 		break;
 	case 15:
-		sprite = Sprite::create("item/passive/yellow.png");
+		sprite = Sprite::create("item/passive/syringe_yellow.png");
 		sprite->setPosition(Vec2(this->getContentSize().width / 2, this->getContentSize().height + 10));
 		this->addChild(sprite);
 		seq = Sequence::create(MoveBy::create(1, Vec2(0, 10)), MoveBy::create(1, Vec2(0, -10)), nullptr);

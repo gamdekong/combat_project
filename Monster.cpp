@@ -53,7 +53,7 @@ Monster::Monster(int num)
 		nowEnergy = 1000;
 		power = 0;
 	}
-	else if (monsterNum == BOSS1)
+	else if (monsterNum == BOSS1) //swornd
 	{
 		nowEnergy = 50;
 		maxEnergy = 50;

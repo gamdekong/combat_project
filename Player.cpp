@@ -161,6 +161,7 @@ void Player::Delay()
 Player::Player()
 {
 	attackSpeed = 0.7;
+	nowMagic = 10;
 	nowEnergy = 20;
 	power = 1;
 	nukBack = 10;
@@ -169,6 +170,7 @@ Player::Player()
 	activeItem = 0;
 	missileNum = 1;
 	energy = new Energy();
+	magicEnergy = new magic();
 
 	playerMoveTexture = Director::getInstance()->getTextureCache()->addImage("player/move/move.png");
 	playerAttackTexture = Director::getInstance()->getTextureCache()->addImage("player/attack/attack.png");

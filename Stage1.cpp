@@ -927,7 +927,8 @@ void Stage1::createBackground()
 
 void Stage1::MakeItem()
 {
-	int num = rand() % 10+ 5;
+	int num = rand() % 15+ 1;
+	//int num = 4;
 	auto item = new Item(num);
 	this->addChild(item,1);
 	item->setPosition(Vec2(1500/ 2, winsize.height / 2));
@@ -1105,6 +1106,11 @@ void Stage1::tick(float dt)
 			_world->DestroyBody(doorBodyVector.at(i));
 		}
 		doorBodyVector.clear();
+
+		player->nowMagic += 2;
+		if(player->nowMagic > 10)
+			player->nowMagic = 10;
+		player->magicEnergy->setTexture2(player->nowMagic);
 		doorOpen = true;
 	}
 
@@ -1115,47 +1121,48 @@ void Stage1::tick(float dt)
 	{
 
 		Monster *monster = (Monster*)(monsterBodyVector[i]->GetUserData());
-
-		//  충돌 처리
-		if (player->getPosition().y < monster->getPosition().y + 30 && player->getPosition().y > monster->getPosition().y - 30)
+		if (monster != nullptr)
 		{
-			//log("dddd");
-			b2Filter newFilter;
-			b2Filter oldFilter;
-			oldFilter.categoryBits = 0x0001;
-			oldFilter.maskBits = 0xFFFF;
-			oldFilter.groupIndex = 0;
-			oldFilter = monsterBodyVector[i]->GetFixtureList()->GetFilterData();
-			newFilter = oldFilter;
-			newFilter.maskBits = CATEGORY_PLAYER;
-			monsterBodyVector[i]->GetFixtureList()->SetFilterData(newFilter);
-			//CC_SAFE_DELETE(newFilter);
-			//CC_SAFE_DELETE(oldFilter);
-		}
-		else
-		{
-			b2Filter newFilter;
-			b2Filter oldFilter;
-			oldFilter.categoryBits = 0x0001;
-			oldFilter.maskBits = 0xFFFF;
-			oldFilter.groupIndex = 0;
-			oldFilter = monsterBodyVector[i]->GetFixtureList()->GetFilterData();
-			newFilter = oldFilter;
-			newFilter.maskBits = 0;////////////////////////////////
-			monsterBodyVector[i]->GetFixtureList()->SetFilterData(newFilter);
-			//CC_SAFE_DELETE(newFilter);
-			//CC_SAFE_DELETE(oldFilter);
+			//  충돌 처리
+			if (player->getPosition().y < monster->getPosition().y + 30 && player->getPosition().y > monster->getPosition().y - 30)
+			{
+				//log("dddd");
+				b2Filter newFilter;
+				b2Filter oldFilter;
+				oldFilter.categoryBits = 0x0001;
+				oldFilter.maskBits = 0xFFFF;
+				oldFilter.groupIndex = 0;
+				oldFilter = monsterBodyVector[i]->GetFixtureList()->GetFilterData();
+				newFilter = oldFilter;
+				newFilter.maskBits = CATEGORY_PLAYER;
+				monsterBodyVector[i]->GetFixtureList()->SetFilterData(newFilter);
+				//CC_SAFE_DELETE(newFilter);
+				//CC_SAFE_DELETE(oldFilter);
+			}
+			else
+			{
+				b2Filter newFilter;
+				b2Filter oldFilter;
+				oldFilter.categoryBits = 0x0001;
+				oldFilter.maskBits = 0xFFFF;
+				oldFilter.groupIndex = 0;
+				oldFilter = monsterBodyVector[i]->GetFixtureList()->GetFilterData();
+				newFilter = oldFilter;
+				newFilter.maskBits = 0;////////////////////////////////
+				monsterBodyVector[i]->GetFixtureList()->SetFilterData(newFilter);
+				//CC_SAFE_DELETE(newFilter);
+				//CC_SAFE_DELETE(oldFilter);
+
+			}
+
+
+			if (player->getPosition().y > monster->getPosition().y + 30)
+				player->setZOrder(monster->getZOrder() - 1);
+			else if (player->getPosition().y < monster->getPosition().y + 30)
+				player->setZOrder(monster->getZOrder() + 1);
+
 
 		}
-
-
-		if (player->getPosition().y > monster->getPosition().y + 30)
-			player->setZOrder(monster->getZOrder() - 1);
-		else if (player->getPosition().y < monster->getPosition().y + 30)
-			player->setZOrder(monster->getZOrder() + 1);
-
-
-
 	}
 
 
@@ -1379,45 +1386,47 @@ void Stage1::AITick2(float dt)  // 몬스터 이동 부분
 
 	for (int i = 0; i < monsterBodyVector.size(); i++)
 	{
-		if (((Monster*)(monsterBodyVector.at(i)->GetUserData()))->isMove == false)
+		if (((Monster*)(monsterBodyVector.at(i)->GetUserData())) != nullptr)
 		{
-			((Monster*)(monsterBodyVector.at(i)->GetUserData()))->MoveAction();
-			((Monster*)(monsterBodyVector.at(i)->GetUserData()))->isMove = true;
+			if (((Monster*)(monsterBodyVector.at(i)->GetUserData()))->isMove == false)
+			{
+				((Monster*)(monsterBodyVector.at(i)->GetUserData()))->MoveAction();
+				((Monster*)(monsterBodyVector.at(i)->GetUserData()))->isMove = true;
+			}
+			auto x = playerBody->GetPosition().x - monsterBodyVector.at(i)->GetPosition().x;
+			auto y = playerBody->GetPosition().y - monsterBodyVector.at(i)->GetPosition().y;
+			float xR, yR;
+			if (stageNum == BOSS_MAP_NUM)
+			{
+				if (x < 0)
+					xR = -1;
+				else
+					xR = 1;
+
+				if (y < 0)
+					yR = -1;
+				else
+					yR = 1;
+			}
+			else
+			{
+				if (x < 0)
+					xR = -1;
+				else
+					xR = 1;
+
+				if (y < 0)
+					yR = -1;
+				else
+					yR = 1;
+			}
+			if (xR > 0)
+				((Monster*)(monsterBodyVector.at(i)->GetUserData()))->setFlippedX(true);
+			else if (xR < 0)
+				((Monster*)(monsterBodyVector.at(i)->GetUserData()))->setFlippedX(false);
+			monsterBodyVector.at(i)->SetLinearVelocity(b2Vec2(xR, yR));
+
 		}
-		auto x = playerBody->GetPosition().x - monsterBodyVector.at(i)->GetPosition().x;
-		auto y = playerBody->GetPosition().y - monsterBodyVector.at(i)->GetPosition().y;
-		float xR, yR;
-		if (stageNum == BOSS_MAP_NUM)
-		{
-			if (x < 0)
-				xR = -1;
-			else
-				xR = 1;
-
-			if (y < 0)
-				yR = -1;
-			else
-				yR = 1;
-		}
-		else
-		{
-			if (x < 0)
-				xR = -1;
-			else
-				xR = 1;
-
-			if (y < 0)
-				yR = -1;
-			else
-				yR = 1;
-		}
-		if(xR > 0)
-			((Monster*)(monsterBodyVector.at(i)->GetUserData()))->setFlippedX(true);
-		else if(xR < 0)
-			((Monster*)(monsterBodyVector.at(i)->GetUserData()))->setFlippedX(false);
-		monsterBodyVector.at(i)->SetLinearVelocity(b2Vec2(xR,yR));
-
-
 	}
 
 

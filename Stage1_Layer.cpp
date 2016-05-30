@@ -78,6 +78,12 @@ bool Stage1_Layer::init()
 	this->addChild(pItemMenu,3);
 
 	upBar->addChild(player->energy,2);
+	upBar->addChild(player->magicEnergy, 2);
+
+	itemSprite = Sprite::create("item/active/redstar.png");
+	itemSprite->setVisible(false);
+	itemSprite->setPosition(Vec2(itemBox->getContentSize().width / 2, itemBox->getContentSize().height / 2));
+	itemBox->addChild(itemSprite);
 
 	//auto energy = Sprite::create("ui/meter-06.png");
 	//energy->setPosition(Vec2(upBar->getContentSize().height / 2, 50));
@@ -546,11 +552,14 @@ void Stage1_Layer::tick(float dt)
 
 		for (int i = 0; i < temp.size(); i++)
 		{
-			float bossEnergy = ((Monster*)(temp.at(i)->GetUserData()))->nowEnergy;
-			float bossMaxEnergy = ((Monster*)(temp.at(i)->GetUserData()))->maxEnergy;
-			float f = (bossEnergy / bossMaxEnergy) * 100;
-			
-			pt->setPercentage(f);
+			if (((Monster*)(temp.at(i)->GetUserData())) != nullptr)
+			{
+				float bossEnergy = ((Monster*)(temp.at(i)->GetUserData()))->nowEnergy;
+				float bossMaxEnergy = ((Monster*)(temp.at(i)->GetUserData()))->maxEnergy;
+				float f = (bossEnergy / bossMaxEnergy) * 100;
+
+				pt->setPercentage(f);
+			}
 		}
 		if (temp.size() == 0)
 		{
@@ -558,13 +567,130 @@ void Stage1_Layer::tick(float dt)
 		}
 
 	}
+
+	if (player->activeItem == 1)
+	{
+		itemSprite->setTexture("item/active/lighter.png");
+		itemSprite->setVisible(true);
+	}
+	else if (player->activeItem == 2)
+	{
+		itemSprite->setTexture("item/active/redstar.png");
+		itemSprite->setVisible(true);
+	}
+	else if (player->activeItem == 3)
+	{
+		itemSprite->setTexture("item/active/saw.png");
+		itemSprite->setVisible(true);
+	}
+	else if (player->activeItem == 4)
+	{
+		itemSprite->setTexture("item/active/spiderweb.png");
+		itemSprite->setVisible(true);
+	}
+	
 }
 
 void Stage1_Layer::ItemUse(Ref * p)
 {
 	log("item click");
+	if (player->activeItem == 1 && player->nowMagic > 7 )
+	{
+		auto nowPlayerStage = (Stage1*)(player->nowStage);
+		auto monster = nowPlayerStage->monsterBodyVector;
+
+		for (int i = 0; i < monster.size(); i++)
+		{
+			auto monsterSprite = (Monster*)(monster.at(i)->GetUserData());
+
+			monsterSprite->nowEnergy -= 10;
+			if (monsterSprite->nowEnergy <= 0)
+			{
+				//monsterSprite->isAlive = false;
+				monsterSprite->DeadAction();
+				monster.at(i)->SetUserData(nullptr);
+			}
+			else
+				monsterSprite->HittedAction();
+		}
+		player->nowMagic -= 8;
+		player->magicEnergy->setTexture2(player->nowMagic);
+
+	}
+	if (player->activeItem == 2 && player->nowMagic > 5)
+	{
+		player->power += 5;
+		
+
+		player->attackSpeed += -0.09;
+		
+
+		player->missileSpeed += 10;
+		
+
+		player->nukBack += 5;
+		
+		player->nowMagic -= 6;
+		player->magicEnergy->setTexture2(player->nowMagic);
+
+		this->scheduleOnce(schedule_selector(Stage1_Layer::resetStat), 5);
+
+	}
+	if (player->activeItem == 3 && player->nowMagic > 4)
+	{
+		player->power += 10;
+
+
+		player->attackSpeed += 0.2;
+
+
+		player->missileSpeed += 10;
+
+
+		player->nukBack += 15;
+
+		player->nowMagic -= 5;
+		player->magicEnergy->setTexture2(player->nowMagic);
+
+		this->scheduleOnce(schedule_selector(Stage1_Layer::resetStat), 5);
+
+	}
+	if (player->activeItem == 4 && player->nowMagic > 1)
+	{
+		auto nowPlayerStage = (Stage1*)(player->nowStage);
+		nowPlayerStage->unschedule(schedule_selector(Stage1::AITick2));
+		this->scheduleOnce(schedule_selector(Stage1_Layer::resetStat), 5);
+
+		player->nowMagic -= 2;
+		player->magicEnergy->setTexture2(player->nowMagic);
+	}
+
 }
 
+void Stage1_Layer::resetStat(float dt)
+{
+	if (player->activeItem == 2)
+	{
+		player->power -= 5;
+		player->attackSpeed += 0.09;
+		player->missileSpeed -= 10;
+		player->nukBack -= 5;
+	}
+
+	if (player->activeItem == 3)
+	{
+		player->power -= 10;
+		player->attackSpeed += -0.2;
+		player->missileSpeed -= 10;
+		player->nukBack -= 15;
+	}
+	if (player->activeItem == 4)
+	{
+		auto nowPlayerStage = (Stage1*)(player->nowStage);
+		nowPlayerStage->schedule(schedule_selector(Stage1::AITick2));
+		
+	}
+}
 
 void Stage1_Layer::onEnter()
 {
