@@ -37,19 +37,7 @@ bool Intro::init()
 	}
 	srand((unsigned)time(NULL));
 
-	SimpleAudioEngine::getInstance()->preloadBackgroundMusic(INTRO_BGM);
-	SimpleAudioEngine::getInstance()->preloadBackgroundMusic(LOBBY_BGM);
-	SimpleAudioEngine::getInstance()->preloadBackgroundMusic(STAGE2_BGM);
-	SimpleAudioEngine::getInstance()->preloadBackgroundMusic(STAGE1_BGM);
-	SimpleAudioEngine::getInstance()->preloadBackgroundMusic(STAGE3_BGM);
-
-	SimpleAudioEngine::getInstance()->preloadEffect(PLAYER_SWORD);
-	SimpleAudioEngine::getInstance()->preloadEffect(PLAYER_HITTED);
-	SimpleAudioEngine::getInstance()->preloadEffect(CLICK);
-	SimpleAudioEngine::getInstance()->preloadEffect(ITEM_GET);
-	SimpleAudioEngine::getInstance()->preloadEffect(ITEM_USE);
-
-	SimpleAudioEngine::getInstance()->playBackgroundMusic(INTRO_BGM, true);
+	
 
 
 	auto winsize = Director::getInstance()->getWinSize();
@@ -198,6 +186,21 @@ void Intro::tick(float dt)
 void Intro::onEnter()
 {
 	Layer::onEnter();
+	SimpleAudioEngine::getInstance()->preloadBackgroundMusic(INTRO_BGM);
+	SimpleAudioEngine::getInstance()->preloadBackgroundMusic(LOBBY_BGM);
+	SimpleAudioEngine::getInstance()->preloadBackgroundMusic(STAGE2_BGM);
+	SimpleAudioEngine::getInstance()->preloadBackgroundMusic(STAGE1_BGM);
+	SimpleAudioEngine::getInstance()->preloadBackgroundMusic(STAGE3_BGM);
+
+	SimpleAudioEngine::getInstance()->preloadEffect(PLAYER_SWORD);
+	SimpleAudioEngine::getInstance()->preloadEffect(PLAYER_HITTED);
+	SimpleAudioEngine::getInstance()->preloadEffect(CLICK);
+	SimpleAudioEngine::getInstance()->preloadEffect(ITEM_GET);
+	SimpleAudioEngine::getInstance()->preloadEffect(ITEM_USE);
+
+	SimpleAudioEngine::getInstance()->setEffectsVolume(0.2);
+
+	SimpleAudioEngine::getInstance()->playBackgroundMusic(INTRO_BGM, true);
 
 	auto listener = EventListenerTouchAllAtOnce::create();
 	listener->onTouchesBegan = CC_CALLBACK_2(Intro::onTouchesBegan, this);
@@ -207,13 +210,12 @@ void Intro::onEnter()
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }
 
-void Intro::onExit()
-{
-	SimpleAudioEngine::getInstance()->stopBackgroundMusic(true);
-	SimpleAudioEngine::getInstance()->end();
-	Layer::onExit();
-
-}
+//void Intro::onExit()
+//{
+//	SimpleAudioEngine::getInstance()->end();
+//	Layer::onExit();
+//
+//}
 
 void Intro::onTouchesBegan(const std::vector<Touch*>& touches, Event  *event)
 {

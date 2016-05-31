@@ -38,7 +38,7 @@ bool LobbyLayer::init()
 	{
 		return false;
 	}
-	SimpleAudioEngine::getInstance()->playBackgroundMusic(LOBBY_BGM, true);
+	
 	auto winsize = Director::getInstance()->getWinSize();
 	//player = new Player();
 	//this->addChild(player,1);
@@ -110,6 +110,14 @@ bool LobbyLayer::init()
 	bgLayer->init();
 
 	this->addChild(bgLayer, 0);
+
+
+
+	auto menuItem = MenuItemImage::create("menu/config_button.png", "menu/config_button_pressed.png",CC_CALLBACK_1(LobbyLayer::OpenMenu,this));
+	auto menu = Menu::create(menuItem,nullptr);
+	menuItem->setAnchorPoint(Vec2(0, 1));
+	menu->setPosition(Vec2(0, upBar->getContentSize().height));
+	upBar->addChild(menu);
 
 	return true;
 }
@@ -215,11 +223,22 @@ bool LobbyLayer::handleLastTouch2()
 	return (wasPressed ? true : false);
 }
 
+void LobbyLayer::OpenMenu(Ref *p)
+{
+	SimpleAudioEngine::getInstance()->playEffect(CLICK);
+	auto menuScene = MenuScene::createScene();
+	Director::getInstance()->pause();
+	this->addChild(menuScene,10);
+}
+
 
 void LobbyLayer::onEnter()
 {
 	Layer::onEnter();
 
+	SimpleAudioEngine::getInstance()->stopBackgroundMusic(true);
+
+	SimpleAudioEngine::getInstance()->playBackgroundMusic(LOBBY_BGM, true);
 	auto listener = EventListenerTouchAllAtOnce::create();
 	listener->onTouchesBegan = CC_CALLBACK_2(LobbyLayer::onTouchesBegan, this);
 	listener->onTouchesMoved = CC_CALLBACK_2(LobbyLayer::onTouchesMoved, this);
@@ -228,12 +247,12 @@ void LobbyLayer::onEnter()
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }
 
-void LobbyLayer::onExit()
-{
-	SimpleAudioEngine::getInstance()->stopBackgroundMusic(true);
-	SimpleAudioEngine::getInstance()->end();
-	Layer::onExit();
-}
+//void LobbyLayer::onExit()
+//{
+//	
+//	SimpleAudioEngine::getInstance()->end();
+//	Layer::onExit();
+//}
 
 void LobbyLayer::onTouchesBegan(const std::vector<Touch*>& touches, Event  *event)
 {

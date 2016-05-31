@@ -107,7 +107,7 @@ void Energy::setTexture2(int energy)
 void Energy::init2()
 {
 	this->initWithTexture(energy20);
-	this->setPosition(Vec2(100 , 50));
+	this->setPosition(Vec2(120 , 50));
 	this->setAnchorPoint(Vec2(0, 0.5));
 }
 

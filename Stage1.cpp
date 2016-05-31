@@ -943,8 +943,8 @@ void Stage1::createBackground()
 
 void Stage1::MakeItem()
 {
-	//int num = rand() % 15+ 1;
-	int num = 1;
+	int num = rand() % 15+ 1;
+	//int num = 1;
 	auto item = new Item(num);
 	this->addChild(item,1);
 	item->setPosition(Vec2(1500/ 2, winsize.height / 2));
@@ -994,11 +994,11 @@ void Stage1::onEnter()
 	Layer::onEnter();
 
 }
-void Stage1::onExit()
-{
-	SimpleAudioEngine::getInstance()->end();
-	Layer::onExit();
-}
+//void Stage1::onExit()
+//{
+//	SimpleAudioEngine::getInstance()->end();
+//	Layer::onExit();
+//}
 //
 //void Stage1::onExit()
 //{

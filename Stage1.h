@@ -44,7 +44,7 @@ public:
 	
 	~Stage1();
 	void onEnter();
-	void onExit();
+	//void onExit();
 	void tick(float dt);
 	void draw(Renderer* renderer, const Mat4 &transform, uint32_t flags);
 

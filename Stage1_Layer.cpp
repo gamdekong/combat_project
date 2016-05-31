@@ -39,7 +39,7 @@ bool Stage1_Layer::init()
     {
         return false;
     }
-	SimpleAudioEngine::getInstance()->playBackgroundMusic(STAGE1_BGM,true);
+	
 	srand((unsigned)time(nullptr));
 	winsize = Director::getInstance()->getWinSize();
 
@@ -102,6 +102,12 @@ bool Stage1_Layer::init()
 	itemSprite->setPosition(Vec2(itemBox->getContentSize().width / 2, itemBox->getContentSize().height / 2));
 	itemBox->addChild(itemSprite);
 
+	auto menuItem = MenuItemImage::create("menu/config_button.png", "menu/config_button_pressed.png", CC_CALLBACK_1(Stage1_Layer::OpenMenu, this));
+	auto menu = Menu::create(menuItem, nullptr);
+	menuItem->setAnchorPoint(Vec2(0, 1));
+	menu->setPosition(Vec2(0, upBar->getContentSize().height));
+	upBar->addChild(menu);
+
 	//auto energy = Sprite::create("ui/meter-06.png");
 	//energy->setPosition(Vec2(upBar->getContentSize().height / 2, 50));
 	//energy->setAnchorPoint(Vec2( 0, 0.5));
@@ -150,7 +156,13 @@ bool Stage1_Layer::init()
 	this->schedule(schedule_selector(Stage1_Layer::tick));
     return true;
 }
-
+void Stage1_Layer::OpenMenu(Ref *p)
+{
+	SimpleAudioEngine::getInstance()->playEffect(CLICK);
+	auto menuScene = MenuScene::createScene();
+	Director::getInstance()->pause();
+	this->addChild(menuScene, 10);
+}
 
 static bool isPointInCircle(Vec2 point, Vec2 center, float radius)
 {
@@ -716,7 +728,8 @@ void Stage1_Layer::resetStat(float dt)
 void Stage1_Layer::onEnter()
 {
 	Layer::onEnter();
-
+	SimpleAudioEngine::getInstance()->stopBackgroundMusic(true);
+	SimpleAudioEngine::getInstance()->playBackgroundMusic(STAGE1_BGM, true);
 	auto listener = EventListenerTouchAllAtOnce::create();
 	listener->onTouchesBegan = CC_CALLBACK_2(Stage1_Layer::onTouchesBegan, this);
 	listener->onTouchesMoved = CC_CALLBACK_2(Stage1_Layer::onTouchesMoved, this);
@@ -725,12 +738,12 @@ void Stage1_Layer::onEnter()
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }
 
-void Stage1_Layer::onExit()
-{
-	SimpleAudioEngine::getInstance()->stopBackgroundMusic(true);
-	SimpleAudioEngine::getInstance()->end();
-	Layer::onExit();
-}
+//void Stage1_Layer::onExit()
+//{
+//	
+//	//SimpleAudioEngine::getInstance()->end();
+//	Layer::onExit();
+//}
 
 void Stage1_Layer::onTouchesBegan(const std::vector<Touch*>& touches, Event  *event)
 {

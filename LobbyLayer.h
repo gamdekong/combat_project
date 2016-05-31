@@ -4,6 +4,7 @@
 #include "GLES-Render.h"
 #include "Player.h"
 #include "Lobby.h"
+#include "MenuScene.h"
 
 #define JOYSTICK_OFFSET_X 5.0f
 #define JOYSTICK_OFFSET_Y 5.0f
@@ -56,13 +57,14 @@ public:
 	void resetJoystick2();
 	bool handleLastTouch1();
 	bool handleLastTouch2();
-	void tick(float);
+	void OpenMenu(Ref*);
+	//void tick(float);
 
 
 
 
 	void onEnter();
-	void onExit();
+	//void onExit();
 	virtual void onTouchesBegan(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
 	virtual void onTouchesMoved(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
 	virtual void onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);

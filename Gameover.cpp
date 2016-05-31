@@ -1,4 +1,19 @@
 #include "Gameover.h"
+#include "SimpleAudioEngine.h"
+
+
+#define PLAYER_SWORD "sounds/player/player_sword.ogg"
+#define PLAYER_HITTED "sounds/player/player_hitted.ogg"
+#define CLICK "sounds/click/click.ogg"
+#define INTRO_BGM "sounds/intro/intro_bgm.ogg"
+#define LOBBY_BGM "sounds/lobby/lobby_bgm.ogg"
+#define STAGE1_BGM "sounds/stage1/stage1_bgm.ogg"
+#define STAGE2_BGM "sounds/stage2/stage2_bgm.ogg"
+#define STAGE3_BGM "sounds/stage3/stage3_bgm.ogg"
+#define ITEM_GET "sounds/item/item_get.ogg"
+#define ITEM_USE "sounds/item/item_use.ogg"
+
+using namespace CocosDenshion;
 
 USING_NS_CC;
 
@@ -37,6 +52,7 @@ bool Gameover::init()
 void Gameover::onEnter()
 {
 	Layer::onEnter();
+	SimpleAudioEngine::getInstance()->stopBackgroundMusic(true);
 
 	auto listener = EventListenerTouchAllAtOnce::create();
 	listener->onTouchesBegan = CC_CALLBACK_2(Gameover::onTouchesBegan, this);
@@ -45,6 +61,12 @@ void Gameover::onEnter()
 	listener->onTouchesCancelled = CC_CALLBACK_2(Gameover::onTouchesCancelled, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }
+
+//void Gameover::onExit()
+//{
+//	SimpleAudioEngine::getInstance()->end();
+//	Layer::onExit();
+//}
 
 void Gameover::onTouchesBegan(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event * event)
 {
