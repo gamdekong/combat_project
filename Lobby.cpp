@@ -325,7 +325,7 @@ void Lobby::tick(float dt)
 	if (player->getPosition().x > 1000 && player->getPosition().x < 1100 && player->getPosition().y > 500 && tCount == 0)
 	{
 		tCount++;
-		auto pScene = Stage1_Layer::createScene();
+		auto pScene = Stage3_Layer::createScene();
 	
 		Director::getInstance()->replaceScene(TransitionFade::create(0.1, pScene));
 	}

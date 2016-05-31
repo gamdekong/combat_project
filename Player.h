@@ -43,6 +43,7 @@ public:
 	int missileNum;
 
 	int itemImage[16] = { 0 };
+	int getItem[16] = { 0 };
 
 	bool alive = true;
 	bool hitted = false;

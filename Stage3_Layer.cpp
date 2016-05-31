@@ -1,4 +1,4 @@
-Ôªø#include "Stage1_Layer.h"
+#include "Stage3_Layer.h"
 #include "Gameover.h"
 #include "SimpleAudioEngine.h"
 
@@ -19,55 +19,55 @@ using namespace CocosDenshion;
 USING_NS_CC;
 
 
-Scene* Stage1_Layer::createScene()
+Scene* Stage3_Layer::createScene()
 {
-   
-    auto scene = Scene::create();
-    auto layer = Stage1_Layer::create();
+
+	auto scene = Scene::create();
+	auto layer = Stage3_Layer::create();
 	scene->addChild(layer);
 
 
-    return scene;
+	return scene;
 }
 
 // on "init" you need to initialize your instance
-bool Stage1_Layer::init()
+bool Stage3_Layer::init()
 {
-    //////////////////////////////
-    // 1. super init first
-    if ( !Layer::init() )
-    {
-        return false;
-    }
-	
+	//////////////////////////////
+	// 1. super init first
+	if (!Layer::init())
+	{
+		return false;
+	}
+
 	srand((unsigned)time(nullptr));
 	winsize = Director::getInstance()->getWinSize();
 
-	
-	
+
+
 	player = new Player();
-		//player = new Player();
+	//player = new Player();
 	//this->addChild(player,1);
 	//this->runAction(Follow::create(player,Rect(0, 0,1500, 720)));
 
-	
+
 
 	//bgLayer = new BackgroundLayer();
 	//bgLayer->init();
 	//bgLayer->player = player;
 	//
-	////ÌîåÎ†àÏù¥Ïñ¥ ÏÉùÏÑ±
+	////«√∑π¿ÃæÓ ª˝º∫
 	//
 	//
 	//bgLayer->runAction(Follow::create(player, Rect(0, 0, 1500, 720)));
 
 	//
-	////----Ï°∞Ïù¥Ïä§Ìã± ÏÉùÏÑ±
+	////----¡∂¿ÃΩ∫∆Ω ª˝º∫
 
 
-	// Ï°∞Ïù¥Ïä§Ìã± 1
-	kCenter1 = Vec2(150,120	);
-	
+	// ¡∂¿ÃΩ∫∆Ω 1
+	kCenter1 = Vec2(150, 120);
+
 	velocity1 = Vec2::ZERO;
 
 	Sprite* bg1 = Sprite::create("joystick_background.png");
@@ -89,20 +89,22 @@ bool Stage1_Layer::init()
 	downBar->setAnchorPoint(Vec2(0.5, 0));
 	this->addChild(downBar, 1);
 
-	auto itemBox = MenuItemImage::create("ui/itemBox.png", "ui/itemBox.png", CC_CALLBACK_1(Stage1_Layer::ItemUse, this));
+	auto itemBox = MenuItemImage::create("ui/itemBox.png", "ui/itemBox.png", CC_CALLBACK_1(Stage3_Layer::ItemUse, this));
 	auto pItemMenu = Menu::create(itemBox, nullptr);
 	pItemMenu->setPosition(Vec2(winsize.width - 80, winsize.height - 80));
-	this->addChild(pItemMenu,3);
+	this->addChild(pItemMenu, 3);
 
-	upBar->addChild(player->energy,2);
+	upBar->addChild(player->energy, 2);
 	upBar->addChild(player->magicEnergy, 2);
+
+	//////////////////////////////////////////////////////
 
 	itemSprite = Sprite::create("item/active/redstar.png");
 	itemSprite->setVisible(false);
 	itemSprite->setPosition(Vec2(itemBox->getContentSize().width / 2, itemBox->getContentSize().height / 2));
 	itemBox->addChild(itemSprite);
 
-	auto menuItem = MenuItemImage::create("menu/config_button.png", "menu/config_button_pressed.png", CC_CALLBACK_1(Stage1_Layer::OpenMenu, this));
+	auto menuItem = MenuItemImage::create("menu/config_button.png", "menu/config_button_pressed.png", CC_CALLBACK_1(Stage3_Layer::OpenMenu, this));
 	auto menu = Menu::create(menuItem, nullptr);
 	menuItem->setAnchorPoint(Vec2(0, 1));
 	menu->setPosition(Vec2(0, upBar->getContentSize().height));
@@ -115,7 +117,7 @@ bool Stage1_Layer::init()
 
 
 
-	// Ï°∞Ïù¥Ïä§Ìã± 2
+	// ¡∂¿ÃΩ∫∆Ω 2
 	kCenter2 = Vec2(winsize.width - 150, 120);
 
 
@@ -130,11 +132,11 @@ bool Stage1_Layer::init()
 	thumb2->setPosition(kCenter2);
 	this->addChild(thumb2, 2);
 
-	
-	
+
+
 	this->MakeMap();
 
-	//auto bgLayer1 = new Stage1();//ÏÉùÏÑ±Ïûê ÎÑ£Í∏∞
+	//auto bgLayer1 = new Stage3();//ª˝º∫¿⁄ ≥÷±‚
 	//bgLayer1->stageNum=1;
 	//bgLayer1->joystickVelocity1 = &velocity1;
 	//bgLayer1->joystickVelocity2 = &velocity2;
@@ -152,11 +154,11 @@ bool Stage1_Layer::init()
 
 	//stage.at(9)->init();
 	//this->addChild(stage.at(9), 0);
-   
-	this->schedule(schedule_selector(Stage1_Layer::tick));
-    return true;
+
+	this->schedule(schedule_selector(Stage3_Layer::tick));
+	return true;
 }
-void Stage1_Layer::OpenMenu(Ref *p)
+void Stage3_Layer::OpenMenu(Ref *p)
 {
 	SimpleAudioEngine::getInstance()->playEffect(CLICK);
 	//auto menuScene = MenuScene::createScene();
@@ -174,75 +176,111 @@ static bool isPointInCircle(Vec2 point, Vec2 center, float radius)
 	return (radius >= sqrt((dx*dx) + (dy*dy)));
 }
 
-void Stage1_Layer::MakeMap()
+void Stage3_Layer::MakeMap()
 {
-	//-----------------Ïä§ÌÖåÏù¥ÏßÄ Í∞ùÏ≤¥ ÏÉùÏÑ±------------------
+	//-----------------Ω∫≈◊¿Ã¡ˆ ∞¥√º ª˝º∫------------------
 
-	auto bgLayer1 = new Stage1();//ÏÉùÏÑ±Ïûê ÎÑ£Í∏∞
+	auto bgLayer1 = new Stage3();//ª˝º∫¿⁄ ≥÷±‚
 	bgLayer1->joystickVelocity1 = &velocity1;
 	bgLayer1->joystickVelocity2 = &velocity2;
 	bgLayer1->joystickIspressed1 = &isPressed1;
 	bgLayer1->joystickIspressed2 = &isPressed2;
 	bgLayer1->player = player;
-	bgLayer1->addChild(player,3);
-	
+	bgLayer1->addChild(player, 3);
 
-	auto bgLayer2 = new Stage1();
+
+	auto bgLayer2 = new Stage3();
 	bgLayer2->joystickVelocity1 = &velocity1;
 	bgLayer2->joystickVelocity2 = &velocity2;
 	bgLayer2->joystickIspressed1 = &isPressed1;
 	bgLayer2->joystickIspressed2 = &isPressed2;
 
-	auto bgLayer3 = new Stage1();
+	auto bgLayer3 = new Stage3();
 	bgLayer3->joystickVelocity1 = &velocity1;
 	bgLayer3->joystickVelocity2 = &velocity2;
 	bgLayer3->joystickIspressed1 = &isPressed1;
 	bgLayer3->joystickIspressed2 = &isPressed2;
 
-	auto bgLayer4 = new Stage1();
+	auto bgLayer4 = new Stage3();
 	bgLayer4->joystickVelocity1 = &velocity1;
 	bgLayer4->joystickVelocity2 = &velocity2;
 	bgLayer4->joystickIspressed1 = &isPressed1;
 	bgLayer4->joystickIspressed2 = &isPressed2;
 
-	auto bgLayer5 = new Stage1();
+	auto bgLayer5 = new Stage3();
 	bgLayer5->joystickVelocity1 = &velocity1;
 	bgLayer5->joystickVelocity2 = &velocity2;
 	bgLayer5->joystickIspressed1 = &isPressed1;
 	bgLayer5->joystickIspressed2 = &isPressed2;
 
-	auto bgLayer6 = new Stage1();
+	auto bgLayer6 = new Stage3();
 	bgLayer6->joystickVelocity1 = &velocity1;
 	bgLayer6->joystickVelocity2 = &velocity2;
 	bgLayer6->joystickIspressed1 = &isPressed1;
 	bgLayer6->joystickIspressed2 = &isPressed2;
 
-	auto bgLayer7 = new Stage1();
+	auto bgLayer7 = new Stage3();
 	bgLayer7->joystickVelocity1 = &velocity1;
 	bgLayer7->joystickVelocity2 = &velocity2;
 	bgLayer7->joystickIspressed1 = &isPressed1;
 	bgLayer7->joystickIspressed2 = &isPressed2;
 
-	auto bgLayer8 = new Stage1();
+	auto bgLayer8 = new Stage3();
 	bgLayer8->joystickVelocity1 = &velocity1;
 	bgLayer8->joystickVelocity2 = &velocity2;
 	bgLayer8->joystickIspressed1 = &isPressed1;
 	bgLayer8->joystickIspressed2 = &isPressed2;
 
-	auto bgLayer9 = new Stage1();
+	auto bgLayer9 = new Stage3();
 	bgLayer9->joystickVelocity1 = &velocity1;
 	bgLayer9->joystickVelocity2 = &velocity2;
 	bgLayer9->joystickIspressed1 = &isPressed1;
 	bgLayer9->joystickIspressed2 = &isPressed2;
 
-	auto bgLayer10 = new Stage1();
+	auto bgLayer10 = new Stage3();
 	bgLayer10->joystickVelocity1 = &velocity1;
 	bgLayer10->joystickVelocity2 = &velocity2;
 	bgLayer10->joystickIspressed1 = &isPressed1;
 	bgLayer10->joystickIspressed2 = &isPressed2;
+
+	auto bgLayer11 = new Stage3();
+	bgLayer11->joystickVelocity1 = &velocity1;
+	bgLayer11->joystickVelocity2 = &velocity2;
+	bgLayer11->joystickIspressed1 = &isPressed1;
+	bgLayer11->joystickIspressed2 = &isPressed2;
+
+	auto bgLayer12 = new Stage3();
+	bgLayer12->joystickVelocity1 = &velocity1;
+	bgLayer12->joystickVelocity2 = &velocity2;
+	bgLayer12->joystickIspressed1 = &isPressed1;
+	bgLayer12->joystickIspressed2 = &isPressed2;
+
+	auto bgLayer13 = new Stage3();
+	bgLayer13->joystickVelocity1 = &velocity1;
+	bgLayer13->joystickVelocity2 = &velocity2;
+	bgLayer13->joystickIspressed1 = &isPressed1;
+	bgLayer13->joystickIspressed2 = &isPressed2;
+
+	auto bgLayer14 = new Stage3();
+	bgLayer14->joystickVelocity1 = &velocity1;
+	bgLayer14->joystickVelocity2 = &velocity2;
+	bgLayer14->joystickIspressed1 = &isPressed1;
+	bgLayer14->joystickIspressed2 = &isPressed2;
+
+	auto bgLayer15 = new Stage3();
+	bgLayer15->joystickVelocity1 = &velocity1;
+	bgLayer15->joystickVelocity2 = &velocity2;
+	bgLayer15->joystickIspressed1 = &isPressed1;
+	bgLayer15->joystickIspressed2 = &isPressed2;
+
+	auto bgLayer16 = new Stage3();
+	bgLayer16->joystickVelocity1 = &velocity1;
+	bgLayer16->joystickVelocity2 = &velocity2;
+	bgLayer16->joystickIspressed1 = &isPressed1;
+	bgLayer16->joystickIspressed2 = &isPressed2;
 	//bgLayer10->player = player;
 	//bgLayer10->addChild(player,3);
-	//-------------------------------Î∞±ÌÑ∞Ïóê Ïä§ÌÖåÏù¥ÏßÄ ÎÑ£Í∏∞------------------
+	//-------------------------------πÈ≈Õø° Ω∫≈◊¿Ã¡ˆ ≥÷±‚------------------
 
 	player->nowStage = bgLayer1;
 
@@ -256,10 +294,16 @@ void Stage1_Layer::MakeMap()
 	stage.push_back(bgLayer8);
 	stage.push_back(bgLayer9);
 	stage.push_back(bgLayer10);
-	
-	
-	
-	//ÎçòÏ†Ñ ÎÑòÎ≤Ñ ÏÑ§Ï†ï
+	stage.push_back(bgLayer11);
+	stage.push_back(bgLayer12);
+	stage.push_back(bgLayer13);
+	stage.push_back(bgLayer14);
+	stage.push_back(bgLayer15);
+	stage.push_back(bgLayer16);
+
+
+
+	//¥¯¿¸ ≥—πˆ º≥¡§
 	for (int i = 0; i < stage.size(); i++)
 	{
 		stage.at(i)->stageNum = i;
@@ -304,12 +348,12 @@ void Stage1_Layer::MakeMap()
 		this->MakeMapRamdom(stage.at(0)->next, stage.at(0), num, false);  //next
 		this->MakeMapRamdom(stage.at(0)->prev, stage.at(0), num, true);  //prev
 	}
-	
+
 
 
 	log("Map Make Done");
 }
-void Stage1_Layer::MakeMapRamdom(Stage1 *nowStage, Stage1 *preStage, int num, bool state)
+void Stage3_Layer::MakeMapRamdom(Stage3 *nowStage, Stage3 *preStage, int num, bool state)
 {
 	num--;
 	if (num == 0)
@@ -338,7 +382,7 @@ void Stage1_Layer::MakeMapRamdom(Stage1 *nowStage, Stage1 *preStage, int num, bo
 			check[stage.size() - 1]++;
 
 		}
-		
+
 		return;
 
 	}
@@ -382,7 +426,7 @@ void Stage1_Layer::MakeMapRamdom(Stage1 *nowStage, Stage1 *preStage, int num, bo
 
 }
 
-void Stage1_Layer::updateVelocity1(Vec2 point)
+void Stage3_Layer::updateVelocity1(Vec2 point)
 {
 	// calculate Angle and length
 	float dx = point.x - kCenter1.x;
@@ -407,7 +451,7 @@ void Stage1_Layer::updateVelocity1(Vec2 point)
 
 	thumb1->setPosition(point);
 }
-void Stage1_Layer::updateVelocity2(Vec2 point)
+void Stage3_Layer::updateVelocity2(Vec2 point)
 {
 	// calculate Angle and length
 	float dx = point.x - kCenter2.x;
@@ -433,18 +477,18 @@ void Stage1_Layer::updateVelocity2(Vec2 point)
 	thumb2->setPosition(point);
 }
 
-void Stage1_Layer::resetJoystick1()
+void Stage3_Layer::resetJoystick1()
 {
 	this->updateVelocity1(kCenter1);
 }
-void Stage1_Layer::resetJoystick2()
+void Stage3_Layer::resetJoystick2()
 {
 	log("2");
 
 	this->updateVelocity2(kCenter2);
 }
 
-bool Stage1_Layer::handleLastTouch1()
+bool Stage3_Layer::handleLastTouch1()
 {
 	bool wasPressed = isPressed1;
 
@@ -457,7 +501,7 @@ bool Stage1_Layer::handleLastTouch1()
 	}
 	return (wasPressed ? true : false);
 }
-bool Stage1_Layer::handleLastTouch2()
+bool Stage3_Layer::handleLastTouch2()
 {
 	bool wasPressed = isPressed2;
 
@@ -471,31 +515,30 @@ bool Stage1_Layer::handleLastTouch2()
 	return (wasPressed ? true : false);
 }
 
-void Stage1_Layer::tick(float dt)
+void Stage3_Layer::tick(float dt)
 {
 
-	if (player->getPosition().x > 1000 && player->getPosition().x < 1100 && player->getPosition().y > 480) // Ïò§Î•∏Ï™ΩÎ¨∏
+	if (player->getPosition().x > 1000 && player->getPosition().x < 1100 && player->getPosition().y > 480) // ø¿∏•¬ πÆ
 	{
-		auto nowPlayerStage = (Stage1*)(player->nowStage);
-		auto nextPlayerStage = ((Stage1*)(player->nowStage))->next;
+		auto nowPlayerStage = (Stage3*)(player->nowStage);
+		auto nextPlayerStage = ((Stage3*)(player->nowStage))->next;
 		if (nowPlayerStage->next == nullptr)
 		{
-			auto pScene = Stage2_Layer::createScene();
-
-			Director::getInstance()->replaceScene(TransitionFade::create(0.1, pScene));
+			auto pScene = Gameover::createScene();
+			Director::getInstance()->replaceScene(TransitionFade::create(0.5, pScene));
 
 		}
 		else if (nowPlayerStage->next->initComplete == false)
 		{
 
-			//-----------ÌîåÎ†àÏù¥Ïñ¥Ïùò ÌòÑÏû¨ Ïä§ÌÖåÏù¥ÏßÄÎ•º Î∞îÍæ∏Í≥† ÌòÑÏû¨Ïä§ÌÖåÏù¥ÏßÄÎäî Ï†úÍ±∞ÌïúÎã§.
+			//-----------«√∑π¿ÃæÓ¿« «ˆ¿Á Ω∫≈◊¿Ã¡ˆ∏¶ πŸ≤Ÿ∞Ì «ˆ¿ÁΩ∫≈◊¿Ã¡ˆ¥¬ ¡¶∞≈«—¥Ÿ.
 			player->nowStage = nextPlayerStage;
 			nowPlayerStage->removeChild(player, false);
 			nowPlayerStage->_world->DestroyBody(nowPlayerStage->playerBody);
 			this->removeChild(nowPlayerStage, false);
 			nextPlayerStage->player = player;
 
-			//-----------ÌîåÎ†àÏù¥Ïñ¥Ïùò Ìè¨ÏßÄÏÖòÏùÑ Ï†ïÌïòÍ≥† Îã§Ïùå Ïä§ÌÖåÏù¥ÏßÄÎ•º Î∂àÎü¨Ïò®Îã§.
+			//-----------«√∑π¿ÃæÓ¿« ∆˜¡ˆº«¿ª ¡§«œ∞Ì ¥Ÿ¿Ω Ω∫≈◊¿Ã¡ˆ∏¶ ∫“∑Øø¬¥Ÿ.
 			player->setPosition(Vec2(450, 450));
 			this->addChild(nextPlayerStage);
 			nextPlayerStage->init();
@@ -503,13 +546,13 @@ void Stage1_Layer::tick(float dt)
 		}
 		else
 		{
-			//------------ÌòÑÏû¨ Ïä§ÌÖåÏù¥ÏßÄ Ï†úÍ±∞
+			//------------«ˆ¿Á Ω∫≈◊¿Ã¡ˆ ¡¶∞≈
 			player->nowStage = nextPlayerStage;
 			nowPlayerStage->removeChild(player, false);
 			nowPlayerStage->_world->DestroyBody(nowPlayerStage->playerBody);
 			this->removeChild(nowPlayerStage, false);
 
-			//------------Îã§Ïùå Ïä§ÌÖåÏù¥ÏßÄ Î∂àÎü¨Ïò¥
+			//------------¥Ÿ¿Ω Ω∫≈◊¿Ã¡ˆ ∫“∑Øø»
 			player->setPosition(Vec2(450, 450));
 			nextPlayerStage->addChild(player);
 			nextPlayerStage->createPlayer(player);
@@ -520,28 +563,27 @@ void Stage1_Layer::tick(float dt)
 
 
 	}
-	else if (player->getPosition().x > 400 && player->getPosition().x < 500 && player->getPosition().y > 480) // ÏôºÏ™ΩÎ¨∏
+	else if (player->getPosition().x > 400 && player->getPosition().x < 500 && player->getPosition().y > 480) // øﬁ¬ πÆ
 	{
 
-		auto nowPlayerStage = (Stage1*)(player->nowStage);
-		auto prevPlayerStage = ((Stage1*)(player->nowStage))->prev;
+		auto nowPlayerStage = (Stage3*)(player->nowStage);
+		auto prevPlayerStage = ((Stage3*)(player->nowStage))->prev;
 		if (nowPlayerStage->prev == nullptr)
 		{
-			auto pScene = Stage2_Layer::createScene();
-
-			Director::getInstance()->replaceScene(TransitionFade::create(0.1, pScene));
+			auto pScene = Gameover::createScene();
+			Director::getInstance()->replaceScene(TransitionFade::create(0.5, pScene));
 		}
 		else if (nowPlayerStage->prev->initComplete == false)
 		{
 
-			//-----------ÌîåÎ†àÏù¥Ïñ¥Ïùò ÌòÑÏû¨ Ïä§ÌÖåÏù¥ÏßÄÎ•º Î∞îÍæ∏Í≥† ÌòÑÏû¨Ïä§ÌÖåÏù¥ÏßÄÎäî Ï†úÍ±∞ÌïúÎã§.
+			//-----------«√∑π¿ÃæÓ¿« «ˆ¿Á Ω∫≈◊¿Ã¡ˆ∏¶ πŸ≤Ÿ∞Ì «ˆ¿ÁΩ∫≈◊¿Ã¡ˆ¥¬ ¡¶∞≈«—¥Ÿ.
 			player->nowStage = prevPlayerStage;
 			nowPlayerStage->removeChild(player, false);
 			nowPlayerStage->_world->DestroyBody(nowPlayerStage->playerBody);
 			this->removeChild(nowPlayerStage, false);
 			prevPlayerStage->player = player;
 
-			//-----------ÌîåÎ†àÏù¥Ïñ¥Ïùò Ìè¨ÏßÄÏÖòÏùÑ Ï†ïÌïòÍ≥† Îã§Ïùå Ïä§ÌÖåÏù¥ÏßÄÎ•º Î∂àÎü¨Ïò®Îã§.
+			//-----------«√∑π¿ÃæÓ¿« ∆˜¡ˆº«¿ª ¡§«œ∞Ì ¥Ÿ¿Ω Ω∫≈◊¿Ã¡ˆ∏¶ ∫“∑Øø¬¥Ÿ.
 			player->setPosition(Vec2(1050, 430));
 			this->addChild(prevPlayerStage);
 			prevPlayerStage->init();
@@ -549,13 +591,13 @@ void Stage1_Layer::tick(float dt)
 		}
 		else
 		{
-			//------------ÌòÑÏû¨ Ïä§ÌÖåÏù¥ÏßÄ Ï†úÍ±∞
+			//------------«ˆ¿Á Ω∫≈◊¿Ã¡ˆ ¡¶∞≈
 			player->nowStage = prevPlayerStage;
 			nowPlayerStage->removeChild(player, false);
 			nowPlayerStage->_world->DestroyBody(nowPlayerStage->playerBody);
 			this->removeChild(nowPlayerStage, false);
 
-			//------------Îã§Ïùå Ïä§ÌÖåÏù¥ÏßÄ Î∂àÎü¨Ïò¥
+			//------------¥Ÿ¿Ω Ω∫≈◊¿Ã¡ˆ ∫“∑Øø»
 			player->setPosition(Vec2(1050, 430));
 			prevPlayerStage->addChild(player);
 			prevPlayerStage->createPlayer(player);
@@ -565,9 +607,9 @@ void Stage1_Layer::tick(float dt)
 		}
 	}
 
-	if (((Stage1*)(player->nowStage))->stageNum == 9) //Î≥¥Ïä§ Ïä§ÌÖåÏù¥ÏßÄ
+	if (((Stage3*)(player->nowStage))->stageNum == BOSS_MAP_NUM3) //∫∏Ω∫ Ω∫≈◊¿Ã¡ˆ
 	{
-		
+
 		if (isProgressOn == false)
 		{
 			auto bossenergy = Sprite::create("ui/bossenergy.png");
@@ -579,10 +621,10 @@ void Stage1_Layer::tick(float dt)
 			log("progress");
 			this->addChild(pt);
 			isProgressOn = true;
-			
+
 			log("progress2");
 		}
-		vector<b2Body*> temp = ((Stage1*)(player->nowStage))->monsterBodyVector;
+		vector<b2Body*> temp = ((Stage3*)(player->nowStage))->monsterBodyVector;
 
 		for (int i = 0; i < temp.size(); i++)
 		{
@@ -622,16 +664,16 @@ void Stage1_Layer::tick(float dt)
 		itemSprite->setTexture("item/active/spiderweb.png");
 		itemSprite->setVisible(true);
 	}
-	
+
 }
 
-void Stage1_Layer::ItemUse(Ref * p)
+void Stage3_Layer::ItemUse(Ref * p)
 {
 	log("item click");
-	if (player->activeItem == 1 && player->nowMagic > 7 )
+	if (player->activeItem == 1 && player->nowMagic > 7)
 	{
 		SimpleAudioEngine::getInstance()->playEffect(ITEM_USE);
-		auto nowPlayerStage = (Stage1*)(player->nowStage);
+		auto nowPlayerStage = (Stage3*)(player->nowStage);
 		auto monster = nowPlayerStage->monsterBodyVector;
 
 		for (int i = 0; i < monster.size(); i++)
@@ -648,7 +690,7 @@ void Stage1_Layer::ItemUse(Ref * p)
 			else
 				monsterSprite->HittedAction();
 		}
-		player->nowMagic -= 8;
+		//player->nowMagic -= 8;
 		player->magicEnergy->setTexture2(player->nowMagic);
 
 	}
@@ -656,20 +698,20 @@ void Stage1_Layer::ItemUse(Ref * p)
 	{
 		SimpleAudioEngine::getInstance()->playEffect(ITEM_USE);
 		player->power += 5;
-		
+
 
 		player->attackSpeed += -0.09;
-		
+
 
 		player->missileSpeed += 10;
-		
+
 
 		player->nukBack += 5;
-		
+
 		player->nowMagic -= 6;
 		player->magicEnergy->setTexture2(player->nowMagic);
 
-		this->scheduleOnce(schedule_selector(Stage1_Layer::resetStat), 5);
+		this->scheduleOnce(schedule_selector(Stage3_Layer::resetStat), 5);
 
 	}
 	if (player->activeItem == 3 && player->nowMagic > 4)
@@ -689,15 +731,15 @@ void Stage1_Layer::ItemUse(Ref * p)
 		player->nowMagic -= 5;
 		player->magicEnergy->setTexture2(player->nowMagic);
 
-		this->scheduleOnce(schedule_selector(Stage1_Layer::resetStat), 5);
+		this->scheduleOnce(schedule_selector(Stage3_Layer::resetStat), 5);
 
 	}
 	if (player->activeItem == 4 && player->nowMagic > 1)
 	{
 		SimpleAudioEngine::getInstance()->playEffect(ITEM_USE);
-		auto nowPlayerStage = (Stage1*)(player->nowStage);
-		nowPlayerStage->unschedule(schedule_selector(Stage1::AITick2));
-		this->scheduleOnce(schedule_selector(Stage1_Layer::resetStat), 5);
+		auto nowPlayerStage = (Stage3*)(player->nowStage);
+		nowPlayerStage->unschedule(schedule_selector(Stage3::AITick2));
+		this->scheduleOnce(schedule_selector(Stage3_Layer::resetStat), 5);
 
 		player->nowMagic -= 2;
 		player->magicEnergy->setTexture2(player->nowMagic);
@@ -705,7 +747,7 @@ void Stage1_Layer::ItemUse(Ref * p)
 
 }
 
-void Stage1_Layer::resetStat(float dt)
+void Stage3_Layer::resetStat(float dt)
 {
 	if (player->activeItem == 2)
 	{
@@ -724,103 +766,103 @@ void Stage1_Layer::resetStat(float dt)
 	}
 	if (player->activeItem == 4)
 	{
-		auto nowPlayerStage = (Stage1*)(player->nowStage);
-		nowPlayerStage->schedule(schedule_selector(Stage1::AITick2));
-		
+		auto nowPlayerStage = (Stage3*)(player->nowStage);
+		nowPlayerStage->schedule(schedule_selector(Stage3::AITick2));
+
 	}
 }
 
-void Stage1_Layer::onEnter()
+void Stage3_Layer::onEnter()
 {
 	Layer::onEnter();
 	SimpleAudioEngine::getInstance()->stopBackgroundMusic(true);
-	SimpleAudioEngine::getInstance()->playBackgroundMusic(STAGE1_BGM, true);
+	SimpleAudioEngine::getInstance()->playBackgroundMusic(STAGE3_BGM, true);
 	auto listener = EventListenerTouchAllAtOnce::create();
-	listener->onTouchesBegan = CC_CALLBACK_2(Stage1_Layer::onTouchesBegan, this);
-	listener->onTouchesMoved = CC_CALLBACK_2(Stage1_Layer::onTouchesMoved, this);
-	listener->onTouchesEnded = CC_CALLBACK_2(Stage1_Layer::onTouchesEnded, this);
-	listener->onTouchesCancelled = CC_CALLBACK_2(Stage1_Layer::onTouchesCancelled, this);
+	listener->onTouchesBegan = CC_CALLBACK_2(Stage3_Layer::onTouchesBegan, this);
+	listener->onTouchesMoved = CC_CALLBACK_2(Stage3_Layer::onTouchesMoved, this);
+	listener->onTouchesEnded = CC_CALLBACK_2(Stage3_Layer::onTouchesEnded, this);
+	listener->onTouchesCancelled = CC_CALLBACK_2(Stage3_Layer::onTouchesCancelled, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }
 
-//void Stage1_Layer::onExit()
+//void Stage3_Layer::onExit()
 //{
 //	
 //	//SimpleAudioEngine::getInstance()->end();
 //	Layer::onExit();
 //}
 
-void Stage1_Layer::onTouchesBegan(const std::vector<Touch*>& touches, Event  *event)
+void Stage3_Layer::onTouchesBegan(const std::vector<Touch*>& touches, Event  *event)
 {
 	for (auto &item : touches)
 	{
-		
+
 		auto touch = item;
-		
+
 		Vec2 point = touch->getLocationInView();
 		Vec2 touchPoint = Director::getInstance()->convertToGL(point);
 
 
-		if (isPointInCircle(touchPoint, kCenter1, JOYSTICK_RADIUS) )
+		if (isPointInCircle(touchPoint, kCenter1, JOYSTICK_RADIUS))
 		{
 			isPressed1 = true;
 			touchNum.push_back(touch->getID());
-			joyNum[touch->getID()]=1;
-			
+			joyNum[touch->getID()] = 1;
+
 			this->updateVelocity1(touchPoint);
-			
+
 		}
 		if (isPointInCircle(touchPoint, kCenter2, JOYSTICK_RADIUS))
 		{
 			isPressed2 = true;
 			touchNum.push_back(touch->getID());
 			joyNum[touch->getID()] = 2;
-			
+
 			this->updateVelocity2(touchPoint);
 		}
-		
+
 	}
 
 
 
 }
 
-void Stage1_Layer::onTouchesMoved(const std::vector<Touch*>& touches, Event  *event)
+void Stage3_Layer::onTouchesMoved(const std::vector<Touch*>& touches, Event  *event)
 {
 	for (auto &item : touches)
 	{
-		
+
 		auto touch = item;
 
-		
+
 
 		if (isPressed1 && joyNum[touch->getID()] == 1)
 		{
-			
+
 			Vec2 point = touch->getLocationInView();
 			Vec2 touchPoint = Director::getInstance()->convertToGL(point);
 
 			this->updateVelocity1(touchPoint);
-			
+
 		}
 		if (isPressed2 && joyNum[touch->getID()] == 2)
 		{
-			
+
 			Vec2 point = touch->getLocationInView();
 			Vec2 touchPoint = Director::getInstance()->convertToGL(point);
 
 			this->updateVelocity2(touchPoint);
-			
+
 		}
-		
-		
-	
+
+
+
 	}
 
 
 }
 
-void Stage1_Layer::onTouchesEnded(const std::vector<Touch*>& touches, Event  *event)
+void Stage3_Layer::onTouchesEnded(const std::vector<Touch*>& touches, Event  *event)
 {
 	for (auto &item : touches)
 	{
@@ -832,7 +874,7 @@ void Stage1_Layer::onTouchesEnded(const std::vector<Touch*>& touches, Event  *ev
 			Vec2 touchPoint = Director::getInstance()->convertToGL(point);
 			this->handleLastTouch1();
 			joyNum[touch->getID()] = 10;
-			
+
 		}
 		if (isPressed2 && joyNum[touch->getID()] == 2)
 		{
@@ -840,13 +882,13 @@ void Stage1_Layer::onTouchesEnded(const std::vector<Touch*>& touches, Event  *ev
 			Vec2 touchPoint = Director::getInstance()->convertToGL(point);
 			this->handleLastTouch2();
 			joyNum[touch->getID()] = 10;
-			
+
 		}
 
 
-		
+
 
 
 	}
-	
+
 }

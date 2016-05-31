@@ -43,6 +43,7 @@ bool MenuScene::init()
 	bg = Sprite::create("menu/bg.png");
 	bg->setPosition(Vec2(winSize.width / 2, winSize.height / 2));
 	this->addChild(bg,0);
+	bg->setTag(11);
 	log("dd");
 	auto regameButton = MenuItemImage::create("menu/regame_button.png", "menu/regame_button_pressed.png", CC_CALLBACK_1(MenuScene::ReGame, this));
 	auto regameMenu = Menu::create(regameButton, nullptr);
@@ -110,7 +111,9 @@ void MenuScene::CloseMenu(Ref * p)
 {
 	SimpleAudioEngine::getInstance()->playEffect(CLICK);
 	Director::getInstance()->resume();
-	this->removeFromParentAndCleanup(true);
+	//this->removeFromParentAndCleanup(true);
+	this->runAction(RemoveSelf::create());
+	
 }
 
 void MenuScene::Ok(Ref * p)
@@ -132,3 +135,5 @@ void MenuScene::X(Ref * p)
 	SimpleAudioEngine::getInstance()->playEffect(CLICK);
 	bg->removeChildByTag(10);
 }
+
+

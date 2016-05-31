@@ -226,9 +226,13 @@ bool LobbyLayer::handleLastTouch2()
 void LobbyLayer::OpenMenu(Ref *p)
 {
 	SimpleAudioEngine::getInstance()->playEffect(CLICK);
-	auto menuScene = MenuScene::createScene();
+	//auto menuScene = MenuScene::createScene();
+	auto menuScene = new MenuScene();
+	menuScene->init();
+	menuScene->autorelease();
 	Director::getInstance()->pause();
 	this->addChild(menuScene,10);
+	
 }
 
 
