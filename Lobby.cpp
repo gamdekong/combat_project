@@ -46,7 +46,7 @@ bool Lobby::init()
 	//player->setOpacity(256);
 	
 	
-	auto firegirl = new Monster(9);
+	firegirl = new Monster(9);
 	firegirl->setPosition(Vec2(450, 400));
 	firegirl->setFlippedX(true);
 	this->addChild(firegirl,1);
@@ -77,7 +77,14 @@ bool Lobby::init()
 	this->createBackground();   //배경 이미지 생성
 	this->runAction(Follow::create(player, Rect(0, 0, 1500, 720)));  //카메라 이동
 
+	auto clickSprite = Sprite::create("menu/click.png");
+	clickSprite->setPosition(Vec2(firegirl->getContentSize().width+80, firegirl->getContentSize().height+20));
+	auto seq = Sequence::create(FadeOut::create(0.2), FadeIn::create(0.2), nullptr);
+	auto seqR = RepeatForever::create(seq);
 
+	
+	firegirl->addChild(clickSprite);
+	clickSprite->runAction(seqR);
 	return true;
 }
 
@@ -325,7 +332,7 @@ void Lobby::tick(float dt)
 	if (player->getPosition().x > 1000 && player->getPosition().x < 1100 && player->getPosition().y > 500 && tCount == 0)
 	{
 		tCount++;
-		auto pScene = Stage3_Layer::createScene();
+		auto pScene = Stage1_Layer::createScene();
 	
 		Director::getInstance()->replaceScene(TransitionFade::create(0.1, pScene));
 	}
@@ -372,6 +379,36 @@ void Lobby::draw(Renderer * renderer, const Mat4 & transform, uint32_t flags)
 	kmGLPopMatrix();
 
 
+}
+
+void Lobby::onTouchesBegan(const std::vector<Touch*>& touches, Event  *event)
+{
+	auto touch = touches[0];
+	auto touchPoint = touch->getLocation();
+	touchPoint = this->convertToNodeSpace(touchPoint);
+
+	bool bTouch = firegirl->getBoundingBox().containsPoint(touchPoint);
+	if (bTouch)
+	{
+		auto readme = Sprite::create("menu/readme.png");
+		readme->setPosition(Vec2(winSize.width / 2, winSize.height / 2));
+		readme->setScale(1.5);
+		readme->setTag(10);
+		this->addChild(readme, 5);
+		log("firegirl touch..");
+	}
+	else
+		this->removeChildByTag(10);
+}
+
+void Lobby::onEnter()
+{
+	Layer::onEnter();
+
+	auto listener = EventListenerTouchAllAtOnce::create();
+	listener->onTouchesBegan = CC_CALLBACK_2(Lobby::onTouchesBegan, this);
+	
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }
 
 void Lobby::createPlayer(Sprite * player)

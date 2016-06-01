@@ -52,7 +52,7 @@ bool Stage3::init()
 
 
 
-		if (this->createWorld(true))
+		if (this->createWorld(false))
 		{
 			this->schedule(schedule_selector(Stage3::tick));
 			myContactListener = new ContactListener(player);
@@ -1214,7 +1214,7 @@ void Stage3::createBackground()
 void Stage3::MakeItem()
 {
 	int num;
-	/*while (1)
+	while (1)
 	{
 		num = rand() % 15 + 1;
 		if (player->getItem[num] == 1)
@@ -1226,8 +1226,8 @@ void Stage3::MakeItem()
 			player->getItem[num] = 1;
 			break;
 		}
-	}*/
-	num = 1;
+	}
+	//num = 1;
 	auto item = new Item(num);
 	this->addChild(item, 1);
 	item->setPosition(Vec2(1500 / 2, winsize.height / 2));

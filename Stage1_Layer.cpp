@@ -1,6 +1,7 @@
 ﻿#include "Stage1_Layer.h"
 #include "Gameover.h"
 #include "SimpleAudioEngine.h"
+#include "AdmobHelper.h"
 
 
 #define PLAYER_SWORD "sounds/player/player_sword.ogg"
@@ -152,6 +153,8 @@ bool Stage1_Layer::init()
 
 	//stage.at(9)->init();
 	//this->addChild(stage.at(9), 0);
+
+	AdmobHelper::hideAd();
    
 	this->schedule(schedule_selector(Stage1_Layer::tick));
     return true;
@@ -480,6 +483,52 @@ void Stage1_Layer::tick(float dt)
 		auto nextPlayerStage = ((Stage1*)(player->nowStage))->next;
 		if (nowPlayerStage->next == nullptr)
 		{
+			UserDefault::getInstance()->setFloatForKey("nowMagic", player->nowMagic);
+			UserDefault::getInstance()->setFloatForKey("nowEnergy", player->nowEnergy);
+			UserDefault::getInstance()->setFloatForKey("speed", player->speed);
+			UserDefault::getInstance()->setFloatForKey("attackSpeed", player->attackSpeed);
+			UserDefault::getInstance()->setFloatForKey("nukBack", player->nukBack);
+			UserDefault::getInstance()->setFloatForKey("power", player->power);
+			UserDefault::getInstance()->setFloatForKey("missileSpeed", player->missileSpeed);
+			UserDefault::getInstance()->setIntegerForKey("missileNum", player->missileNum);
+
+			UserDefault::getInstance()->setIntegerForKey("itemImage1", player->itemImage[1]);
+			UserDefault::getInstance()->setIntegerForKey("itemImage2", player->itemImage[2]);
+			UserDefault::getInstance()->setIntegerForKey("itemImage3", player->itemImage[3]);
+			UserDefault::getInstance()->setIntegerForKey("itemImage4", player->itemImage[4]);
+			UserDefault::getInstance()->setIntegerForKey("itemImage5", player->itemImage[5]);
+			UserDefault::getInstance()->setIntegerForKey("itemImage6", player->itemImage[6]);
+			UserDefault::getInstance()->setIntegerForKey("itemImage7", player->itemImage[7]);
+			UserDefault::getInstance()->setIntegerForKey("itemImage8", player->itemImage[8]);
+			UserDefault::getInstance()->setIntegerForKey("itemImage9", player->itemImage[9]);
+			UserDefault::getInstance()->setIntegerForKey("itemImage10", player->itemImage[10]);
+			UserDefault::getInstance()->setIntegerForKey("itemImage11", player->itemImage[11]);
+			UserDefault::getInstance()->setIntegerForKey("itemImage12", player->itemImage[12]);
+			UserDefault::getInstance()->setIntegerForKey("itemImage13", player->itemImage[13]);
+			UserDefault::getInstance()->setIntegerForKey("itemImage14", player->itemImage[14]);
+			UserDefault::getInstance()->setIntegerForKey("itemImage15", player->itemImage[15]);
+
+			UserDefault::getInstance()->setIntegerForKey("getItem1", player->getItem[1]);
+			UserDefault::getInstance()->setIntegerForKey("getItem2", player->getItem[2]);
+			UserDefault::getInstance()->setIntegerForKey("getItem3", player->getItem[3]);
+			UserDefault::getInstance()->setIntegerForKey("getItem4", player->getItem[4]);
+			UserDefault::getInstance()->setIntegerForKey("getItem5", player->getItem[5]);
+			UserDefault::getInstance()->setIntegerForKey("getItem6", player->getItem[6]);
+			UserDefault::getInstance()->setIntegerForKey("getItem7", player->getItem[7]);
+			UserDefault::getInstance()->setIntegerForKey("getItem8", player->getItem[8]);
+			UserDefault::getInstance()->setIntegerForKey("getItem9", player->getItem[9]);
+			UserDefault::getInstance()->setIntegerForKey("getItem10", player->getItem[10]);
+			UserDefault::getInstance()->setIntegerForKey("getItem11", player->getItem[11]);
+			UserDefault::getInstance()->setIntegerForKey("getItem12", player->getItem[12]);
+			UserDefault::getInstance()->setIntegerForKey("getItem13", player->getItem[13]);
+			UserDefault::getInstance()->setIntegerForKey("getItem14", player->getItem[14]);
+			UserDefault::getInstance()->setIntegerForKey("getItem15", player->getItem[15]);
+
+			
+
+
+
+
 			auto pScene = Stage2_Layer::createScene();
 
 			Director::getInstance()->replaceScene(TransitionFade::create(0.1, pScene));
@@ -527,6 +576,49 @@ void Stage1_Layer::tick(float dt)
 		auto prevPlayerStage = ((Stage1*)(player->nowStage))->prev;
 		if (nowPlayerStage->prev == nullptr)
 		{
+
+			UserDefault::getInstance()->setFloatForKey("nowMagic", player->nowMagic);
+			UserDefault::getInstance()->setFloatForKey("nowEnergy", player->nowEnergy);
+			UserDefault::getInstance()->setFloatForKey("speed", player->speed);
+			UserDefault::getInstance()->setFloatForKey("attackSpeed", player->attackSpeed);
+			UserDefault::getInstance()->setFloatForKey("nukBack", player->nukBack);
+			UserDefault::getInstance()->setFloatForKey("power", player->power);
+			UserDefault::getInstance()->setFloatForKey("missileSpeed", player->missileSpeed);
+			UserDefault::getInstance()->setIntegerForKey("missileNum", player->missileNum);
+			UserDefault::getInstance()->setIntegerForKey("activeItem", player->activeItem);
+
+			UserDefault::getInstance()->setIntegerForKey("itemImage1", player->itemImage[1]);
+			UserDefault::getInstance()->setIntegerForKey("itemImage2", player->itemImage[2]);
+			UserDefault::getInstance()->setIntegerForKey("itemImage3", player->itemImage[3]);
+			UserDefault::getInstance()->setIntegerForKey("itemImage4", player->itemImage[4]);
+			UserDefault::getInstance()->setIntegerForKey("itemImage5", player->itemImage[5]);
+			UserDefault::getInstance()->setIntegerForKey("itemImage6", player->itemImage[6]);
+			UserDefault::getInstance()->setIntegerForKey("itemImage7", player->itemImage[7]);
+			UserDefault::getInstance()->setIntegerForKey("itemImage8", player->itemImage[8]);
+			UserDefault::getInstance()->setIntegerForKey("itemImage9", player->itemImage[9]);
+			UserDefault::getInstance()->setIntegerForKey("itemImage10", player->itemImage[10]);
+			UserDefault::getInstance()->setIntegerForKey("itemImage11", player->itemImage[11]);
+			UserDefault::getInstance()->setIntegerForKey("itemImage12", player->itemImage[12]);
+			UserDefault::getInstance()->setIntegerForKey("itemImage13", player->itemImage[13]);
+			UserDefault::getInstance()->setIntegerForKey("itemImage14", player->itemImage[14]);
+			UserDefault::getInstance()->setIntegerForKey("itemImage15", player->itemImage[15]);
+
+			UserDefault::getInstance()->setIntegerForKey("getItem1", player->getItem[1]);
+			UserDefault::getInstance()->setIntegerForKey("getItem2", player->getItem[2]);
+			UserDefault::getInstance()->setIntegerForKey("getItem3", player->getItem[3]);
+			UserDefault::getInstance()->setIntegerForKey("getItem4", player->getItem[4]);
+			UserDefault::getInstance()->setIntegerForKey("getItem5", player->getItem[5]);
+			UserDefault::getInstance()->setIntegerForKey("getItem6", player->getItem[6]);
+			UserDefault::getInstance()->setIntegerForKey("getItem7", player->getItem[7]);
+			UserDefault::getInstance()->setIntegerForKey("getItem8", player->getItem[8]);
+			UserDefault::getInstance()->setIntegerForKey("getItem9", player->getItem[9]);
+			UserDefault::getInstance()->setIntegerForKey("getItem10", player->getItem[10]);
+			UserDefault::getInstance()->setIntegerForKey("getItem11", player->getItem[11]);
+			UserDefault::getInstance()->setIntegerForKey("getItem12", player->getItem[12]);
+			UserDefault::getInstance()->setIntegerForKey("getItem13", player->getItem[13]);
+			UserDefault::getInstance()->setIntegerForKey("getItem14", player->getItem[14]);
+			UserDefault::getInstance()->setIntegerForKey("getItem15", player->getItem[15]);
+
 			auto pScene = Stage2_Layer::createScene();
 
 			Director::getInstance()->replaceScene(TransitionFade::create(0.1, pScene));

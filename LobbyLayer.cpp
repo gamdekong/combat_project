@@ -1,6 +1,6 @@
 #include "LobbyLayer.h"
 #include "SimpleAudioEngine.h"
-
+#include "AdmobHelper.h"
 
 #define PLAYER_SWORD "sounds/player/player_sword.ogg"
 #define PLAYER_HITTED "sounds/player/player_hitted.ogg"
@@ -113,11 +113,18 @@ bool LobbyLayer::init()
 
 
 
+
+
 	auto menuItem = MenuItemImage::create("menu/config_button.png", "menu/config_button_pressed.png",CC_CALLBACK_1(LobbyLayer::OpenMenu,this));
 	auto menu = Menu::create(menuItem,nullptr);
 	menuItem->setAnchorPoint(Vec2(0, 1));
 	menu->setPosition(Vec2(0, upBar->getContentSize().height));
 	upBar->addChild(menu);
+
+
+
+
+	AdmobHelper::showAd();
 
 	return true;
 }

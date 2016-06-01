@@ -155,6 +155,50 @@ bool Stage3_Layer::init()
 	//stage.at(9)->init();
 	//this->addChild(stage.at(9), 0);
 
+	player->nowMagic = UserDefault::getInstance()->getFloatForKey("nowMagic");
+	player->nowEnergy = UserDefault::getInstance()->getFloatForKey("nowEnergy");
+	player->speed = UserDefault::getInstance()->getFloatForKey("speed");
+	player->attackSpeed = UserDefault::getInstance()->getFloatForKey("attackSpeed");
+	player->nukBack = UserDefault::getInstance()->getFloatForKey("nukBack");
+	player->power = UserDefault::getInstance()->getFloatForKey("power");
+	player->missileSpeed = UserDefault::getInstance()->getFloatForKey("missileSpeed");
+	player->missileNum = UserDefault::getInstance()->getIntegerForKey("missileNum");
+	player->activeItem = UserDefault::getInstance()->getIntegerForKey("activeItem");
+
+	player->itemImage[1] = UserDefault::getInstance()->getIntegerForKey("itemImage1");
+	player->itemImage[2] = UserDefault::getInstance()->getIntegerForKey("itemImage2");
+	player->itemImage[3] = UserDefault::getInstance()->getIntegerForKey("itemImage3");
+	player->itemImage[4] = UserDefault::getInstance()->getIntegerForKey("itemImage4");
+	player->itemImage[5] = UserDefault::getInstance()->getIntegerForKey("itemImage5");
+	player->itemImage[6] = UserDefault::getInstance()->getIntegerForKey("itemImage6");
+	player->itemImage[7] = UserDefault::getInstance()->getIntegerForKey("itemImage7");
+	player->itemImage[8] = UserDefault::getInstance()->getIntegerForKey("itemImage8");
+	player->itemImage[9] = UserDefault::getInstance()->getIntegerForKey("itemImage9");
+	player->itemImage[10] = UserDefault::getInstance()->getIntegerForKey("itemImage10");
+	player->itemImage[11] = UserDefault::getInstance()->getIntegerForKey("itemImage11");
+	player->itemImage[12] = UserDefault::getInstance()->getIntegerForKey("itemImage12");
+	player->itemImage[13] = UserDefault::getInstance()->getIntegerForKey("itemImage13");
+	player->itemImage[14] = UserDefault::getInstance()->getIntegerForKey("itemImage14");
+	player->itemImage[15] = UserDefault::getInstance()->getIntegerForKey("itemImage15");
+
+
+	player->getItem[1] = UserDefault::getInstance()->getIntegerForKey("getItem1");
+	player->getItem[2] = UserDefault::getInstance()->getIntegerForKey("getItem2");
+	player->getItem[3] = UserDefault::getInstance()->getIntegerForKey("getItem3");
+	player->getItem[4] = UserDefault::getInstance()->getIntegerForKey("getItem4");
+	player->getItem[5] = UserDefault::getInstance()->getIntegerForKey("getItem5");
+	player->getItem[6] = UserDefault::getInstance()->getIntegerForKey("getItem6");
+	player->getItem[7] = UserDefault::getInstance()->getIntegerForKey("getItem7");
+	player->getItem[8] = UserDefault::getInstance()->getIntegerForKey("getItem8");
+	player->getItem[9] = UserDefault::getInstance()->getIntegerForKey("getItem9");
+	player->getItem[10] = UserDefault::getInstance()->getIntegerForKey("getItem10");
+	player->getItem[11] = UserDefault::getInstance()->getIntegerForKey("getItem11");
+	player->getItem[12] = UserDefault::getInstance()->getIntegerForKey("getItem12");
+	player->getItem[13] = UserDefault::getInstance()->getIntegerForKey("getItem13");
+	player->getItem[14] = UserDefault::getInstance()->getIntegerForKey("getItem14");
+	player->getItem[15] = UserDefault::getInstance()->getIntegerForKey("getItem15");
+
+
 	this->schedule(schedule_selector(Stage3_Layer::tick));
 	return true;
 }
@@ -524,6 +568,7 @@ void Stage3_Layer::tick(float dt)
 		auto nextPlayerStage = ((Stage3*)(player->nowStage))->next;
 		if (nowPlayerStage->next == nullptr)
 		{
+
 			auto pScene = Gameover::createScene();
 			Director::getInstance()->replaceScene(TransitionFade::create(0.5, pScene));
 
@@ -690,7 +735,7 @@ void Stage3_Layer::ItemUse(Ref * p)
 			else
 				monsterSprite->HittedAction();
 		}
-		//player->nowMagic -= 8;
+		player->nowMagic -= 8;
 		player->magicEnergy->setTexture2(player->nowMagic);
 
 	}

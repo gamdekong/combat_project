@@ -1,5 +1,6 @@
 #include "Intro.h"
 #include "SimpleAudioEngine.h"
+#include "AdmobHelper.h"
 
 
 #define PLAYER_SWORD "sounds/player/player_sword.ogg"
@@ -101,7 +102,7 @@ bool Intro::init()
 	orora->runAction(r1);
 	orora2->runAction(r2);*/
 	//orora2->runAction(moveRight);
-
+	AdmobHelper::hideAd();
 	return true;
 }
 

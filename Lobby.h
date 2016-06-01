@@ -41,7 +41,8 @@ public:
 	void tick(float);
 	void draw(Renderer* renderer, const Mat4 &transform, uint32_t flags);
 
-	//bool onTouchBegan(Touch *touch, Event *event);
+	void onTouchesBegan(const std::vector<Touch*>& touches, Event  *event);
+	void onEnter();
 	bool createWorld(bool);
 	void createPlayer(Sprite *player);
 	void createMonster(Sprite *monster);
@@ -62,6 +63,7 @@ public:
 	Vec2 *joystickVelocity1, *joystickVelocity2;
 	bool *joystickIspressed1, *joystickIspressed2;
 	Player *player;
+	Sprite *firegirl;
 	//Sprite *pSprite;
 	b2Body *playerBody;
 	vector<b2Body*> missileBodyVector;

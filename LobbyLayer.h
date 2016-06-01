@@ -47,6 +47,7 @@ public:
 	Vec2 kCenter1, kCenter2;
 	Sprite* thumb1, *thumb2;
 	bool isPressed1, isPressed2;
+	
 
 	Vec2 velocity1, velocity2;
 

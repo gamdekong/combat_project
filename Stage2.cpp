@@ -526,10 +526,10 @@ bool Stage2::init()
 	{
 
 		auto monster1 = new Monster2(1);
-		monster1->setPosition(Vec2(200, 180));
+		monster1->setPosition(Vec2(800, 180));
 		this->addChild(monster1, 1);
 		auto monster2 = new Monster2(3);
-		monster2->setPosition(Vec2(400, 280));
+		monster2->setPosition(Vec2(600, 280));
 		this->addChild(monster2, 1);
 		auto monster3 = new Monster2(5);
 		monster3->setPosition(Vec2(300, 250));
@@ -568,7 +568,7 @@ bool Stage2::init()
 	{
 
 		auto monster1 = new Monster2(8);
-		monster1->setPosition(Vec2(200, 220));
+		monster1->setPosition(Vec2(700, 220));
 		this->addChild(monster1, 1);
 		auto monster2 = new Monster2(7);
 		monster2->setPosition(Vec2(500, 180));
@@ -619,11 +619,11 @@ bool Stage2::init()
 		monster3->setPosition(Vec2(200, 180));
 		this->addChild(monster3, 1);
 		auto monster5 = new Monster2(8);
-		monster5->setPosition(Vec2(300, 200));
+		monster5->setPosition(Vec2(700, 200));
 		this->addChild(monster5, 1);
 
 
-		if (this->createWorld(true))
+		if (this->createWorld(false))
 		{
 			this->schedule(schedule_selector(Stage2::tick));
 			myContactListener = new ContactListener(player);
@@ -1116,7 +1116,7 @@ void Stage2::createBackground()
 void Stage2::MakeItem()
 {
 	int num;
-	/*while (1)
+	while (1)
 	{
 		num = rand() % 15 + 1;
 		if (player->getItem[num] == 1)
@@ -1128,8 +1128,8 @@ void Stage2::MakeItem()
 			player->getItem[num] = 1;
 			break;
 		}
-	}*/
-	num = 9;
+	}
+	//num = 9;
 	auto item = new Item(num);
 	this->addChild(item, 1);
 	item->setPosition(Vec2(1500 / 2, winsize.height / 2));
@@ -1623,7 +1623,8 @@ void Stage2::AITick2(float dt)  // 몬스터 이동 부분
 			auto x = playerBody->GetPosition().x - monsterBodyVector.at(i)->GetPosition().x;
 			auto y = playerBody->GetPosition().y - monsterBodyVector.at(i)->GetPosition().y;
 			float xR, yR;
-			if (stageNum == BOSS_MAP_NUM2)
+			if (stageNum == BOSS_MAP_NUM2 &&
+				((Monster2*)(monsterBodyVector.at(i)->GetUserData()))->nowEnergy > ((Monster2*)(monsterBodyVector.at(i)->GetUserData()))->maxEnergy / 2)
 			{
 				if (x < 0)
 					xR = -2;
@@ -1634,6 +1635,19 @@ void Stage2::AITick2(float dt)  // 몬스터 이동 부분
 					yR = -2;
 				else
 					yR = 2;
+			}
+			else if (stageNum == BOSS_MAP_NUM2 &&
+				((Monster2*)(monsterBodyVector.at(i)->GetUserData()))->nowEnergy <= ((Monster2*)(monsterBodyVector.at(i)->GetUserData()))->maxEnergy / 2)
+			{
+				if (x < 0)
+					xR = -4;
+				else
+					xR = 4;
+
+				if (y < 0)
+					yR = -4;
+				else
+					yR = 4;
 			}
 			else
 			{
